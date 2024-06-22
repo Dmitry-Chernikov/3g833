@@ -24,6 +24,8 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
 #define ENABLE_KYPAD   // Это для моей клавиатуры кода включаю
 #define ENABLE_SWITCH  // Включение кода механического переключателя
+#define ENABLE_EEPROM  // Включить код поддкржки использовангия EEPROM и переменно структуры Data и переменной data
+//#define CLEAR_EEPROM // Запуск кода очистки всей памяти EEPROM для отладки
 
 //Входные сигналы
 #ifdef ENABLE_KYPAD
@@ -80,18 +82,25 @@ enum FunctionTypes {
   edit = 3
 };
 
+#if defined ENABLE_EEPROM || defined CLEAR_EEPROM
+struct Data {
+  char  InitData;
+  float LinearMove;
+  float LimitTop;
+  float LimitBottom;
+  float CylinderDiametr;
+  float CylinderAngle;
+};
+
+volatile Data data;
+#endif
+
 char input_saved[3];
 char output_saved[3];
 
 char string_saved[] = " *";
 char string_notSaved[] = "  ";
 char degree = (char)223;
-
-float LinearMove = 0;
-float LimitTop = 0;
-float LimitBottom = 10;
-float CylinderDiametr = 30;
-float CylinderAngle = 10;
 
 unsigned long previousMillisSped1, previousMillisSped2, previousMillisSped3 = 0;
 unsigned long interval1 = 3000;
@@ -116,9 +125,9 @@ LiquidScreen settings_screen(limits_line, cylinder_line);
 LiquidMenu main_menu(lcd, welcome_screen, settings_screen, 1);
 
 
-LiquidLine linear_move_line(0, 0, "Current ", LinearMove, "mm");
-LiquidLine limit_top_line(1, 1, "Top:", LimitTop, "mm");
-LiquidLine limit_bootom_line(1, 1, "Bottom:", LimitBottom, "mm");
+LiquidLine linear_move_line(0, 0, "Current ", data.LinearMove, "mm");
+LiquidLine limit_top_line(1, 1, "Top:", data.LimitTop, "mm");
+LiquidLine limit_bootom_line(1, 1, "Bottom:", data.LimitBottom, "mm");
 
 LiquidScreen top_screen(linear_move_line, limit_top_line);
 LiquidScreen bootom_screen(linear_move_line, limit_bootom_line);
@@ -131,11 +140,11 @@ LiquidMenu limit_menu(lcd, top_screen, bootom_screen, oSecondary_screen, 1);
 
 
 LiquidLine diametr_title_line(0, 0, "Diameter");
-LiquidLine diametr_value_line(1, 1, "Set ", CylinderDiametr, "mm");
+LiquidLine diametr_value_line(1, 1, "Set ", data.CylinderDiametr, "mm");
 LiquidScreen diametr_screen(diametr_title_line, diametr_value_line);
 
 LiquidLine angle_title_line(0, 0, "Grid Angle");
-LiquidLine angle_value_line(1, 1, "Set ", CylinderAngle, degree);
+LiquidLine angle_value_line(1, 1, "Set ", data.CylinderAngle, degree);
 LiquidScreen angle_screen(angle_title_line, angle_value_line);
 
 // И это последнее третье меню.
@@ -180,7 +189,7 @@ void goto_cylinder_menu() {
 }
 
 void set_limit_top() {
-  if (LinearMove > LimitBottom) {
+  if (data.LinearMove > data.LimitBottom) {
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -192,7 +201,7 @@ void set_limit_top() {
     menu_system.update();
   } else {
     lcd.setBacklight(GREEN);
-    LimitTop = LinearMove;
+    data.LimitTop = data.LinearMove;
     menu_system.update();
     delay(500);
     lcd.setBacklight(WHITE);
@@ -200,7 +209,7 @@ void set_limit_top() {
 }
 
 void set_limit_bootom() {
-  if (LinearMove < LimitTop) {
+  if (data.LinearMove < data.LimitTop) {
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -212,7 +221,7 @@ void set_limit_bootom() {
     menu_system.update();
   } else {
     lcd.setBacklight(GREEN);
-    LimitBottom = LinearMove;
+    data.LimitBottom = data.LinearMove;
     menu_system.update();
     delay(500);
     lcd.setBacklight(WHITE);
@@ -236,44 +245,44 @@ void mode_edit_value() {
 }
 
 void increase_diametr() {
-  if (CylinderDiametr <= 165) {
+  if (data.CylinderDiametr <= 165) {
 
     if (!oneBool && !twoBool) {
-      CylinderDiametr += 0.01;
+      data.CylinderDiametr += 0.01;
       oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
     }
 
     if (oneBool && !twoBool) {
-      if (CylinderDiametr > 164) {
+      if (data.CylinderDiametr > 164) {
         oneBool = false;
         previousMillisSped1 = 0;
       } else {
-        CylinderDiametr += 0.10;
+        data.CylinderDiametr += 0.10;
         twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
       }
     }
 
     if (oneBool && twoBool && !threeBool) {
-      if (CylinderDiametr > 163) {
+      if (data.CylinderDiametr > 163) {
         twoBool = false;
         previousMillisSped2 = 0;
       } else {
-        CylinderDiametr += 1.00;
+        data.CylinderDiametr += 1.00;
         threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
       }
     }
 
     if (oneBool && twoBool && threeBool) {
-      if (CylinderDiametr > 155) {
+      if (data.CylinderDiametr > 155) {
         threeBool = false;
         previousMillisSped3 = 0;
       } else {
-        CylinderDiametr += 10.00;
+        data.CylinderDiametr += 10.00;
       }
     }
 
   } else {
-    CylinderDiametr = 165;
+    data.CylinderDiametr = 165;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -287,43 +296,43 @@ void increase_diametr() {
 }
 
 void decrease_diametr() {
-  if (CylinderDiametr >= 30) {
+  if (data.CylinderDiametr >= 30) {
 
     if (!oneBool && !twoBool) {
-      CylinderDiametr -= 0.01;
+      data.CylinderDiametr -= 0.01;
       oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
     }
 
     if (oneBool && !twoBool) {
-      if (CylinderDiametr < 31) {
+      if (data.CylinderDiametr < 31) {
         oneBool = false;
         previousMillisSped1 = 0;
       } else {
-        CylinderDiametr -= 0.10;
+        data.CylinderDiametr -= 0.10;
         twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
       }
     }
 
     if (oneBool && twoBool && !threeBool) {
-      if (CylinderDiametr < 33) {
+      if (data.CylinderDiametr < 33) {
         twoBool = false;
         previousMillisSped2 = 0;
       } else {
-        CylinderDiametr -= 1.00;
+        data.CylinderDiametr -= 1.00;
         threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
       }
     }
 
     if (oneBool && twoBool && threeBool) {
-      if (CylinderDiametr < 45) {
+      if (data.CylinderDiametr < 45) {
         threeBool = false;
         previousMillisSped3 = 0;
       } else {
-        CylinderDiametr -= 10.00;
+        data.CylinderDiametr -= 10.00;
       }
     }
   } else {
-    CylinderDiametr = 30;
+    data.CylinderDiametr = 30;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -337,24 +346,24 @@ void decrease_diametr() {
 }
 
 void increase_angle() {
-  if (CylinderAngle < 120) {
+  if (data.CylinderAngle < 120) {
 
     if (!oneBool && !twoBool) {
-      CylinderAngle += 1.00;
+      data.CylinderAngle += 1.00;
       oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
     }
 
     if (oneBool && !twoBool) {
-      if (CylinderAngle > 100) {
+      if (data.CylinderAngle > 100) {
         oneBool = false;
         previousMillisSped1 = 0;
       } else {
-        CylinderAngle += 10.00;
+        data.CylinderAngle += 10.00;
         twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
       }
     }
   } else {
-    CylinderAngle = 120;
+    data.CylinderAngle = 120;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -368,24 +377,24 @@ void increase_angle() {
 }
 
 void decrease_angle() {
-  if (CylinderAngle > 10) {
+  if (data.CylinderAngle > 10) {
 
     if (!oneBool && !twoBool) {
-      CylinderAngle -= 1.00;
+      data.CylinderAngle -= 1.00;
       oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
     }
 
     if (oneBool && !twoBool) {
-      if (CylinderAngle < 30) {
+      if (data.CylinderAngle < 30) {
         oneBool = false;
         previousMillisSped1 = 0;
       } else {
-        CylinderAngle -= 10.00;
+        data.CylinderAngle -= 10.00;
         twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
       }
     }
   } else {
-    CylinderAngle = 10;
+    data.CylinderAngle = 10;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -482,6 +491,7 @@ void setup() {
   pinMode(interruptRemote, INPUT_PULLUP);  // Подтянем пины источники PCINT к питанию
   pciSetup(interruptRemote);               // И разрешим на них прерывания T6
 #endif
+
   /////////////Инициализация входов и подтягивание входов к положительному потенциалу с помощью внутрених резисторов/////////////
   pinMode(buttonEndCycle, INPUT_PULLUP);
   pinMode(buttonStartFeed, INPUT_PULLUP);
@@ -528,6 +538,38 @@ void setup() {
   //lcd.setBacklight(Color::WHITE);
   lcd.setBacklight(WHITE);
 
+#ifdef CLEAR_EEPROM 
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    EEPROM.write(i, 0);
+  }
+  EEPROM.get(0, data);
+#endif
+
+#ifdef ENABLE_EEPROM
+
+  EEPROM.get(0, data);
+
+  if (data.InitData != '*') {
+
+    data.InitData = '*';
+    data.LinearMove = 0;
+    data.LimitTop = 10;
+    data.LimitBottom = 50;
+    data.CylinderDiametr = 80;
+    data.CylinderAngle = 60;
+    
+    EEPROM.put(0, data);
+    EEPROM.get(0, data);
+
+    lcd.setCursor(0, 0);
+    lcd.print("Init EEPROM OK");
+    lcd.setCursor(0, 1);
+    lcd.print(data.InitData);
+    delay(1000);
+  }
+
+#endif
+
   back_line.set_focusPosition(Position::LEFT);
   //back_line.attach_function(1, go_back);
   //back_line.attach_function(2, go_back);
@@ -543,7 +585,7 @@ void setup() {
   //cylinder_line.attach_function(2, goto_cylinder_menu);
   cylinder_line.attach_function(3, goto_cylinder_menu);
 
-  main_menu.switch_focus(true);
+  //main_menu.switch_focus(true);
 
   limit_top_line.set_focusPosition(Position::LEFT);
   //limit_top_line.attach_function(1, set_limit_top);
@@ -867,7 +909,7 @@ void Menu() {
 
   while (startMenu) {
 
-    LinearMove = getLinearMotion();
+    data.LinearMove = getLinearMotion();
 
     if (buttons = lcd.readButtons()) {
 
