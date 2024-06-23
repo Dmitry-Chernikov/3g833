@@ -84,7 +84,7 @@ enum FunctionTypes {
 
 #if defined ENABLE_EEPROM || defined CLEAR_EEPROM
 struct Data {
-  char  InitData;
+  char InitData;
   float LinearMove;
   float LimitTop;
   float LimitBottom;
@@ -136,7 +136,7 @@ LiquidLine oSave_line(0, 0, "Save");
 LiquidScreen oSecondary_screen(oSave_line, back_line);
 
 //Это второе меню.
-LiquidMenu limit_menu(lcd, top_screen, bootom_screen, oSecondary_screen, 1);
+LiquidMenu limit_menu(lcd, bootom_screen, top_screen, oSecondary_screen, 1);
 
 
 LiquidLine diametr_title_line(0, 0, "Diameter");
@@ -159,20 +159,27 @@ LiquidSystem menu_system(main_menu, limit_menu, cylinder_menu, 1);
 
 ///////////////////////////Процедуры меню begin///////////////////////////////////
 // Функция обратного вызова, которая будет прикреплена к Back_line.
+
 void go_back() {
   // Эта функция принимает ссылку на разыскиваемое меню.
-  menu_system.change_menu(main_menu);
-  if (menu_system.get_currentScreen() == &settings_screen) {
-    menu_system.set_focusedLine(0);
+  if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider){
+    startMenu = false;
   }
-  //menu_system.change_screen(&settings_screen);
+
+  if (stateGeneralStop) {
+    menu_system.change_menu(main_menu);
+    if (menu_system.get_currentScreen() == &settings_screen) {
+      menu_system.set_focusedLine(0);
+    }
+  } 
+
 }
 
 void goto_limit_menu() {
   menu_system.change_menu(limit_menu);
 
   if (menu_system.get_currentScreen() == &oSecondary_screen) {
-    menu_system.change_screen(&top_screen);
+    menu_system.change_screen(&bootom_screen);
   }
 
   menu_system.set_focusedLine(1);
@@ -189,27 +196,274 @@ void goto_cylinder_menu() {
 }
 
 void set_limit_top() {
-  if (data.LinearMove > data.LimitBottom) {
+  if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
+    if (data.LinearMove > data.LimitBottom) {
+      lcd.clear();
+      lcd.setBacklight(RED);
+      lcd.setCursor(5, 0);
+      lcd.print("ERROR");
+      lcd.setCursor(2, 1);
+      lcd.print("TOP > BOOTOM");
+      delay(2000);
+      lcd.setBacklight(WHITE);
+      menu_system.update();
+    } else {
+      lcd.setBacklight(GREEN);
+      data.LimitTop = data.LinearMove;
+      menu_system.update();
+      delay(500);
+      lcd.setBacklight(WHITE);
+    }
+  }
+
+  if (stateGeneralStop) {
+    IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
+
+    if ((menu_system.get_currentScreen() == &top_screen) && IncDecMode) {
+
+      lcd.setBacklight(GREEN);
+      menu_system.set_focusPosition(Position::RIGHT);
+
+    } else {
+
+      lcd.setBacklight(WHITE);
+      menu_system.set_focusPosition(Position::LEFT);
+    }
+  }
+}
+
+void increase_limit_top() {
+  //constrain(LEDbright, 0, 255);
+  if (data.LimitTop <= (data.LimitBottom - 5)) {
+
+    if (!oneBool && !twoBool) {
+      data.LimitTop += 0.01;
+      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
+    }
+
+    if (oneBool && !twoBool) {
+      if (data.LimitTop > (data.LimitBottom - 5.5)) {
+        oneBool = false;
+        previousMillisSped1 = 0;
+      } else {
+        data.LimitTop += 0.10;
+        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
+      }
+    }
+
+    if (oneBool && twoBool && !threeBool) {
+      if (data.LimitTop > (data.LimitBottom - 6)) {
+        twoBool = false;
+        previousMillisSped2 = 0;
+      } else {
+        data.LimitTop += 1.00;
+        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
+      }
+    }
+
+    if (oneBool && twoBool && threeBool) {
+      if (data.LimitTop > (data.LimitBottom - 7)) {
+        threeBool = false;
+        previousMillisSped3 = 0;
+      } else {
+        data.LimitTop += 10.00;
+      }
+    }
+
+  } else {
+    data.LimitTop = data.LimitBottom - 5;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
     lcd.print("ERROR");
     lcd.setCursor(2, 1);
-    lcd.print("TOP > BOOTOM");
+    lcd.print("TOP > BOTTOM");
     delay(2000);
-    lcd.setBacklight(WHITE);
-    menu_system.update();
-  } else {
     lcd.setBacklight(GREEN);
-    data.LimitTop = data.LinearMove;
     menu_system.update();
-    delay(500);
-    lcd.setBacklight(WHITE);
+  }
+}
+
+void decrease_limit_top() {
+
+  if (data.LimitTop >= 0) {
+
+    if (!oneBool && !twoBool) {
+      data.LimitTop -= 0.01;
+      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
+    }
+
+    if (oneBool && !twoBool) {
+      if (data.LimitTop < 0.5) {
+        oneBool = false;
+        previousMillisSped1 = 0;
+      } else {
+        data.LimitTop -= 0.10;
+        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
+      }
+    }
+
+    if (oneBool && twoBool && !threeBool) {
+      if (data.LimitTop < 1) {
+        twoBool = false;
+        previousMillisSped2 = 0;
+      } else {
+        data.LimitTop -= 1.00;
+        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
+      }
+    }
+
+    if (oneBool && twoBool && threeBool) {
+      if (data.LimitTop < 2) {
+        threeBool = false;
+        previousMillisSped3 = 0;
+      } else {
+        data.LimitTop -= 10.00;
+      }
+    }
+
+  } else {
+    data.LimitTop = 0;
+    lcd.clear();
+    lcd.setBacklight(RED);
+    lcd.setCursor(5, 0);
+    lcd.print("ERROR");
+    lcd.setCursor(2, 1);
+    lcd.print("TOP < 0");
+    delay(2000);
+    lcd.setBacklight(GREEN);
+    menu_system.update();
   }
 }
 
 void set_limit_bootom() {
-  if (data.LinearMove < data.LimitTop) {
+  if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
+    if (data.LinearMove < data.LimitTop) {
+      lcd.clear();
+      lcd.setBacklight(RED);
+      lcd.setCursor(5, 0);
+      lcd.print("ERROR");
+      lcd.setCursor(2, 1);
+      lcd.print("BOOTOM < TOP");
+      delay(2000);
+      lcd.setBacklight(WHITE);
+      menu_system.update();
+    } else {
+      lcd.setBacklight(GREEN);
+      data.LimitBottom = data.LinearMove;
+      menu_system.update();
+      delay(500);
+      lcd.setBacklight(WHITE);
+    }
+  }
+
+  if (stateGeneralStop) {
+    IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
+
+    if ((menu_system.get_currentScreen() == &bootom_screen) && IncDecMode) {
+
+      lcd.setBacklight(GREEN);
+      menu_system.set_focusPosition(Position::RIGHT);
+
+    } else {
+
+      lcd.setBacklight(WHITE);
+      menu_system.set_focusPosition(Position::LEFT);
+    }
+  }
+}
+
+void increase_limit_bootom() {
+
+  if (data.LimitBottom <= 500) {
+
+    if (!oneBool && !twoBool) {
+      data.LimitBottom += 0.01;
+      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
+    }
+
+    if (oneBool && !twoBool) {
+      if (data.LimitBottom > 499) {
+        oneBool = false;
+        previousMillisSped1 = 0;
+      } else {
+        data.LimitBottom += 0.10;
+        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
+      }
+    }
+
+    if (oneBool && twoBool && !threeBool) {
+      if (data.LimitBottom > 498) {
+        twoBool = false;
+        previousMillisSped2 = 0;
+      } else {
+        data.LimitBottom += 1.00;
+        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
+      }
+    }
+
+    if (oneBool && twoBool && threeBool) {
+      if (data.LimitBottom > 497) {
+        threeBool = false;
+        previousMillisSped3 = 0;
+      } else {
+        data.LimitBottom += 10.00;
+      }
+    }
+
+  } else {
+    data.LimitBottom = 500;
+    lcd.clear();
+    lcd.setBacklight(RED);
+    lcd.setCursor(5, 0);
+    lcd.print("ERROR");
+    lcd.setCursor(2, 1);
+    lcd.print("BOOTOM > 500");
+    delay(2000);
+    lcd.setBacklight(GREEN);
+    menu_system.update();
+  }
+}
+
+void decrease_limit_bootom() {
+  if (data.LimitBottom >= data.LimitTop + 5) {
+
+    if (!oneBool && !twoBool) {
+      data.LimitBottom -= 0.01;
+      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
+    }
+
+    if (oneBool && !twoBool) {
+      if (data.LimitBottom < data.LimitTop + 5.5) {
+        oneBool = false;
+        previousMillisSped1 = 0;
+      } else {
+        data.LimitBottom -= 0.10;
+        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
+      }
+    }
+
+    if (oneBool && twoBool && !threeBool) {
+      if (data.LimitBottom < data.LimitTop + 6) {
+        twoBool = false;
+        previousMillisSped2 = 0;
+      } else {
+        data.LimitBottom -= 1.00;
+        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
+      }
+    }
+
+    if (oneBool && twoBool && threeBool) {
+      if (data.LimitBottom < data.LimitTop + 7) {
+        threeBool = false;
+        previousMillisSped3 = 0;
+      } else {
+        data.LimitBottom -= 10.00;
+      }
+    }
+
+  } else {
+    data.LimitBottom = data.LimitTop + 5;
     lcd.clear();
     lcd.setBacklight(RED);
     lcd.setCursor(5, 0);
@@ -217,14 +471,8 @@ void set_limit_bootom() {
     lcd.setCursor(2, 1);
     lcd.print("BOOTOM < TOP");
     delay(2000);
-    lcd.setBacklight(WHITE);
-    menu_system.update();
-  } else {
     lcd.setBacklight(GREEN);
-    data.LimitBottom = data.LinearMove;
     menu_system.update();
-    delay(500);
-    lcd.setBacklight(WHITE);
   }
 }
 
@@ -538,8 +786,8 @@ void setup() {
   //lcd.setBacklight(Color::WHITE);
   lcd.setBacklight(WHITE);
 
-#ifdef CLEAR_EEPROM 
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
+#ifdef CLEAR_EEPROM
+  for (int i = 0; i < EEPROM.length(); i++) {
     EEPROM.write(i, 0);
   }
   EEPROM.get(0, data);
@@ -550,14 +798,13 @@ void setup() {
   EEPROM.get(0, data);
 
   if (data.InitData != '*') {
-
     data.InitData = '*';
     data.LinearMove = 0;
     data.LimitTop = 10;
     data.LimitBottom = 50;
     data.CylinderDiametr = 80;
     data.CylinderAngle = 60;
-    
+
     EEPROM.put(0, data);
     EEPROM.get(0, data);
 
@@ -588,13 +835,13 @@ void setup() {
   //main_menu.switch_focus(true);
 
   limit_top_line.set_focusPosition(Position::LEFT);
-  //limit_top_line.attach_function(1, set_limit_top);
-  //limit_top_line.attach_function(2, set_limit_top);
+  limit_top_line.attach_function(1, increase_limit_top);
+  limit_top_line.attach_function(2, decrease_limit_top);
   limit_top_line.attach_function(3, set_limit_top);
 
   limit_bootom_line.set_focusPosition(Position::LEFT);
-  //limit_bootom_line.attach_function(1, set_limit_bootom);
-  //limit_bootom_line.attach_function(2, set_limit_bootom);
+  limit_bootom_line.attach_function(1, increase_limit_bootom);
+  limit_bootom_line.attach_function(2, decrease_limit_bootom);
   limit_bootom_line.attach_function(3, set_limit_bootom);
 
   diametr_value_line.set_focusPosition(Position::LEFT);
@@ -726,11 +973,14 @@ void loop() {
         digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
         digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
 
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print(getLinearMotion(), 4);
-        lcd.print(" mm");
-        delay(100);
+        /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
+        Menu();
+
+        // lcd.clear();
+        // lcd.setCursor(0, 0);
+        // lcd.print(getLinearMotion(), 4);
+        // lcd.print(" mm");
+        // delay(100);
       }
     }
   } else {  // Кнопку Общий стоп нажали
@@ -745,6 +995,9 @@ void loop() {
     digitalWrite(electromagnetBottom, true);        // выключить электромагнит движения вниз
     digitalWrite(electromagnetManual, true);        // выключаем электромагнит ручной подачи
     digitalWrite(electromagnetBrake, true);         // выключаем электромагнит растормаживания
+
+    /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
+    Menu();
   }
 
   /////////////////////////////////////////////////////ЦИКЛ///////////////////////////////////////////////////////
@@ -860,15 +1113,18 @@ void loop() {
 
         digitalWrite(electromagnetManual, false);  // включить электромагнит ручного управления
 
-        digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя
-        digitalWrite(motorSelfCoolant, !stateSpindle);  // включить мотор помпы СОЖ
+        digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя или отключить в зависимости от stateSpindle 
+        digitalWrite(motorSelfCoolant, !stateSpindle);  // включить мотор помпы СОЖ или отключить в зависимости от stateSpindle 
+
+        if (!stateSpindle){
+          /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
+          Menu();
+        }
+        
       }
     }
   }
 
-
-  /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-  Menu();
 }
 
 #ifdef ENABLE_KYPAD
@@ -899,8 +1155,16 @@ void Menu() {
     lcd.setCursor(0, 0);
     lcd.print("Start Menu");
     delay(1000);
-    menu_system.change_menu(main_menu);
-    menu_system.change_screen(&welcome_screen);
+    if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
+      menu_system.change_menu(limit_menu);
+      menu_system.change_screen(&bootom_screen);
+      menu_system.set_focusedLine(1);
+    }
+    if (stateGeneralStop) {
+      menu_system.change_menu(main_menu);
+      menu_system.change_screen(&welcome_screen);
+    }
+
   } else {
     if (second > 0) {
       second = 0;
@@ -1004,13 +1268,19 @@ void Menu() {
       }
 
       //previousMillisMenu = millis();
-      while (lcd.readButtons() > 0 && startMenu && !IncDecMode) {
-        startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print(second += 1);
-        delay(1000);
+      if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider){
+
+      }else{
+        while (lcd.readButtons() > 0 && startMenu && !IncDecMode) {
+          startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
+          lcd.clear();
+          lcd.setCursor(0, 0);
+          lcd.print(second += 1);
+          delay(1000);
+        }
+
       }
+      
     } else {
       oneBool = false;
       twoBool = false;
@@ -1040,10 +1310,12 @@ void Menu() {
       }
 
     } else {
+      // Сохранение изменённой структуры data
+      EEPROM.put(0, data);
+
       second = 0;
       lcd.clear();
       lcd.setCursor(0, 0);
-      //lcd.setBacklight(WHITE);
       lcd.print("Close Menu");
       delay(1000);
     }
