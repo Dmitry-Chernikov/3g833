@@ -25,7 +25,7 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 #define ENABLE_KYPAD           // Это для моей клавиатуры кода включаю
 #define ENABLE_SWITCH          // Включение кода механического переключателя
 #define ENABLE_PROGRAM_SWITCH  // Включение кода программного переключателя
-#define ENABLE_EEPROM          // Включить код поддкржки использовангия EEPROM и переменно структуры Data и переменной data
+#define ENABLE_EEPROM          // Включить код поддержки использования EEPROM и переменно структуры Data и переменной data
 //#define CLEAR_EEPROM // Запуск кода очистки всей памяти EEPROM для отладки
 
 //Входные сигналы
@@ -55,7 +55,7 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 
 //Состояние режимов
 volatile bool stateEndCycle = false;         // Состояние Конец-Цикла
-volatile bool statePush = false;             // Состояние Толчёк-Ползун
+volatile bool statePush = false;             // Состояние Толчок-Ползун
 volatile bool stateStartFeed = false;        // Состояние Подача-Пуск
 volatile bool stateSpindle = false;          // Состояние Шпиндель-Старт\Стоп
 volatile bool stateAutoCycleManual = false;  // Состояние Цикл-Ручной
@@ -96,7 +96,7 @@ struct Data {
   float CylinderAngle;
 
   bool  StateElectromagnetTop;
-  bool  StateElectromagnetBottom;  
+  bool  StateElectromagnetBottom;
 
   bool operator != (const Data& otcher) const{
     return  InitData != otcher.InitData && \
@@ -115,7 +115,7 @@ struct Data {
 
 
 Data data;
-Data dataBuffer; // временная пременная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
+Data dataBuffer; // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
 #endif
 
 //char input_saved[3];
@@ -762,7 +762,7 @@ void setup() {
   pciSetup(interruptRemote);               // И разрешим на них прерывания T6
   #endif
 
-  /////////////Инициализация входов и подтягивание входов к положительному потенциалу с помощью внутрених резисторов/////////////
+  /////////////Инициализация входов и подтягивание входов к положительному потенциалу с помощью внутренних резисторов/////////////
   pinMode(buttonEndCycle, INPUT_PULLUP);
   pinMode(buttonStartFeed, INPUT_PULLUP);
   pinMode(buttonSpindleStart, INPUT_PULLUP);
@@ -891,7 +891,7 @@ void setup() {
 }
 
 void loop() {
-  data.LinearMove = getLinearMotion(); // Получаем данные с эекодера
+  data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
 
   stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
   stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
@@ -905,13 +905,13 @@ void loop() {
 
     #ifdef ENABLE_PROGRAM_SWITCH
     if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
-      data.StateElectromagnetTop = false;  // включить сотояние вверх программного переключателя 
-      data.StateElectromagnetBottom = true;  // выключить сотояние вниз программного переключателя       
+      data.StateElectromagnetTop = false;  // включить стояние вверх программного переключателя
+      data.StateElectromagnetBottom = true;  // выключить стояние вниз программного переключателя
     }
 
     if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
-      data.StateElectromagnetTop = true;  // выключить сотояние вверх программного переключателя 
-      data.StateElectromagnetBottom = false;  // включить сотояние вниз программного переключателя       
+      data.StateElectromagnetTop = true;  // выключить стояние вверх программного переключателя
+      data.StateElectromagnetBottom = false;  // включить стояние вниз программного переключателя
     }
     #endif
 
@@ -926,7 +926,7 @@ void loop() {
         data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
 
         digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
-        digitalWrite(electromagnetBrake, true);  // выключить электромагнит растормживания
+        digitalWrite(electromagnetBrake, true);  // выключить электромагнит растормаживания
         stateEndCycle = false;                   // Конец цикла сбрасываем так как ползун стоит на концевике парковки
 
         statePush = trigerRS(statePush,
@@ -934,7 +934,7 @@ void loop() {
                              digitalRead(buttonPush) || stateGeneralStop);  // Толчковый ввод хоны
 
         #ifdef ENABLE_PROGRAM_SWITCH
-          if (statePush && !data.StateElectromagnetTop) {  // Если кнопка Толковая нажата и програмный переключатель включён вверх
+          if (statePush && !data.StateElectromagnetTop) {  // Если кнопка Толковая нажата и программный переключатель включён вверх
 
             digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
             digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = false);  // включаем электромагнит движения вниз
@@ -944,7 +944,7 @@ void loop() {
             digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
           }
         #endif
-        
+
         #ifdef ENABLE_SWITCH
           if (statePush && !digitalRead(endSwitchTop)) {  // Если кнопка Толковая нажата и переключатель включён вверх
 
@@ -976,7 +976,7 @@ void loop() {
         }
 
         if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
-        
+
           stateSpindle = trigerRS(stateSpindle,
                           !digitalRead(buttonSpindleStart),
                           !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom));  // Шпиндель Стоп или Старт
@@ -1039,7 +1039,7 @@ void loop() {
           }
         }
       }
-    } 
+    }
     if (!stateAutoCycleManual) {  // Переключатель включен в режим Ручной
 
       digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
@@ -1069,16 +1069,16 @@ void loop() {
         // delay(100);
       }
     }
-  } 
+  }
   if (!stateStartFeed) {  // Кнопку Общий стоп нажали
 
     EEPROM.get(0, dataBuffer);
     if (data != dataBuffer) {
-      EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM  
+      EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
     }else{
-      EEPROM.get(0, data); // Чтение структуры data из EEPROM  
+      EEPROM.get(0, data); // Чтение структуры data из EEPROM
     }
-    
+
     stateSpindle = trigerRS(stateSpindle,
                             !digitalRead(buttonSpindleStart),
                             !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Старт
@@ -1112,7 +1112,7 @@ void loop() {
     // lcd.print(" mm");
     // delay(100);
 
-    if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл      
+    if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
 
       digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления если был на ручном
 
@@ -1126,7 +1126,7 @@ void loop() {
         digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
         digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = true); // выключить электромагнит движения вниз
         digitalWrite(electromagnetTop, data.StateElectromagnetTop = false);      // включить электромагнит движения вверх
-        
+
         if (stateTopSlider) {  // Ползун поднялся в верх, исходное состояние конец цикла
 
           digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
@@ -1137,7 +1137,7 @@ void loop() {
         }
 
       }
- 
+
       if (!stateEndCycle && stateSpindle) { //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Eсли включен
 
         digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя
@@ -1149,7 +1149,7 @@ void loop() {
             digitalWrite(electromagnetTop, data.StateElectromagnetTop = true);  // выключить электромагнит движения вверх
             delay(100);
             digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = false);  // включить электромагнит движения вниз
-            
+
           }
 
           if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
@@ -1212,11 +1212,11 @@ void loop() {
             delay(100);
             digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
           }
-        #endif          
+        #endif
       }
     }
 
-    if (!stateAutoCycleManual) { // Переключатель включен в режим Ручной    
+    if (!stateAutoCycleManual) { // Переключатель включен в режим Ручной
 
       stateSpindle = trigerRS(stateSpindle,
                               !digitalRead(buttonSpindleStart),
@@ -1259,7 +1259,7 @@ void loop() {
 ISR(PCINT0_vect) {  // Обработчик запросов прерывания от пинов PCINT0..PCINT7
 
   cli();         // сбрасываем флаг прерывания (Запретить прерывания)
-  readKeypad();  // вызов процетуры опроса клавиатуры
+  readKeypad();  // вызов процедуры опроса клавиатуры
   sei();         // устанавливаем флаг прерывания (Разрешить прерывания)
 }
 #endif
