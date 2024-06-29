@@ -1025,6 +1025,14 @@ void loop() {
 
         if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
 
+          if (stateSpindle ) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
+            lcd.clear();
+            lcd.setBacklight(WHITE);
+            digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
+            stateStartCycle = true;                   // вход в цикл
+
+          }
+
           #ifdef ENABLE_PROGRAM_SWITCH
           stateSpindle = trigerRS(stateSpindle,
                   !digitalRead(buttonSpindleStart),
@@ -1036,14 +1044,6 @@ void loop() {
                           !digitalRead(buttonSpindleStart),
                           !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom));  // Шпиндель Стоп или Старт
           #endif
-
-          if (stateSpindle ) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
-            lcd.clear();
-            lcd.setBacklight(WHITE);
-            digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
-            stateStartCycle = true;                   // вход в цикл
-
-          }
 
           if (!stateSpindle) {  // Шпиндель выключен
 
@@ -1204,6 +1204,7 @@ void loop() {
       EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
       EEPROM.get(0, data); // Чтение структуры data из EEPROM
 
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("SAVE EEPROM OK");
       lcd.setCursor(0, 1);
@@ -1390,6 +1391,7 @@ void loop() {
         EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
         EEPROM.get(0, data); // Чтение структуры data из EEPROM
 
+        lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("SAVE EEPROM OK");
         lcd.setCursor(0, 1);
@@ -1664,6 +1666,7 @@ void Menu() {
         EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
         EEPROM.get(0, data); // Чтение структуры data из EEPROM
 
+        lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("SAVE EEPROM OK");
         lcd.setCursor(0, 1);
