@@ -101,16 +101,18 @@ struct Data {
   bool  StateIntermediate;
 
   bool operator != (const Data& otcher) const{
-    return  InitData != otcher.InitData && \
-            LinearMove != otcher.LinearMove && \
-            AnglePrevious != otcher.AnglePrevious && \
-            AbsoluteAngle != otcher.AbsoluteAngle && \
-            LimitTop != otcher.LimitTop && \
-            LimitBottom != otcher.LimitBottom && \
-            CylinderDiametr != otcher.CylinderDiametr && \
-            CylinderAngle != otcher.CylinderAngle && \
-            StateElectromagnetTop != otcher.StateElectromagnetTop && \
-            StateElectromagnetBottom != otcher.StateElectromagnetBottom && \
+    return  InitData != otcher.InitData || \
+
+            abs(LinearMove - otcher.LinearMove) > 0.1 || \
+            abs(AnglePrevious - otcher.AnglePrevious) > 0.1 || \
+            abs(AbsoluteAngle - otcher.AbsoluteAngle) > 0.1 || \
+            abs(LimitTop - otcher.LimitTop) > 0.1 || \
+            abs(LimitBottom - otcher.LimitBottom) > 0.1 || \
+            abs(CylinderDiametr - otcher.CylinderDiametr) > 0.1 || \
+            abs(CylinderAngle - otcher.CylinderAngle) > 0.1 || \
+
+            StateElectromagnetTop != otcher.StateElectromagnetTop || \
+            StateElectromagnetBottom != otcher.StateElectromagnetBottom || \
             StateIntermediate != otcher.StateIntermediate;
   }
 };
@@ -831,7 +833,6 @@ void setup() {
       indexClear = indexClear + 1;
     }
   }
-  EEPROM.get(0, data);
 
   lcd.setCursor(0, 0);
   lcd.print("CLEAR EEPROM OK");
@@ -858,7 +859,6 @@ void setup() {
     data.StateIntermediate = true;
 
     EEPROM.put(0, data);
-    EEPROM.get(0, data);
 
     lcd.setCursor(0, 0);
     lcd.print("INIT EEPROM OK");
@@ -914,14 +914,6 @@ void setup() {
 
 void loop() {
 
-
-  if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
-    data.AbsoluteAngle = 0;
-    data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
-  }
-
-  data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
-
   stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
   stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
   digitalWrite(motorStartFeed, !stateStartFeed);                                                                                   // Запускаем мотор возвратно поступательного движения
@@ -931,6 +923,14 @@ void loop() {
 
   /////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
   if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно поступательного движения
+
+    if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
+      data.AbsoluteAngle = 0;
+      data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+    }
+
+    data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
+
     /**
       Имитация механического путевого переключателя,
       data.LinearMove хранит текущее положение ползуна, контролируемое энкодером
@@ -1203,7 +1203,15 @@ void loop() {
     if (data != dataBuffer) {
       EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
       EEPROM.get(0, data); // Чтение структуры data из EEPROM
+
+      lcd.setCursor(0, 0);
+      lcd.print("SAVE EEPROM OK");
+      lcd.setCursor(0, 1);
+      lcd.print(data.InitData);
+      delay(1000);
     }
+
+
 
     stateSpindle = trigerRS(stateSpindle,
                             !digitalRead(buttonSpindleStart),
@@ -1381,6 +1389,12 @@ void loop() {
       if (data != dataBuffer) {
         EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
         EEPROM.get(0, data); // Чтение структуры data из EEPROM
+
+        lcd.setCursor(0, 0);
+        lcd.print("SAVE EEPROM OK");
+        lcd.setCursor(0, 1);
+        lcd.print(data.InitData);
+        delay(1000);
       }
 
       digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
@@ -1649,6 +1663,12 @@ void Menu() {
       if (data != dataBuffer) {
         EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
         EEPROM.get(0, data); // Чтение структуры data из EEPROM
+
+        lcd.setCursor(0, 0);
+        lcd.print("SAVE EEPROM OK");
+        lcd.setCursor(0, 1);
+        lcd.print(data.InitData);
+        delay(1000);
       }
 
       second = 0;
