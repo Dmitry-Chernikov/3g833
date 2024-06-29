@@ -23,8 +23,9 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 #define WHITE 0x7
 
 #define ENABLE_KYPAD           // Это для моей клавиатуры кода включаю
-#define ENABLE_SWITCH          // Включение кода механического переключателя
+//#define ENABLE_SWITCH          // Включение кода механического переключателя
 #define ENABLE_PROGRAM_SWITCH  // Включение кода программного переключателя
+
 #define ENABLE_EEPROM          // Включить код поддержки использования EEPROM и переменно структуры Data и переменной data
 //#define CLEAR_EEPROM // Запуск кода очистки всей памяти EEPROM для отладки
 
@@ -34,11 +35,11 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
 #endif
 
 #define buttonEndCycle 22         // Вывод кнопки Конец Цикла
-#define buttonStartFeed 23        // Вывод кнопки Подача-Пуск, подача электроэнэргии на двигатели возвратно поступательного движения
+#define buttonStartFeed 23        // Вывод кнопки Подача-Пуск, подача электроэнергии на двигатели возвратно поступательного движения
 #define buttonSpindleStart 24     // Вывод кнопки Старт Шпиндель
 #define buttonSpindleStop 25      // Вывод кнопки Шпиндель Стоп
 #define buttonPush 26             // Вывод кнопки Толчковое опускание хонинговальной головки
-#define buttonGeneralStop 27      // Вывод кнопки Общий Стоп, отключение питания на все миханизмы станка
+#define buttonGeneralStop 27      // Вывод кнопки Общий Стоп, отключение питания на все механизмы станка
 #define switchAutoCycleManual 28  // Вывод переключателя автоматического цикла или ручного управления
 #define switchTopSlider 29        // Вывод концевика верхнего положения ползуна
 #define endSwitchTop 37           // Вывод концевика верхнего концевика цикла
@@ -97,6 +98,7 @@ struct Data {
 
   bool  StateElectromagnetTop;
   bool  StateElectromagnetBottom;
+  bool  StateIntermediate;
 
   bool operator != (const Data& otcher) const{
     return  InitData != otcher.InitData && \
@@ -108,7 +110,8 @@ struct Data {
             CylinderDiametr != otcher.CylinderDiametr && \
             CylinderAngle != otcher.CylinderAngle && \
             StateElectromagnetTop != otcher.StateElectromagnetTop && \
-            StateElectromagnetBottom != otcher.StateElectromagnetBottom;
+            StateElectromagnetBottom != otcher.StateElectromagnetBottom && \
+            StateIntermediate != otcher.StateIntermediate;
   }
 };
 
@@ -716,15 +719,15 @@ void readKeypad() {
 #endif
 
 bool stateMillisDelay(unsigned long* previousMillis, unsigned long* interval) {
-  unsigned long currentMillis = millis();
+  //unsigned long currentMillis = millis();
 
   if (*previousMillis == 0) {
-    *previousMillis = currentMillis;
+    *previousMillis = millis();
   }
 
   //проверяем не прошел ли нужный интервал, если прошел то
-  if ((currentMillis - *previousMillis) >= *interval) {
-    // сохраняем время последнего переключения
+  if ((millis() - *previousMillis) >= *interval) {
+    // обнуляем предыдущее значение millis()
     *previousMillis = 0;
     return HIGH;
   }
@@ -802,21 +805,40 @@ void setup() {
 
   /////////////Инициализация энкодера/////////////
   angleSensor.init();
-  //AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true));
+  // data.AbsoluteAngle = 0;
+  // data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
 
   lcd.begin(16, 2);
   //lcd.setBacklight(Color::WHITE);
   lcd.setBacklight(WHITE);
 
   #ifdef CLEAR_EEPROM
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("CLEAR EEPROM");
+
+  char procesClear[16]  = "                ";
+  uint8_t indexClear = 0;
+  uint16_t compareParam = EEPROM.length() / 16;
+
   for (int i = 0; i < EEPROM.length(); i++) {
     EEPROM.write(i, 0);
+    if (i = compareParam){
+      lcd.setCursor(0, 1);
+      procesClear[indexClear] = '0';
+      lcd.print(procesClear);
+      compareParam = compareParam + (EEPROM.length() / 16);
+      indexClear = indexClear + 1;
+    }
   }
   EEPROM.get(0, data);
+
+  lcd.setCursor(0, 0);
+  lcd.print("CLEAR EEPROM OK");
+  delay(1000);
   #endif
 
   #ifdef ENABLE_EEPROM
-
   EEPROM.get(0, data);
 
   if (data.InitData != '*') {
@@ -833,56 +855,56 @@ void setup() {
 
     data.StateElectromagnetTop = true;
     data.StateElectromagnetBottom = true;
+    data.StateIntermediate = true;
 
     EEPROM.put(0, data);
     EEPROM.get(0, data);
 
     lcd.setCursor(0, 0);
-    lcd.print("Init EEPROM OK");
+    lcd.print("INIT EEPROM OK");
     lcd.setCursor(0, 1);
     lcd.print(data.InitData);
     delay(1000);
   }
-
   #endif
 
   back_line.set_focusPosition(Position::LEFT);
   //back_line.attach_function(1, go_back);
   //back_line.attach_function(2, go_back);
-  back_line.attach_function(3, go_back);
+  back_line.attach_function(FunctionTypes::edit, go_back);
 
   limits_line.set_focusPosition(Position::LEFT);
   //limits_line.attach_function(1, goto_limit_menu);
   //limits_line.attach_function(2, goto_limit_menu);
-  limits_line.attach_function(3, goto_limit_menu);
+  limits_line.attach_function(FunctionTypes::edit, goto_limit_menu);
 
   cylinder_line.set_focusPosition(Position::LEFT);
   //cylinder_line.attach_function(1, goto_cylinder_menu);
   //cylinder_line.attach_function(2, goto_cylinder_menu);
-  cylinder_line.attach_function(3, goto_cylinder_menu);
+  cylinder_line.attach_function(FunctionTypes::edit, goto_cylinder_menu);
 
   //main_menu.switch_focus(true);
 
   limit_top_line.set_focusPosition(Position::LEFT);
-  limit_top_line.attach_function(1, increase_limit_top);
-  limit_top_line.attach_function(2, decrease_limit_top);
-  limit_top_line.attach_function(3, set_limit_top);
+  limit_top_line.attach_function(FunctionTypes::increase, increase_limit_top);
+  limit_top_line.attach_function(FunctionTypes::decrease, decrease_limit_top);
+  limit_top_line.attach_function(FunctionTypes::edit, set_limit_top);
 
   limit_bootom_line.set_focusPosition(Position::LEFT);
-  limit_bootom_line.attach_function(1, increase_limit_bootom);
-  limit_bootom_line.attach_function(2, decrease_limit_bootom);
-  limit_bootom_line.attach_function(3, set_limit_bootom);
+  limit_bootom_line.attach_function(FunctionTypes::increase, increase_limit_bootom);
+  limit_bootom_line.attach_function(FunctionTypes::decrease, decrease_limit_bootom);
+  limit_bootom_line.attach_function(FunctionTypes::edit, set_limit_bootom);
 
   diametr_value_line.set_focusPosition(Position::LEFT);
-  diametr_value_line.attach_function(1, increase_diametr);
-  diametr_value_line.attach_function(2, decrease_diametr);
-  diametr_value_line.attach_function(3, mode_edit_value);
+  diametr_value_line.attach_function(FunctionTypes::increase, increase_diametr);
+  diametr_value_line.attach_function(FunctionTypes::decrease, decrease_diametr);
+  diametr_value_line.attach_function(FunctionTypes::edit, mode_edit_value);
 
   angle_value_line.set_focusPosition(Position::LEFT);
   angle_value_line.set_decimalPlaces(0);
-  angle_value_line.attach_function(1, increase_angle);
-  angle_value_line.attach_function(2, decrease_angle);
-  angle_value_line.attach_function(3, mode_edit_value);
+  angle_value_line.attach_function(FunctionTypes::increase, increase_angle);
+  angle_value_line.attach_function(FunctionTypes::decrease, decrease_angle);
+  angle_value_line.attach_function(FunctionTypes::edit, mode_edit_value);
 
   //strncpy(input_saved, string_saved, sizeof(string_saved));
   //strncpy(output_saved, string_saved, sizeof(string_saved));
@@ -891,6 +913,13 @@ void setup() {
 }
 
 void loop() {
+
+
+  if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
+    data.AbsoluteAngle = 0;
+    data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+  }
+
   data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
 
   stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
@@ -902,43 +931,61 @@ void loop() {
 
   /////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
   if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно поступательного движения
-
+    /**
+      Имитация механического путевого переключателя,
+      data.LinearMove хранит текущее положение ползуна, контролируемое энкодером
+      data.LimitTop и data.LimitBottom лимиты крайних положений ползуна
+      data.StateElectromagnetTop и data.StateElectromagnetBottom хранят состояние переключателя
+      data структура сохраняется в EEPROM для восстановления состояния программного путевого переключателя
+      после экстренного нажатия кнопки ОБЩИЙ СТОП и выключения питания,
+      !!! Не реализовано контроль питания, что бы успеть сохранить data в EEPROM.
+    */
     #ifdef ENABLE_PROGRAM_SWITCH
     if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
-      data.StateElectromagnetTop = false;  // включить стояние вверх программного переключателя
-      data.StateElectromagnetBottom = true;  // выключить стояние вниз программного переключателя
-    }
 
+      data.StateElectromagnetTop = true;  // включить стояние вверх программного переключателя
+      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
+      data.StateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
+    }
+    if (data.LimitTop < data.LinearMove && data.LinearMove < data.LimitBottom){
+
+      data.StateIntermediate = false; // ползун находиться в промежуточном состоянии, между лимитами
+    }
     if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
-      data.StateElectromagnetTop = true;  // выключить стояние вверх программного переключателя
-      data.StateElectromagnetBottom = false;  // включить стояние вниз программного переключателя
+
+      data.StateElectromagnetTop = false;  // выключить стояние вверх программного переключателя
+      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
+      data.StateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
     }
     #endif
 
     if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
 
-      digitalWrite(electromagnetBrake, true);   // отключаем электромагнит растормаживания
-      digitalWrite(electromagnetManual, true);  // отключаем электромагнит ручной подачи
+      if (!digitalRead(electromagnetManual)){ // Если порт electromagnetManual включён
+        digitalWrite(electromagnetBrake, true);   // отключаем электромагнит растормаживания
+        digitalWrite(electromagnetManual, true);  // отключаем электромагнит ручной подачи
+      }
 
       if (stateTopSlider) {  // Если ползун на концевике парковки
 
-        data.AbsoluteAngle = 0;
-        data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
-
-        digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
-        digitalWrite(electromagnetBrake, true);  // выключить электромагнит растормаживания
-        stateEndCycle = false;                   // Конец цикла сбрасываем так как ползун стоит на концевике парковки
-
         statePush = trigerRS(statePush,
-                             !digitalRead(buttonPush),
-                             digitalRead(buttonPush) || stateGeneralStop);  // Толчковый ввод хоны
+                      !digitalRead(buttonPush),
+                      digitalRead(buttonPush) || stateGeneralStop);  // Толчковый ввод хоны
+
+        if (stateEndCycle){
+          digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
+          digitalWrite(electromagnetBrake, true);  // выключить электромагнит растормаживания
+          stateEndCycle = false;                   // Конец цикла, сбрасываем так как ползун стоит на концевике парковки
+        }
+
 
         #ifdef ENABLE_PROGRAM_SWITCH
-          if (statePush && !data.StateElectromagnetTop) {  // Если кнопка Толковая нажата и программный переключатель включён вверх
+          if (statePush && !data.StateElectromagnetBottom) {  // Если кнопка Толковая нажата и программный переключатель включён вверх
 
             digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = false);  // включаем электромагнит движения вниз
-          } else {
+            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включаем электромагнит движения вниз
+          }
+          if (!statePush && !data.StateElectromagnetBottom) {
 
             digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
             digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
@@ -950,7 +997,8 @@ void loop() {
 
             digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
             digitalWrite(electromagnetBottom, false);  // включаем электромагнит движения вниз
-          } else {
+          }
+          if (!statePush && !digitalRead(endSwitchTop)) {
 
             digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
             digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
@@ -977,12 +1025,21 @@ void loop() {
 
         if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
 
+          #ifdef ENABLE_PROGRAM_SWITCH
+          stateSpindle = trigerRS(stateSpindle,
+                  !digitalRead(buttonSpindleStart),
+                  !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || data.StateElectromagnetTop);  // Шпиндель Стоп или Старт
+          #endif
+
+          #ifdef ENABLE_SWITCH
           stateSpindle = trigerRS(stateSpindle,
                           !digitalRead(buttonSpindleStart),
                           !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom));  // Шпиндель Стоп или Старт
+          #endif
 
           if (stateSpindle ) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
-
+            lcd.clear();
+            lcd.setBacklight(WHITE);
             digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
             stateStartCycle = true;                   // вход в цикл
 
@@ -996,18 +1053,13 @@ void loop() {
 
 
             #ifdef ENABLE_PROGRAM_SWITCH
-            if (statePush && !data.StateElectromagnetTop) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх
+            if (statePush && !data.StateElectromagnetTop || statePush && !data.StateElectromagnetBottom) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх или вниз
 
               digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
               digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключаем электромагнит движения вверх
               digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включаем электромагнит движения вниз
             }
-            if (statePush && !data.StateElectromagnetBottom) {  // Если кнопка Толковая не нажата и переключатель путевой включён вниз
 
-              digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // включаем электромагнит движения вверх
-              digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // выключаем электромагнит движения вниз
-            }
             if ((!statePush && !data.StateElectromagnetTop) || (!statePush && !data.StateElectromagnetBottom)) { // Если кнопка Толковая не нажата и переключатель путевой включён вниз или вверх
 
               digitalWrite(electromagnetBrake, true); // включаем электромагнит растормаживания
@@ -1040,15 +1092,11 @@ void loop() {
         }
       }
     }
+
     if (!stateAutoCycleManual) {  // Переключатель включен в режим Ручной
 
       digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
       digitalWrite(electromagnetManual, false);  // включаем электромагнит ручной подачи
-
-      if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки ползуна в верху исходного состояния
-        data.AbsoluteAngle = 0;
-        data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
-      }
 
       if (!stateTopSlider) {  // Если ползун сошёл с концевика парковки
 
@@ -1056,26 +1104,104 @@ void loop() {
                                 !digitalRead(buttonSpindleStart),
                                 !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Стоп
 
-        digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
-        digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
 
-        /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-        Menu();
 
-        // lcd.clear();
-        // lcd.setCursor(0, 0);
-        // lcd.print(getLinearMotion(), 4);
-        // lcd.print(" mm");
-        // delay(100);
+        #ifdef ENABLE_PROGRAM_SWITCH
+        if ( ((data.LimitTop - 5/*мм*/) < data.LinearMove) && (data.LinearMove < (data.LimitBottom + 5/*мм*/)) ) {
+          if (stateSpindle){
+            digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+            digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+          }
+        }
+        #endif
+
+        #ifdef ENABLE_SWITCH
+        if (stateSpindle){
+          digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+          digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+        }
+        #endif
+
+        if (!stateSpindle){
+          digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+          digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+          /**
+            LCD DISPLAY AND BUTTONS READ
+          */
+          Menu();
+        }
+
+
+
       }
     }
+
+    #ifdef ENABLE_PROGRAM_SWITCH
+    if (!data.StateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+      lcd.clear();
+      lcd.setBacklight(YELLOW);
+      lcd.setCursor(0, 0);
+      lcd.print("IN FIELD ACTION");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+
+    if (data.StateIntermediate && !data.StateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+      lcd.clear();
+      lcd.setBacklight(WHITE);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT TOP PROG");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+
+    }
+
+    if (data.StateIntermediate && !data.StateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(WHITE);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT BOOTOM PROG");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+    #endif
+
+    #ifdef ENABLE_SWITCH
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(YELLOW);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT TOP MECHAN");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(GREEN);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT BOOTOM MECHAN");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+    #endif
   }
   if (!stateStartFeed) {  // Кнопку Общий стоп нажали
+
+    lcd.clear();
+    lcd.setBacklight(WHITE);
 
     EEPROM.get(0, dataBuffer);
     if (data != dataBuffer) {
       EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
-    }else{
       EEPROM.get(0, data); // Чтение структуры data из EEPROM
     }
 
@@ -1097,20 +1223,33 @@ void loop() {
   /////////////////////////////////////////////////////ЦИКЛ///////////////////////////////////////////////////////
   while (stateStartCycle) {  // Включён режим Цикл
 
-    data.LinearMove = getLinearMotion(); // Получаем данные с эекодера
+    #ifdef ENABLE_PROGRAM_SWITCH
+    if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
+
+      data.StateElectromagnetTop = true;  // включить стояние вверх программного переключателя
+      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
+      data.StateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
+    }
+    if (data.LimitTop < data.LinearMove && data.LinearMove < data.LimitBottom){
+
+      data.StateIntermediate = false; // ползун находиться в промежуточном состоянии, между лимитами
+    }
+    if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
+
+      data.StateElectromagnetTop = false;  // выключить стояние вверх программного переключателя
+      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
+      data.StateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
+    }
+    #endif
+
+    data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
 
     stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
     stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
-    digitalWrite(motorStartFeed, !stateStartFeed); // Запускаем мотор возвратно поступательного движенияя
+    digitalWrite(motorStartFeed, !stateStartFeed); // Запускаем мотор возвратно поступательного движения
     stateAutoCycleManual = trigerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual));  // Переключатель режимов: "Ввод хоны", "Ручной"
     stateTopSlider = trigerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider));                          // Концевик парковки ползуна в верху исходного состояния
     stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                                         // Конец цикла
-
-    // lcd.clear();
-    // lcd.setCursor(0, 0);
-    // lcd.print(getLinearMotion(), 4);
-    // lcd.print(" mm");
-    // delay(100);
 
     if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
 
@@ -1124,8 +1263,8 @@ void loop() {
 
         digitalWrite(motorSpindle, !stateSpindle);      // выключаем мотор шпинделя
         digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
-        digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = true); // выключить электромагнит движения вниз
-        digitalWrite(electromagnetTop, data.StateElectromagnetTop = false);      // включить электромагнит движения вверх
+        digitalWrite(electromagnetBottom, true); // выключить электромагнит движения вниз
+        digitalWrite(electromagnetTop, false);      // включить электромагнит движения вверх
 
         if (stateTopSlider) {  // Ползун поднялся в верх, исходное состояние конец цикла
 
@@ -1133,7 +1272,7 @@ void loop() {
           digitalWrite(electromagnetBrake, true);  // выключаем электромагнит растормаживания
           stateEndCycle = false;                   // сбрасываем состояние выхода из цикла
           stateStartCycle = false;                 // выходим из цикла
-          break;
+          //break;
         }
 
       }
@@ -1144,19 +1283,19 @@ void loop() {
         digitalWrite(motorSelfCoolant, !stateSpindle);  // включаем мотор помпы СОЖ
 
         #ifdef ENABLE_PROGRAM_SWITCH
-          if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
+          if (!data.StateElectromagnetBottom) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop = true);  // выключить электромагнит движения вверх
+            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключить электромагнит движения вверх
             delay(100);
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = false);  // включить электромагнит движения вниз
+            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включить электромагнит движения вниз
 
           }
 
-          if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
+          if (!data.StateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = true);  // выключить электромагнит движения вниз
+            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom );  // выключить электромагнит движения вниз
             delay(100);
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop = false);  // включить электромагнит движения вверх
+            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // включить электромагнит движения вверх
           }
         #endif
 
@@ -1183,18 +1322,18 @@ void loop() {
         digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
 
         #ifdef ENABLE_PROGRAM_SWITCH
-          if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
+          if (!data.StateElectromagnetBottom) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop = true);  // выключить электромагнит движения вверх
+            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключить электромагнит движения вверх
             delay(100);
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = false);  // включить электромагнит движения вниз
+            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom );  // включить электромагнит движения вниз
           }
 
-          if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
+          if (!data.StateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom = true);  // выключить электромагнит движения вниз
+            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // выключить электромагнит движения вниз
             delay(100);
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop = false);  // включить электромагнит движения вверх
+            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // включить электромагнит движения вверх
           }
         #endif
 
@@ -1232,13 +1371,17 @@ void loop() {
 
       if (!stateSpindle) { // Если шпиндель выключен, есть возможность запустить меню настройки
         /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-        Menu(); // Запуск меню настроек по удержанеию кнопки в течение 3 секунд
+        Menu(); // Запуск меню настроек по удержанию кнопки в течение 3 секунд
       }
     }
 
     if (stateGeneralStop) {  // Нажата кнопка Общий стоп
 
-      EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
+      EEPROM.get(0, dataBuffer);
+      if (data != dataBuffer) {
+        EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
+        EEPROM.get(0, data); // Чтение структуры data из EEPROM
+      }
 
       digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
       digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
@@ -1251,6 +1394,64 @@ void loop() {
 
       stateStartCycle = false;  // выходим из цикла
     }
+
+    #ifdef ENABLE_PROGRAM_SWITCH
+    if (!data.StateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+      lcd.clear();
+      lcd.setBacklight(GREEN);
+      lcd.setCursor(0, 0);
+      lcd.print("IN FIELD ACTION");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+
+    if (data.StateIntermediate && !data.StateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+      lcd.clear();
+      lcd.setBacklight(YELLOW);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT TOP PROG");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+
+    }
+
+    if (data.StateIntermediate && !data.StateElectromagnetTop  && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(YELLOW);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT BOOTOM PROG");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+    #endif
+
+    #ifdef ENABLE_SWITCH
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(YELLOW);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT TOP MECHAN");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
+
+      lcd.clear();
+      lcd.setBacklight(GREEN);
+      lcd.setCursor(0, 0);
+      lcd.print("LIMIT BOOTOM MECHAN");
+      lcd.setCursor(0, 1);
+      lcd.print(data.LinearMove, 2);
+      lcd.print(" mm");
+    }
+    #endif
 
   }
 }
@@ -1267,14 +1468,15 @@ ISR(PCINT0_vect) {  // Обработчик запросов прерывани�
 
 void Menu() {
 
-  lcd.clear();
-  //previousMillisMenu = millis();
+  //lcd.clear();
+  //previousMillisMenu = 0;
   while (lcd.readButtons() > 0 && !startMenu) {
     startMenu = stateMillisDelay(&previousMillisMenu, &intervalMenu);
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print(second += 1);
     delay(1000);
+    lcd.clear();
   }
 
   if (startMenu) {
@@ -1300,6 +1502,11 @@ void Menu() {
   }
 
   while (startMenu) {
+
+    if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
+      data.AbsoluteAngle = 0;
+      data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+    }
 
     data.LinearMove = getLinearMotion();
 
@@ -1397,7 +1604,7 @@ void Menu() {
 
       //previousMillisMenu = millis();
       if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
-
+      ////
       } else {
         while (lcd.readButtons() > 0 && startMenu && !IncDecMode) {
           startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
@@ -1438,13 +1645,18 @@ void Menu() {
 
     } else {
 
-      EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
+      EEPROM.get(0, dataBuffer);
+      if (data != dataBuffer) {
+        EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
+        EEPROM.get(0, data); // Чтение структуры data из EEPROM
+      }
 
       second = 0;
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Close Menu");
       delay(1000);
+      lcd.clear();
     }
   }
 }
