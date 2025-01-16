@@ -1,9 +1,20 @@
 #include <Arduino.h>
 #include <AS5048A.h>
 #include <Adafruit_RGBLCDShield.h>
-#include <utility/Adafruit_MCP23017.h>
 #include <LiquidMenu.h>
 #include <EEPROM.h>
+
+#define ENABLE_KYPAD           // Это для моей клавиатуры кода включаю
+#define ENABLE_SWITCH          // Включение кода механического переключателя
+#define ENABLE_PROGRAM_SWITCH  // Включение кода программного переключателя
+#define ENABLE_EEPROM          // Включить код поддержки использования EEPROM и переменно структуры Data и переменной data
+//#define CLEAR_EEPROM // Запуск кода очистки всей памяти EEPROM для отладки
+
+#include "ColorDisplay.h"
+#include "IOPorts.h"
+#include "TechnicalSpecifications3G833.h"
+
+
 
 //#include <avr/pgmspace.h>
 //#include <util/delay.h>
@@ -11,48 +22,7 @@
 
 AS5048A angleSensor(SS);  //выход на Arduino SS = PIN_SPI_SS (53), MOSI = PIN_SPI_MOSI (51), MISO = PIN_SPI_MISO (50), SCK = PIN_SPI_SCK (52)
 
-Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();
-
-#define OFF 0x0
-#define RED 0x1
-#define GREEN 0x2
-#define YELLOW 0x3
-#define BLUE 0x4
-#define VIOLET 0x5
-#define TEAL 0x6
-#define WHITE 0x7
-
-#define ENABLE_KYPAD           // Это для моей клавиатуры кода включаю
-//#define ENABLE_SWITCH          // Включение кода механического переключателя
-#define ENABLE_PROGRAM_SWITCH  // Включение кода программного переключателя
-
-#define ENABLE_EEPROM          // Включить код поддержки использования EEPROM и переменно структуры Data и переменной data
-//#define CLEAR_EEPROM // Запуск кода очистки всей памяти EEPROM для отладки
-
-//Входные сигналы
-#ifdef ENABLE_KYPAD
-#define interruptRemote 12  // Вывод прерывания PCINT6 пульта управления
-#endif
-
-#define buttonEndCycle 22         // Вывод кнопки Конец Цикла
-#define buttonStartFeed 23        // Вывод кнопки Подача-Пуск, подача электроэнергии на двигатели возвратно поступательного движения
-#define buttonSpindleStart 24     // Вывод кнопки Старт Шпиндель
-#define buttonSpindleStop 25      // Вывод кнопки Шпиндель Стоп
-#define buttonPush 26             // Вывод кнопки Толчковое опускание хонинговальной головки
-#define buttonGeneralStop 27      // Вывод кнопки Общий Стоп, отключение питания на все механизмы станка
-#define switchAutoCycleManual 28  // Вывод переключателя автоматического цикла или ручного управления
-#define switchTopSlider 29        // Вывод концевика верхнего положения ползуна
-#define endSwitchTop 37           // Вывод концевика верхнего концевика цикла
-#define endSwitchBottom 38        // Вывод концевика нижнего концевика цикла
-
-//Выходные сигналы
-#define electromagnetTop 30     // Вывод электро-муфты ЭТМ0921Н перемещения вверх ползуна
-#define electromagnetBottom 31  // Вывод электро-муфты ЭТМ0921Н перемещения вниз ползуна
-#define electromagnetManual 32  // Вывод электро-муфты ЭТМ0721Н ручное управления ползуна
-#define electromagnetBrake 33   // Вывод электромагнита растормаживания МИС5100М перемещения ползуна
-#define motorSpindle 34         // Вывод включения мотора вращения шпинделя
-#define motorStartFeed 35       // Вывод включения мотора возвратно поступательного движения ползун
-#define motorSelfCoolant 36     // Вывод включения смазочно охлаждающей жидкости
+Adafruit_RGBLCDShield _lcd = Adafruit_RGBLCDShield();
 
 //Состояние режимов
 volatile bool stateEndCycle = false;         // Состояние Конец-Цикла
@@ -65,8 +35,8 @@ volatile bool stateStartCycle = false;       // Состояние Цикла
 volatile bool stateGeneralStop = true;       // Состояние Общий Стоп
 
 //Переменные энкодера
-const uint8_t NormalModule = 3;      //Модуль нормальны
-const uint8_t NumberGearTeeth = 17;  //Число зубьев колеса или число заходов червяка
+const uint8_t normalModule = 3;      //Модуль нормальны
+const uint8_t numberGearTeeth = 17;  //Число зубьев колеса или число заходов червяка
 
 unsigned long previousMillisMenu = 0;
 bool startMenu = false;
@@ -77,50 +47,58 @@ uint8_t buttons, second = 0;
 //Переменные для инициализации меню, текст, используемый для Меню индикации для линий сохранения.
 volatile bool IncDecMode = false;
 
-enum FunctionTypes {
+enum FunctionTypes : uint8_t {
   increase = 1,
   decrease = 2,
   edit = 3
 };
 
+enum DecIncrTypes : uint8_t {
+  inc = 1,
+  dec = 2
+};
+
+enum StartLevelSpeed : uint8_t {
+    SPEED_1 = 0,  // Первая скорость
+    SPEED_2,      // Вторая скорость
+    SPEED_3       // Третья скорость
+};
+
 #if defined ENABLE_EEPROM || defined CLEAR_EEPROM
 struct Data {
-  char InitData;
+  char initData;
 
-  float LinearMove;
-  float AnglePrevious;
-  float AbsoluteAngle;
+  float linearMove;     //Длина линейного перемещения от концевика порковки от энкодера
+  float anglePrevious;  //Угол предыдущий от экодера
+  float absoluteAngle;  //Обсалютный угол или инкрементн и декремент угла
 
-  float LimitTop;
-  float LimitBottom;
-  float CylinderDiametr;
-  float CylinderAngle;
+  float limitTop;         //Верхняя позиция цикла
+  float limitBottom;      //Нижная позиция цикла
+  float cylinderDiametr;  //Диаметр обрабатываемого цилиндра
+  float cylinderAngle;    //Желаемый угол сетки в цилиндре
 
-  bool  StateElectromagnetTop;
-  bool  StateElectromagnetBottom;
-  bool  StateIntermediate;
+  bool stateElectromagnetTop;     //Сохранение состояния муфты движения вверх, если электричество отключили
+  bool stateElectromagnetBottom;  //Сохранение состояния муфты движения вниз, если электричество отключили
+  bool stateIntermediate;         //Сохранение состояния интервала в режиме цикла, если электричество отключили
 
-  bool operator != (const Data& otcher) const{
-    return  InitData != otcher.InitData || \
+  bool operator!=(const Data &otcher) const {
+    return initData != otcher.initData ||
+          abs(linearMove - otcher.linearMove) > 0.1 ||
+          abs(anglePrevious - otcher.anglePrevious) > 0.1 ||
+          abs(absoluteAngle - otcher.absoluteAngle) > 0.1 ||
+          abs(limitTop - otcher.limitTop) > 0.1 ||
+          abs(limitBottom - otcher.limitBottom) > 0.1 ||
+          abs(cylinderDiametr - otcher.cylinderDiametr) > 0.1 ||
+          abs(cylinderAngle - otcher.cylinderAngle) > 0.1 ||
 
-            abs(LinearMove - otcher.LinearMove) > 0.1 || \
-            abs(AnglePrevious - otcher.AnglePrevious) > 0.1 || \
-            abs(AbsoluteAngle - otcher.AbsoluteAngle) > 0.1 || \
-            abs(LimitTop - otcher.LimitTop) > 0.1 || \
-            abs(LimitBottom - otcher.LimitBottom) > 0.1 || \
-            abs(CylinderDiametr - otcher.CylinderDiametr) > 0.1 || \
-            abs(CylinderAngle - otcher.CylinderAngle) > 0.1 || \
-
-            StateElectromagnetTop != otcher.StateElectromagnetTop || \
-            StateElectromagnetBottom != otcher.StateElectromagnetBottom || \
-            StateIntermediate != otcher.StateIntermediate;
+          stateElectromagnetTop != otcher.stateElectromagnetTop ||
+          stateElectromagnetBottom != otcher.stateElectromagnetBottom ||
+          stateIntermediate != otcher.stateIntermediate;
   }
 };
 
-
-
-Data data;
-Data dataBuffer; // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
+Data _data;
+Data _dataBuffer;  // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
 #endif
 
 //char input_saved[3];
@@ -128,561 +106,342 @@ Data dataBuffer; // временная переменная для провер�
 //char string_saved[] = " *";
 //char string_notSaved[] = "  ";
 
-char degree = (char)223;
+char symbolDegree = (char)223;
 
-unsigned long previousMillisSped1, previousMillisSped2, previousMillisSped3 = 0;
-const unsigned long interval1 = 3000;
-const unsigned long interval2 = 3000;
-const unsigned long interval3 = 3000;
-bool oneBool, twoBool, threeBool = false;
+unsigned long _previousMillisSped = 0;
+const unsigned long _intervals[] = { 3000, 3000, 3000 };
+bool _speeds[] = { false, false, false };
 
 //Объекты Liquidline может быть использован больше, чем один раз.
-LiquidLine back_line(11, 1, "/BACK");
+LiquidLine backLine(11, 1, "/BACK");
 
 
-LiquidLine welcome_line1(0, 0, "Properties Menu");
-LiquidLine welcome_line2(1, 1, "Machine 3G833");
-LiquidScreen welcome_screen(welcome_line1, welcome_line2);
+LiquidLine welcomeLine1(0, 0, "Properties Menu");
+LiquidLine welcomeLine2(1, 1, "Machine 3G833");
+LiquidScreen welcomeScreen(welcomeLine1, welcomeLine2);
 
 //Эти строки направлены на другие меню.
-LiquidLine limits_line(1, 0, "Limits position");
-LiquidLine cylinder_line(1, 1, "Cylinder size");
-LiquidScreen settings_screen(limits_line, cylinder_line);
+LiquidLine limitsLine(1, 0, "Limits position");
+LiquidLine cylinderLine(1, 1, "Cylinder size");
+LiquidScreen settingsScreen(limitsLine, cylinderLine);
 
 //Это первое меню.
-LiquidMenu main_menu(lcd, welcome_screen, settings_screen, 1);
+LiquidMenu mainMenu(_lcd, welcomeScreen, settingsScreen, 1);
 
 
-LiquidLine linear_move_line(0, 0, "Current ", data.LinearMove, "mm");
-LiquidLine limit_top_line(1, 1, "Top:", data.LimitTop, "mm");
-LiquidLine limit_bootom_line(1, 1, "Bottom:", data.LimitBottom, "mm");
+LiquidLine linearMoveLine(0, 0, "Current ", _data.linearMove, "mm");
+LiquidLine limitTopLine(1, 1, "Top:", _data.limitTop, "mm");
+LiquidLine limitBootomLine(1, 1, "Bottom:", _data.limitBottom, "mm");
 
-LiquidScreen top_screen(linear_move_line, limit_top_line);
-LiquidScreen bootom_screen(linear_move_line, limit_bootom_line);
+LiquidScreen topScreen(linearMoveLine, limitTopLine);
+LiquidScreen bootomScreen(linearMoveLine, limitBootomLine);
 
-LiquidLine oSave_line(0, 0, "Save");
-LiquidScreen oSecondary_screen(oSave_line, back_line);
+LiquidLine oSaveLine(0, 0, "Save");
+LiquidScreen oSecondaryScreen(oSaveLine, backLine);
 
 //Это второе меню.
-LiquidMenu limit_menu(lcd, bootom_screen, top_screen, oSecondary_screen, 1);
+LiquidMenu limitMenu(_lcd, bootomScreen, topScreen, oSecondaryScreen, 1);
 
+LiquidLine diametrTitleLine(0, 0, "Diameter");
+LiquidLine diametrValueLine(1, 1, "Set ", _data.cylinderDiametr, "mm");
+LiquidScreen diametrScreen(diametrTitleLine, diametrValueLine);
 
-LiquidLine diametr_title_line(0, 0, "Diameter");
-LiquidLine diametr_value_line(1, 1, "Set ", data.CylinderDiametr, "mm");
-LiquidScreen diametr_screen(diametr_title_line, diametr_value_line);
-
-LiquidLine angle_title_line(0, 0, "Grid Angle");
-LiquidLine angle_value_line(1, 1, "Set ", data.CylinderAngle, degree);
-LiquidScreen angle_screen(angle_title_line, angle_value_line);
+LiquidLine angleTitleLine(0, 0, "Grid Angle");
+LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, symbolDegree);
+LiquidScreen angleScreen(angleTitleLine, angleValueLine);
 
 // И это последнее третье меню.
-LiquidMenu cylinder_menu(lcd, diametr_screen, angle_screen, oSecondary_screen);
+LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
 
 /*
- * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы меню.
+ * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы мен= 3000ю.
  * Он обеспечивает те же функции, что и LiquidMenu с добавлением add_menu () и change_menu ().
  */
-LiquidSystem menu_system(main_menu, limit_menu, cylinder_menu, 1);
+LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
 
 
 ///////////////////////////Процедуры меню begin///////////////////////////////////
-// Функция обратного вызова, которая будет прикреплена к Back_line.
+// Функция для проверки выхода за пределы
+bool isOutOfBounds(float paramManipulation, float maxParam, float minParam) {
+  //Serial.println(maxParam - paramManipulation);
+  return (maxParam - paramManipulation) < 0 || (paramManipulation - minParam) < 0;
+}
 
-void go_back() {
+// Функция для обновления сообщения об ошибке
+void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo,
+                        uint8_t posLineOne, uint8_t posLineTwo,
+                        DecIncrTypes typeOperation, float &paramManipulation,
+                        float maxParam, float minParam,
+                        String messInc, String messDec) {
+
+  mesLineTwo = (typeOperation == DecIncrTypes::inc) ? messInc : messDec;
+  mesLineTwo += (paramManipulation = (typeOperation == DecIncrTypes::inc) ? maxParam : minParam);
+  lcdPrintChar(lcd, mesLineOne, mesLineTwo, "", RED, posLineOne, posLineTwo, 0, false);
+  delay(2000);
+  lcd.setBacklight(GREEN);
+  menuSystem.update();
+}
+
+// Функция для проверки достижения порога
+bool hasReachedThreshold(float paramManipulation, float maxParam, float minParam, float threshold, DecIncrTypes typeOperation) {
+  return (typeOperation == DecIncrTypes::inc) ? paramManipulation >= maxParam - threshold : paramManipulation <= minParam + threshold;
+}
+
+// Функция для управления скоростью
+void manageSpeed(bool currentSpeed, bool &nextSpeed, unsigned long &previousMillisSped, unsigned long interval) {
+  currentSpeed = stateMillisDelay(&previousMillisSped, &interval);
+  nextSpeed = false;
+}
+
+bool allSpeedsInactive(bool *speeds, int size) {
+    for (int i = 0; i < size; i++) {
+        if (speeds[i]) {
+            return false; // Если хоть один элемент активен, возвращаем false
+        }
+    }
+    return true; // Все элементы неактивны
+}
+
+void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation,
+                     float maxParam, float minParam,
+                     bool *speeds, StartLevelSpeed startSpeed,
+                     unsigned long &previousMillisSped,
+                     const unsigned long *intervals,
+                     String messInc, String messDec,
+                     uint8_t posLineOne, uint8_t posLineTwo) {
+
+  // Определение массивов для инкрементов и интервалов
+  const float increments[] = { 0.01, 0.10, 1.00, 10.00 };
+  const float THRESHOLDS[] = { 0.002f, 0.004f, 0.006f };
+  const float thresholds[] = {
+    (maxParam - minParam) * THRESHOLDS[0],
+    (maxParam - minParam) * THRESHOLDS[1],
+    (maxParam - minParam) * THRESHOLDS[2]
+  };
+
+
+  // Проверка выхода за пределы
+  if (isOutOfBounds(paramManipulation, maxParam, minParam)) {
+    String mesLineTwo;
+    updateErrorMessage(_lcd, "ERROR", mesLineTwo, posLineOne, posLineTwo, typeOperation, paramManipulation, maxParam, minParam, messInc, messDec);
+    return;
+  }
+
+  for (int i = startSpeed; i < 3; ++i) {
+    if (speeds[i]) {
+      // Проверка на достижение порога
+      if (hasReachedThreshold(paramManipulation, maxParam, minParam, thresholds[i], typeOperation)) {
+        if (i > 0) speeds[i - 1] = true; // Активируем предыдущую скорость, если порог достигнут
+        speeds[i] = false; // Отключаем текущую скорость
+        previousMillisSped = 0; // Сбрасываем время
+        break; // Выход из цикла
+      }
+
+      // Изменение параметра
+      paramManipulation += (typeOperation == DecIncrTypes::inc) ? increments[i + 1] : -increments[i + 1];
+      if (i != 2) { // Проверяем, чтобы не выйти за пределы массива
+        //Serial.println(i);
+        speeds[i] = !(speeds[i + 1] = stateMillisDelay(&previousMillisSped, &intervals[i + 1]));
+      }
+      break; // Выход из цикла
+    }
+
+    // Если ни одна скорость не активна
+    if (i == startSpeed && allSpeedsInactive(speeds, 3)) {
+      paramManipulation += (typeOperation == DecIncrTypes::inc) ? increments[i] : -increments[i];
+      speeds[i] = stateMillisDelay(&previousMillisSped, &intervals[i]);
+      break; // Выход из цикла
+    }
+  }
+}
+
+void goBack() {  // Функция обратного вызова, которая будет прикреплена к backLine. Выход в основное меню
   // Эта функция принимает ссылку на разыскиваемое меню.
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     startMenu = false;
   }
 
   if (stateGeneralStop) {
-    menu_system.change_menu(main_menu);
-    if (menu_system.get_currentScreen() == &settings_screen) {
-      menu_system.set_focusedLine(0);
+    menuSystem.change_menu(mainMenu);
+    if (menuSystem.get_currentScreen() == &settingsScreen) {
+      menuSystem.set_focusedLine(0);
     }
   }
 }
 
-void goto_limit_menu() {
-  menu_system.change_menu(limit_menu);
+void gotoLimitMenu() {  // Процедура вызывает экран меню Лимиты
+  menuSystem.change_menu(limitMenu);
 
-  if (menu_system.get_currentScreen() == &oSecondary_screen) {
-    menu_system.change_screen(&bootom_screen);
+  if (menuSystem.get_currentScreen() == &oSecondaryScreen) {
+    menuSystem.change_screen(&bootomScreen);
   }
 
-  menu_system.set_focusedLine(1);
+  menuSystem.set_focusedLine(1);
 }
 
-void goto_cylinder_menu() {
-  menu_system.change_menu(cylinder_menu);
+void gotoCylinderMenu() {  // Процедура вызывает экран меню Цилиндр
+  menuSystem.change_menu(cylinderMenu);
 
-  if (menu_system.get_currentScreen() == &oSecondary_screen) {
-    menu_system.change_screen(&diametr_screen);
+  if (menuSystem.get_currentScreen() == &oSecondaryScreen) {
+    menuSystem.change_screen(&diametrScreen);
   }
 
-  menu_system.set_focusedLine(1);
+  menuSystem.set_focusedLine(1);
 }
 
-void set_limit_top() {
+void setlimitTop() {  //Процедура копирует значение энкодера в значение верхнего лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
-    if (data.LinearMove > data.LimitBottom) {
-      lcd.clear();
-      lcd.setBacklight(RED);
-      lcd.setCursor(5, 0);
-      lcd.print("ERROR");
-      lcd.setCursor(2, 1);
-      lcd.print("TOP > BOOTOM");
+    if (_data.linearMove > _data.limitBottom) {
+      _lcd.clear();
+      _lcd.setBacklight(RED);
+      _lcd.setCursor(5, 0);
+      _lcd.print("ERROR");
+      _lcd.setCursor(2, 1);
+      _lcd.print("TOP > BOOTOM");
       delay(2000);
-      lcd.setBacklight(WHITE);
-      menu_system.update();
+      _lcd.setBacklight(WHITE);
+      menuSystem.update();
     } else {
-      lcd.setBacklight(GREEN);
-      data.LimitTop = data.LinearMove;
-      menu_system.update();
+      _lcd.setBacklight(GREEN);
+      _data.limitTop = _data.linearMove;
+      menuSystem.update();
       delay(500);
-      lcd.setBacklight(WHITE);
+      _lcd.setBacklight(WHITE);
     }
   }
 
   if (stateGeneralStop) {
     IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
 
-    if ((menu_system.get_currentScreen() == &top_screen) && IncDecMode) {
+    if ((menuSystem.get_currentScreen() == &topScreen) && IncDecMode) {
 
-      lcd.setBacklight(GREEN);
-      menu_system.set_focusPosition(Position::RIGHT);
+      _lcd.setBacklight(GREEN);
+      menuSystem.set_focusPosition(Position::RIGHT);
 
     } else {
 
-      lcd.setBacklight(WHITE);
-      menu_system.set_focusPosition(Position::LEFT);
+      _lcd.setBacklight(WHITE);
+      menuSystem.set_focusPosition(Position::LEFT);
     }
   }
 }
 
-void increase_limit_top() {
-  //constrain(LEDbright, 0, 255);
-  if (data.LimitTop <= (data.LimitBottom - 5)) {
-
-    if (!oneBool && !twoBool) {
-      data.LimitTop += 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.LimitTop > (data.LimitBottom - 5.5)) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.LimitTop += 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.LimitTop > (data.LimitBottom - 6)) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.LimitTop += 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.LimitTop > (data.LimitBottom - 7)) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.LimitTop += 10.00;
-      }
-    }
-
-  } else {
-    data.LimitTop = data.LimitBottom - 5;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("TOP > BOTTOM");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void IncreaselimitTop() {  //Процедура увеличевает значение верхнего лимита программмного концевика
+  changeParamMenu(DecIncrTypes::inc, _data.limitTop,
+                  _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "TOP > ", "TOP < ", 5, 2);
 }
 
-void decrease_limit_top() {
-
-  if (data.LimitTop >= 0) {
-
-    if (!oneBool && !twoBool) {
-      data.LimitTop -= 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.LimitTop < 0.5) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.LimitTop -= 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.LimitTop < 1) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.LimitTop -= 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.LimitTop < 2) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.LimitTop -= 10.00;
-      }
-    }
-
-  } else {
-    data.LimitTop = 0;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("TOP < 0");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void decreaselimitTop() {  //Процедура уменьшает значение верхнего лимита программмного концевика
+  changeParamMenu(DecIncrTypes::dec, _data.limitTop,
+                  _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "TOP > ", "TOP < ", 5, 2);
 }
 
-void set_limit_bootom() {
+void setLimitBootom() {  //Процедура копирует значение энкодера в значение нижнего лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
-    if (data.LinearMove < data.LimitTop) {
-      lcd.clear();
-      lcd.setBacklight(RED);
-      lcd.setCursor(5, 0);
-      lcd.print("ERROR");
-      lcd.setCursor(2, 1);
-      lcd.print("BOOTOM < TOP");
+    if (_data.linearMove < _data.limitTop) {
+      _lcd.clear();
+      _lcd.setBacklight(RED);
+      _lcd.setCursor(5, 0);
+      _lcd.print("ERROR");
+      _lcd.setCursor(2, 1);
+      _lcd.print("BOOTOM < TOP");
       delay(2000);
-      lcd.setBacklight(WHITE);
-      menu_system.update();
+      _lcd.setBacklight(WHITE);
+      menuSystem.update();
     } else {
-      lcd.setBacklight(GREEN);
-      data.LimitBottom = data.LinearMove;
-      menu_system.update();
+      _lcd.setBacklight(GREEN);
+      _data.limitBottom = _data.linearMove;
+      menuSystem.update();
       delay(500);
-      lcd.setBacklight(WHITE);
+      _lcd.setBacklight(WHITE);
     }
   }
 
   if (stateGeneralStop) {
     IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
 
-    if ((menu_system.get_currentScreen() == &bootom_screen) && IncDecMode) {
+    if ((menuSystem.get_currentScreen() == &bootomScreen) && IncDecMode) {
 
-      lcd.setBacklight(GREEN);
-      menu_system.set_focusPosition(Position::RIGHT);
+      _lcd.setBacklight(GREEN);
+      menuSystem.set_focusPosition(Position::RIGHT);
 
     } else {
 
-      lcd.setBacklight(WHITE);
-      menu_system.set_focusPosition(Position::LEFT);
+      _lcd.setBacklight(WHITE);
+      menuSystem.set_focusPosition(Position::LEFT);
     }
   }
 }
 
-void increase_limit_bootom() {
-
-  if (data.LimitBottom <= 500) {
-
-    if (!oneBool && !twoBool) {
-      data.LimitBottom += 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.LimitBottom > 499) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.LimitBottom += 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.LimitBottom > 498) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.LimitBottom += 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.LimitBottom > 497) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.LimitBottom += 10.00;
-      }
-    }
-
-  } else {
-    data.LimitBottom = 500;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("BOOTOM > 500");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void increaseLimitBootom() {  //Процедура увеличивает значение нижнего лимита программмного концевика
+  changeParamMenu(DecIncrTypes::inc, _data.limitBottom,
+                  maxVerticalMovementSpindle, _data.limitTop + smallestLength,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "BOOTOM > ", "BOOTOM < ", 5, 2);
 }
 
-void decrease_limit_bootom() {
-  if (data.LimitBottom >= data.LimitTop + 5) {
-
-    if (!oneBool && !twoBool) {
-      data.LimitBottom -= 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.LimitBottom < data.LimitTop + 5.5) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.LimitBottom -= 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.LimitBottom < data.LimitTop + 6) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.LimitBottom -= 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.LimitBottom < data.LimitTop + 7) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.LimitBottom -= 10.00;
-      }
-    }
-
-  } else {
-    data.LimitBottom = data.LimitTop + 5;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("BOOTOM < TOP");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void decrease_limit_bootom() {  //Процедура уменьшает значение нижнего лимита программмного концевика
+  changeParamMenu(DecIncrTypes::dec, _data.limitBottom,
+                  maxVerticalMovementSpindle, _data.limitTop + smallestLength,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "BOOTOM > ", "BOOTOM < ", 5, 2);
 }
 
-void mode_edit_value() {
+void modeEditValue() {
   IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
 
-  if ((menu_system.get_currentScreen() == &diametr_screen) && IncDecMode
-      || (menu_system.get_currentScreen() == &angle_screen) && IncDecMode) {
+  if ((menuSystem.get_currentScreen() == &diametrScreen) && IncDecMode
+      || (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
 
-    lcd.setBacklight(GREEN);
-    menu_system.set_focusPosition(Position::RIGHT);
+    _lcd.setBacklight(GREEN);
+    menuSystem.set_focusPosition(Position::RIGHT);
 
   } else {
 
-    lcd.setBacklight(WHITE);
-    menu_system.set_focusPosition(Position::LEFT);
+    _lcd.setBacklight(WHITE);
+    menuSystem.set_focusPosition(Position::LEFT);
   }
 }
 
-void increase_diametr() {
-  if (data.CylinderDiametr <= 165) {
-
-    if (!oneBool && !twoBool) {
-      data.CylinderDiametr += 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.CylinderDiametr > 164) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.CylinderDiametr += 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.CylinderDiametr > 163) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.CylinderDiametr += 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.CylinderDiametr > 155) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.CylinderDiametr += 10.00;
-      }
-    }
-
-  } else {
-    data.CylinderDiametr = 165;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("Diametr > 165");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void increaseDiametr() {
+  changeParamMenu(DecIncrTypes::inc, _data.cylinderDiametr,
+                  permissibleDiameter, smallestDiameter,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "Diametr > ", "Diametr < ", 5, 2);
 }
 
-void decrease_diametr() {
-  if (data.CylinderDiametr >= 30) {
-
-    if (!oneBool && !twoBool) {
-      data.CylinderDiametr -= 0.01;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.CylinderDiametr < 31) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.CylinderDiametr -= 0.10;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-
-    if (oneBool && twoBool && !threeBool) {
-      if (data.CylinderDiametr < 33) {
-        twoBool = false;
-        previousMillisSped2 = 0;
-      } else {
-        data.CylinderDiametr -= 1.00;
-        threeBool = stateMillisDelay(&previousMillisSped3, &interval3);
-      }
-    }
-
-    if (oneBool && twoBool && threeBool) {
-      if (data.CylinderDiametr < 45) {
-        threeBool = false;
-        previousMillisSped3 = 0;
-      } else {
-        data.CylinderDiametr -= 10.00;
-      }
-    }
-  } else {
-    data.CylinderDiametr = 30;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(2, 1);
-    lcd.print("Diametr < 30");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void decreaseDiametr() {
+  changeParamMenu(DecIncrTypes::dec, _data.cylinderDiametr,
+                  permissibleDiameter, smallestDiameter,
+                  _speeds, StartLevelSpeed::SPEED_1,
+                  _previousMillisSped, _intervals,
+                  "Diametr > ", "Diametr < ", 5, 2);
 }
 
-void increase_angle() {
-  if (data.CylinderAngle < 120) {
-
-    if (!oneBool && !twoBool) {
-      data.CylinderAngle += 1.00;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.CylinderAngle > 100) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.CylinderAngle += 10.00;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-  } else {
-    data.CylinderAngle = 120;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(3, 1);
-    lcd.print("Angle > 120");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void increaseAngle() {
+  changeParamMenu(DecIncrTypes::inc, _data.cylinderAngle,
+                  maximumScrubbingAngle, minimalScrubbingAngle,
+                  _speeds, StartLevelSpeed::SPEED_3,
+                  _previousMillisSped, _intervals,
+                  "Angle > ", "Angle < ", 5, 3);
 }
 
-void decrease_angle() {
-  if (data.CylinderAngle > 10) {
-
-    if (!oneBool && !twoBool) {
-      data.CylinderAngle -= 1.00;
-      oneBool = stateMillisDelay(&previousMillisSped1, &interval1);
-    }
-
-    if (oneBool && !twoBool) {
-      if (data.CylinderAngle < 30) {
-        oneBool = false;
-        previousMillisSped1 = 0;
-      } else {
-        data.CylinderAngle -= 10.00;
-        twoBool = stateMillisDelay(&previousMillisSped2, &interval2);
-      }
-    }
-  } else {
-    data.CylinderAngle = 10;
-    lcd.clear();
-    lcd.setBacklight(RED);
-    lcd.setCursor(5, 0);
-    lcd.print("ERROR");
-    lcd.setCursor(3, 1);
-    lcd.print("Angle < 10");
-    delay(2000);
-    lcd.setBacklight(GREEN);
-    menu_system.update();
-  }
+void decreaseAngle() {
+  changeParamMenu(DecIncrTypes::dec, _data.cylinderAngle,
+                  maximumScrubbingAngle, minimalScrubbingAngle,
+                  _speeds, StartLevelSpeed::SPEED_3,
+                  _previousMillisSped, _intervals,
+                  "Angle > ", "Angle < ", 5, 3);
 }
-
-
 ///////////////////////////Процедуры меню end/////////////////////////////////////
 
 bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset) {  //Триггер с приоритетом сброса
@@ -720,7 +479,7 @@ void readKeypad() {
 }
 #endif
 
-bool stateMillisDelay(unsigned long* previousMillis, unsigned long* interval) {
+bool stateMillisDelay(unsigned long *previousMillis, const unsigned long *interval) {
   //unsigned long currentMillis = millis();
 
   if (*previousMillis == 0) {
@@ -737,174 +496,157 @@ bool stateMillisDelay(unsigned long* previousMillis, unsigned long* interval) {
 }
 
 float getLinearMotion() {
-  return angleSensor.LinearDisplacementRack(angleSensor.AbsoluteAngleRotation(&data.AbsoluteAngle, angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)), &data.AnglePrevious), NormalModule, NumberGearTeeth);
+  return angleSensor.LinearDisplacementRack(angleSensor.AbsoluteAngleRotation(&_data.absoluteAngle, angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)), &_data.anglePrevious), normalModule, numberGearTeeth);
 
-  // lcd.clear();
-  // lcd.setCursor(0, 0);
-  // lcd.print(getLinearMotion(), 4);
-  // lcd.print(" mm");
+  // _lcd.clear();
+  // _lcd.setCursor(0, 0);
+  // _lcd.print(getLinearMotion(), 4);
+  // _lcd.print(" mm");
 
-  // lcd.setCursor(0, 1);
-  // //lcd.print(val, DEC);
+  // _lcd.setCursor(0, 1);
+  // //_lcd.print(val, DEC);
 
-  // //lcd.print(angleSensor.RotationRawToRadian(angleSensor.getRawRotation(true)), DEC);
-  // lcd.print(int(AbsoluteAngle), DEC);  //lcd.print(millis()/1000);
-  // lcd.print(char(223));
+  // //_lcd.print(angleSensor.RotationRawToRadian(angleSensor.getRawRotation(true)), DEC);
+  // _lcd.print(int(absoluteAngle), DEC);  //_lcd.print(millis()/1000);
+  // _lcd.print(char(223));
 
-  // lcd.print(int(angleSensor.GetAngularMinutes(AbsoluteAngle)), DEC);  //lcd.print(millis()/1000);
-  // lcd.print(char(34));
+  // _lcd.print(int(angleSensor.GetAngularMinutes(absoluteAngle)), DEC);  //_lcd.print(millis()/1000);
+  // _lcd.print(char(34));
 
-  // lcd.print(int(angleSensor.GetAngularSeconds(AbsoluteAngle)), DEC);
-  // lcd.print(char(39));
-  // lcd.print("  ");
+  // _lcd.print(int(angleSensor.GetAngularSeconds(absoluteAngle)), DEC);
+  // _lcd.print(char(39));
+  // _lcd.print("  ");
 }
+
+
+/*****SERIAL*****/
+// #define TYPES_READ_CMD 3   //Считывание параметров ведомого
+// #define TYPES_WRITE_CMD 6  //Запись параметров ведомого
+// #define TYPES_READ_CMD 10  //Непрерывная запись набора параметров
+
+// const int ADRES_DATA_PARAM = 0x000D;
+// const int ADRES_DATA_STATE = 0x0070;
+// const int ADRES_FAULTY_DESCRIPTION = 0x0080;
+/*****SERIAL*****/
 
 void setup() {
   cli();
 
-  #ifdef ENABLE_KYPAD
+#ifdef ENABLE_KYPAD
   pinMode(interruptRemote, INPUT_PULLUP);  // Подтянем пины источники PCINT к питанию
   pciSetup(interruptRemote);               // И разрешим на них прерывания T6
-  #endif
+#endif
 
-  /////////////Инициализация входов и подтягивание входов к положительному потенциалу с помощью внутренних резисторов/////////////
-  pinMode(buttonEndCycle, INPUT_PULLUP);
-  pinMode(buttonStartFeed, INPUT_PULLUP);
-  pinMode(buttonSpindleStart, INPUT_PULLUP);
-  pinMode(buttonSpindleStop, INPUT_PULLUP);
-  pinMode(buttonPush, INPUT_PULLUP);
-  pinMode(buttonGeneralStop, INPUT_PULLUP);
-  pinMode(switchAutoCycleManual, INPUT_PULLUP);
-  pinMode(switchTopSlider, INPUT_PULLUP);
-  pinMode(endSwitchTop, INPUT_PULLUP);
-  pinMode(endSwitchBottom, INPUT_PULLUP);
+  initSetupInputManipulation();
 
-  /////////////Инициализация выходов и устанавливаем высокое состояние на выходе/////////////
-  pinMode(electromagnetTop, OUTPUT);
-  digitalWrite(electromagnetTop, true);
 
-  pinMode(electromagnetBottom, OUTPUT);
-  digitalWrite(electromagnetBottom, true);
+  /*****SERIAL*****/
+  Serial.begin(9600);
+  //Serial1.begin(9600);  // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
+  //pinMode(rs485TransceivReceive, OUTPUT);
+  //digitalWrite(rs485TransceivReceive, false);
 
-  pinMode(electromagnetManual, OUTPUT);
-  digitalWrite(electromagnetManual, true);
-
-  pinMode(electromagnetBrake, OUTPUT);
-  digitalWrite(electromagnetBrake, true);
-
-  pinMode(motorSpindle, OUTPUT);
-  digitalWrite(motorSpindle, true);
-
-  pinMode(motorStartFeed, OUTPUT);
-  digitalWrite(motorStartFeed, true);
-
-  pinMode(motorSelfCoolant, OUTPUT);
-  digitalWrite(motorSelfCoolant, true);
-
-  #ifdef ENABLE_KYPAD
+#ifdef ENABLE_KYPAD
   readKeypad();
-  #endif
+#endif
 
   /////////////Инициализация энкодера/////////////
   angleSensor.init();
-  // data.AbsoluteAngle = 0;
-  // data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+  // data.absoluteAngle = 0;
+  // data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
 
-  lcd.begin(16, 2);
-  //lcd.setBacklight(Color::WHITE);
-  lcd.setBacklight(WHITE);
+  _lcd.begin(16, 2);
+  //_lcd.setBacklight(WHITE);
+  _lcd.setBacklight(WHITE);
 
-  #ifdef CLEAR_EEPROM
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("CLEAR EEPROM");
+#ifdef CLEAR_EEPROM
+  _lcd.clear();
+  _lcd.setCursor(0, 0);
+  _lcd.print("CLEAR EEPROM");
 
-  char procesClear[16]  = "                ";
+  char procesClear[16] = "                ";
   uint8_t indexClear = 0;
   uint16_t compareParam = EEPROM.length() / 16;
 
   for (int i = 0; i < EEPROM.length(); i++) {
     EEPROM.write(i, 0);
-    if (i = compareParam){
-      lcd.setCursor(0, 1);
+    if (i = compareParam) {
+      _lcd.setCursor(0, 1);
       procesClear[indexClear] = '0';
-      lcd.print(procesClear);
+      _lcd.print(procesClear);
       compareParam = compareParam + (EEPROM.length() / 16);
       indexClear = indexClear + 1;
     }
   }
 
-  lcd.setCursor(0, 0);
-  lcd.print("CLEAR EEPROM OK");
+  _lcd.setCursor(0, 0);
+  _lcd.print("CLEAR EEPROM OK");
   delay(1000);
-  #endif
+#endif
 
-  #ifdef ENABLE_EEPROM
-  EEPROM.get(0, data);
+#ifdef ENABLE_EEPROM
+  EEPROM.get(0, _data);
 
-  if (data.InitData != '*') {
-    data.InitData = '*';
+  if (_data.initData != '*') {
+    _data.initData = '*';
 
-    data.LinearMove = 0;
-    data.AnglePrevious = 0;
-    data.AbsoluteAngle = 0;
+    _data.linearMove = 0;
+    _data.anglePrevious = 0;
+    _data.absoluteAngle = 0;
 
-    data.LimitTop = 10;
-    data.LimitBottom = 50;
-    data.CylinderDiametr = 80;
-    data.CylinderAngle = 60;
+    _data.limitTop = 10;
+    _data.limitBottom = 50;
+    _data.cylinderDiametr = 80;
+    _data.cylinderAngle = 60;
 
-    data.StateElectromagnetTop = true;
-    data.StateElectromagnetBottom = true;
-    data.StateIntermediate = true;
+    _data.stateElectromagnetTop = true;
+    _data.stateElectromagnetBottom = true;
+    _data.stateIntermediate = true;
 
-    EEPROM.put(0, data);
+    EEPROM.put(0, _data);
 
-    lcd.setCursor(0, 0);
-    lcd.print("INIT EEPROM OK");
-    lcd.setCursor(0, 1);
-    lcd.print(data.InitData);
+    lcdPrintChar(_lcd, "INIT EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
     delay(1000);
   }
-  #endif
+#endif
 
-  back_line.set_focusPosition(Position::LEFT);
-  //back_line.attach_function(1, go_back);
-  //back_line.attach_function(2, go_back);
-  back_line.attach_function(FunctionTypes::edit, go_back);
+  backLine.set_focusPosition(Position::LEFT);
+  //backLine.attach_function(1, goBack);
+  //backLine.attach_function(2, goBack);
+  backLine.attach_function(FunctionTypes::edit, goBack);
 
-  limits_line.set_focusPosition(Position::LEFT);
-  //limits_line.attach_function(1, goto_limit_menu);
-  //limits_line.attach_function(2, goto_limit_menu);
-  limits_line.attach_function(FunctionTypes::edit, goto_limit_menu);
+  limitsLine.set_focusPosition(Position::LEFT);
+  //limitsLine.attach_function(1, gotoLimitMenu);
+  //limitsLine.attach_function(2, gotoLimitMenu);
+  limitsLine.attach_function(FunctionTypes::edit, gotoLimitMenu);
 
-  cylinder_line.set_focusPosition(Position::LEFT);
-  //cylinder_line.attach_function(1, goto_cylinder_menu);
-  //cylinder_line.attach_function(2, goto_cylinder_menu);
-  cylinder_line.attach_function(FunctionTypes::edit, goto_cylinder_menu);
+  cylinderLine.set_focusPosition(Position::LEFT);
+  //cylinderLine.attach_function(1, gotoCylinderMenu);
+  //cylinderLine.attach_function(2, gotoCylinderMenu);
+  cylinderLine.attach_function(FunctionTypes::edit, gotoCylinderMenu);
 
-  //main_menu.switch_focus(true);
+  //mainMenu.switch_focus(true);
 
-  limit_top_line.set_focusPosition(Position::LEFT);
-  limit_top_line.attach_function(FunctionTypes::increase, increase_limit_top);
-  limit_top_line.attach_function(FunctionTypes::decrease, decrease_limit_top);
-  limit_top_line.attach_function(FunctionTypes::edit, set_limit_top);
+  limitTopLine.set_focusPosition(Position::LEFT);
+  limitTopLine.attach_function(FunctionTypes::increase, IncreaselimitTop);
+  limitTopLine.attach_function(FunctionTypes::decrease, decreaselimitTop);
+  limitTopLine.attach_function(FunctionTypes::edit, setlimitTop);
 
-  limit_bootom_line.set_focusPosition(Position::LEFT);
-  limit_bootom_line.attach_function(FunctionTypes::increase, increase_limit_bootom);
-  limit_bootom_line.attach_function(FunctionTypes::decrease, decrease_limit_bootom);
-  limit_bootom_line.attach_function(FunctionTypes::edit, set_limit_bootom);
+  limitBootomLine.set_focusPosition(Position::LEFT);
+  limitBootomLine.attach_function(FunctionTypes::increase, increaseLimitBootom);
+  limitBootomLine.attach_function(FunctionTypes::decrease, decrease_limit_bootom);
+  limitBootomLine.attach_function(FunctionTypes::edit, setLimitBootom);
 
-  diametr_value_line.set_focusPosition(Position::LEFT);
-  diametr_value_line.attach_function(FunctionTypes::increase, increase_diametr);
-  diametr_value_line.attach_function(FunctionTypes::decrease, decrease_diametr);
-  diametr_value_line.attach_function(FunctionTypes::edit, mode_edit_value);
+  diametrValueLine.set_focusPosition(Position::LEFT);
+  diametrValueLine.attach_function(FunctionTypes::increase, increaseDiametr);
+  diametrValueLine.attach_function(FunctionTypes::decrease, decreaseDiametr);
+  diametrValueLine.attach_function(FunctionTypes::edit, modeEditValue);
 
-  angle_value_line.set_focusPosition(Position::LEFT);
-  angle_value_line.set_decimalPlaces(0);
-  angle_value_line.attach_function(FunctionTypes::increase, increase_angle);
-  angle_value_line.attach_function(FunctionTypes::decrease, decrease_angle);
-  angle_value_line.attach_function(FunctionTypes::edit, mode_edit_value);
+  angleValueLine.set_focusPosition(Position::LEFT);
+  angleValueLine.set_decimalPlaces(0); //Количество цифр после запятой в значении линии
+  angleValueLine.attach_function(FunctionTypes::increase, increaseAngle);
+  angleValueLine.attach_function(FunctionTypes::decrease, decreaseAngle);
+  angleValueLine.attach_function(FunctionTypes::edit, modeEditValue);
 
   //strncpy(input_saved, string_saved, sizeof(string_saved));
   //strncpy(output_saved, string_saved, sizeof(string_saved));
@@ -914,6 +656,25 @@ void setup() {
 
 void loop() {
 
+  /*****SERIAL*****/
+  // if (Serial1.available()) {
+  //   Serial.write(Serial1.read());
+  // }
+
+  // if (stateMillisDelay(&previousMillisMenu, &intervalMenu)) {
+  //   //SEND//
+  //   digitalWrite(rs485TransceivReceive, true);  // переводим модуль в режим передачи данных
+  //   delay(10);
+  //   Serial1.write(" Data");
+  //   Serial1.write(0x0a);
+
+  //   // TO Recieved //
+  //   delay(10);
+  //   digitalWrite(rs485TransceivReceive, false);  // переводим модуль в режим приёма данных
+  // }
+  /*****SERIAL*****/
+
+
   stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
   stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
   digitalWrite(motorStartFeed, !stateStartFeed);                                                                                   // Запускаем мотор возвратно поступательного движения
@@ -922,46 +683,46 @@ void loop() {
   stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                                         // Конец цикла
 
   /////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
-  if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно поступательного движения
+  if (stateStartFeed) {  // Кнопку подача-пуск нажали. Запускаем мотор возвратно поступательного движения
 
     if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
-      data.AbsoluteAngle = 0;
-      data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+      _data.absoluteAngle = 0;
+      _data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
     }
 
-    data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
+    _data.linearMove = getLinearMotion();  // Получаем данные с энкодера
 
-    /**
+/**
       Имитация механического путевого переключателя,
-      data.LinearMove хранит текущее положение ползуна, контролируемое энкодером
-      data.LimitTop и data.LimitBottom лимиты крайних положений ползуна
-      data.StateElectromagnetTop и data.StateElectromagnetBottom хранят состояние переключателя
+      data.linearMove хранит текущее положение ползуна, контролируемое энкодером
+      data.limitTop и data.limitBottom лимиты крайних положений ползуна
+      data.stateElectromagnetTop и data.stateElectromagnetBottom хранят состояние переключателя
       data структура сохраняется в EEPROM для восстановления состояния программного путевого переключателя
       после экстренного нажатия кнопки ОБЩИЙ СТОП и выключения питания,
       !!! Не реализовано контроль питания, что бы успеть сохранить data в EEPROM.
     */
-    #ifdef ENABLE_PROGRAM_SWITCH
-    if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
+#ifdef ENABLE_PROGRAM_SWITCH
+    if (_data.linearMove <= _data.limitTop) {  // Если переключатель включен в положение верх
 
-      data.StateElectromagnetTop = true;  // включить стояние вверх программного переключателя
-      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
-      data.StateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
+      _data.stateElectromagnetTop = true;      // включить стояние вверх программного переключателя
+      _data.stateIntermediate = true;          // ползун вышел из промежуточного состояния
+      _data.stateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
     }
-    if (data.LimitTop < data.LinearMove && data.LinearMove < data.LimitBottom){
+    if (_data.limitTop < _data.linearMove && _data.linearMove < _data.limitBottom) {
 
-      data.StateIntermediate = false; // ползун находиться в промежуточном состоянии, между лимитами
+      _data.stateIntermediate = false;  // ползун находиться в промежуточном состоянии, между лимитами
     }
-    if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
+    if (_data.linearMove >= _data.limitBottom) {  // Если переключатель включен в положение низ
 
-      data.StateElectromagnetTop = false;  // выключить стояние вверх программного переключателя
-      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
-      data.StateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
+      _data.stateElectromagnetTop = false;    // выключить стояние вверх программного переключателя
+      _data.stateIntermediate = true;         // ползун вышел из промежуточного состояния
+      _data.stateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
     }
-    #endif
+#endif
 
     if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
 
-      if (!digitalRead(electromagnetManual)){ // Если порт electromagnetManual включён
+      if (!digitalRead(electromagnetManual)) {    // Если порт electromagnetManual включён
         digitalWrite(electromagnetBrake, true);   // отключаем электромагнит растормаживания
         digitalWrite(electromagnetManual, true);  // отключаем электромагнит ручной подачи
       }
@@ -969,41 +730,41 @@ void loop() {
       if (stateTopSlider) {  // Если ползун на концевике парковки
 
         statePush = trigerRS(statePush,
-                      !digitalRead(buttonPush),
-                      digitalRead(buttonPush) || stateGeneralStop);  // Толчковый ввод хоны
+                             !digitalRead(buttonPush),
+                             digitalRead(buttonPush) || stateGeneralStop);  // Толчковый ввод хоны
 
-        if (stateEndCycle){
+        if (stateEndCycle) {
           digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
           digitalWrite(electromagnetBrake, true);  // выключить электромагнит растормаживания
           stateEndCycle = false;                   // Конец цикла, сбрасываем так как ползун стоит на концевике парковки
         }
 
 
-        #ifdef ENABLE_PROGRAM_SWITCH
-          if (statePush && !data.StateElectromagnetBottom) {  // Если кнопка Толковая нажата и программный переключатель включён вверх
+#ifdef ENABLE_PROGRAM_SWITCH
+        if (statePush && !_data.stateElectromagnetBottom) {  // Если кнопка Толковая нажата и программный переключатель включён вверх
 
-            digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включаем электромагнит движения вниз
-          }
-          if (!statePush && !data.StateElectromagnetBottom) {
+          digitalWrite(electromagnetBrake, false);                           // включаем электромагнит растормаживания
+          digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // включаем электромагнит движения вниз
+        }
+        if (!statePush && !_data.stateElectromagnetBottom) {
 
-            digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-          }
-        #endif
+          digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+        }
+#endif
 
-        #ifdef ENABLE_SWITCH
-          if (statePush && !digitalRead(endSwitchTop)) {  // Если кнопка Толковая нажата и переключатель включён вверх
+#ifdef ENABLE_SWITCH
+        if (statePush && !digitalRead(endSwitchTop)) {  // Если кнопка Толковая нажата и переключатель включён вверх
 
-            digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
-            digitalWrite(electromagnetBottom, false);  // включаем электромагнит движения вниз
-          }
-          if (!statePush && !digitalRead(endSwitchTop)) {
+          digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
+          digitalWrite(electromagnetBottom, false);  // включаем электромагнит движения вниз
+        }
+        if (!statePush && !digitalRead(endSwitchTop)) {
 
-            digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-          }
-        #endif
+          digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+        }
+#endif
       }
 
       if (!stateTopSlider) {  // Если ползун сошёл с концевика парковки
@@ -1018,32 +779,30 @@ void loop() {
           digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
           digitalWrite(electromagnetBottom, true);        // выключить электромагнит движения вниз
 
-          digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживание
-          digitalWrite(electromagnetTop, data.StateElectromagnetTop = false);    // включить электромагнит движения вверх
-
+          digitalWrite(electromagnetBrake, false);                             // включаем электромагнит растормаживание
+          digitalWrite(electromagnetTop, _data.stateElectromagnetTop = false);  // включить электромагнит движения вверх
         }
 
         if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
 
-          if (stateSpindle ) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
-            lcd.clear();
-            lcd.setBacklight(WHITE);
+          if (stateSpindle) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
+            _lcd.clear();
+            _lcd.setBacklight(WHITE);
             digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
             stateStartCycle = true;                   // вход в цикл
-
           }
 
-          #ifdef ENABLE_PROGRAM_SWITCH
+#ifdef ENABLE_PROGRAM_SWITCH
           stateSpindle = trigerRS(stateSpindle,
-                  !digitalRead(buttonSpindleStart),
-                  !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || data.StateElectromagnetTop);  // Шпиндель Стоп или Старт
-          #endif
+                                  !digitalRead(buttonSpindleStart),
+                                  !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || _data.stateElectromagnetTop);  // Шпиндель Стоп или Старт
+#endif
 
-          #ifdef ENABLE_SWITCH
+#ifdef ENABLE_SWITCH
           stateSpindle = trigerRS(stateSpindle,
-                          !digitalRead(buttonSpindleStart),
-                          !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom));  // Шпиндель Стоп или Старт
-          #endif
+                                  !digitalRead(buttonSpindleStart),
+                                  !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom));  // Шпиндель Стоп или Старт
+#endif
 
           if (!stateSpindle) {  // Шпиндель выключен
 
@@ -1051,43 +810,41 @@ void loop() {
                                  !digitalRead(buttonPush),
                                  digitalRead(buttonPush) || stateSpindle || stateEndCycle || stateGeneralStop);  // Толчковый ввод хоны
 
+#ifdef ENABLE_PROGRAM_SWITCH
+            if (statePush && !_data.stateElectromagnetTop || statePush && !_data.stateElectromagnetBottom) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх или вниз
 
-            #ifdef ENABLE_PROGRAM_SWITCH
-            if (statePush && !data.StateElectromagnetTop || statePush && !data.StateElectromagnetBottom) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх или вниз
-
-              digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключаем электромагнит движения вверх
-              digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включаем электромагнит движения вниз
+              digitalWrite(electromagnetBrake, false);                           // включаем электромагнит растормаживания
+              digitalWrite(electromagnetTop, _data.stateElectromagnetTop);        // выключаем электромагнит движения вверх
+              digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // включаем электромагнит движения вниз
             }
+            if ((!statePush && !_data.stateElectromagnetTop) || (!statePush && !_data.stateElectromagnetBottom)) {  // Если кнопка Толковая не нажата и переключатель путевой включён вниз или вверх
 
-            if ((!statePush && !data.StateElectromagnetTop) || (!statePush && !data.StateElectromagnetBottom)) { // Если кнопка Толковая не нажата и переключатель путевой включён вниз или вверх
-
-              digitalWrite(electromagnetBrake, true); // включаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, true); // выключаем электромагнит движения вверх
+              digitalWrite(electromagnetBrake, true);   // включаем электромагнит растормаживания
+              digitalWrite(electromagnetTop, true);     // выключаем электромагнит движения вверх
               digitalWrite(electromagnetBottom, true);  // выключаем электромагнит движения вниз
             }
-            #endif
+#endif
 
-            #ifdef ENABLE_SWITCH
+#ifdef ENABLE_SWITCH
             if (statePush && !digitalRead(endSwitchTop)) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх
 
-              digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, true); // выключаем электромагнит движения вверх
-              digitalWrite(electromagnetBottom, false); // включаем электромагнит движения вниз
+              digitalWrite(electromagnetBrake, false);   // включаем электромагнит растормаживания
+              digitalWrite(electromagnetTop, true);      // выключаем электромагнит движения вверх
+              digitalWrite(electromagnetBottom, false);  // включаем электромагнит движения вниз
             }
             if (statePush && !digitalRead(endSwitchBottom)) {  // Если кнопка Толковая нажата и переключатель путевой включён вверх
 
               digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, false); // включаем электромагнит движения вверх
-              digitalWrite(electromagnetBottom, true); // выключаем электромагнит движения вниз
+              digitalWrite(electromagnetTop, false);    // включаем электромагнит движения вверх
+              digitalWrite(electromagnetBottom, true);  // выключаем электромагнит движения вниз
             }
             if ((!statePush && !digitalRead(endSwitchTop)) || (!statePush && !digitalRead(endSwitchBottom))) {  // Если кнопка Толковая не нажата и переключатель путевой включён вниз или вверх
 
-              digitalWrite(electromagnetBrake, true); // выключаем электромагнит растормаживания
-              digitalWrite(electromagnetTop, true); // выключаем электромагнит движения вверх
+              digitalWrite(electromagnetBrake, true);   // выключаем электромагнит растормаживания
+              digitalWrite(electromagnetTop, true);     // выключаем электромагнит движения вверх
               digitalWrite(electromagnetBottom, true);  // выключаем электромагнит движения вниз
             }
-            #endif
+#endif
           }
         }
       }
@@ -1104,25 +861,23 @@ void loop() {
                                 !digitalRead(buttonSpindleStart),
                                 !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Стоп
 
-
-
-        #ifdef ENABLE_PROGRAM_SWITCH
-        if ( ((data.LimitTop - 5/*мм*/) < data.LinearMove) && (data.LinearMove < (data.LimitBottom + 5/*мм*/)) ) {
-          if (stateSpindle){
-            digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
-            digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
-          }
+#ifdef ENABLE_PROGRAM_SWITCH
+        if (stateSpindle && ((_data.limitTop - 5 /*мм*/) < _data.linearMove) && (_data.linearMove < (_data.limitBottom + 5 /*мм*/))) {
+          digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+          digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+        } else {
+          stateSpindle = false;
         }
-        #endif
+#endif
 
-        #ifdef ENABLE_SWITCH
-        if (stateSpindle){
+#ifdef ENABLE_SWITCH
+        if (stateSpindle) {
           digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
           digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
         }
-        #endif
+#endif
 
-        if (!stateSpindle){
+        if (!stateSpindle) {
           digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
           digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
           /**
@@ -1130,89 +885,35 @@ void loop() {
           */
           Menu();
         }
-
-
-
       }
     }
 
-    #ifdef ENABLE_PROGRAM_SWITCH
-    if (!data.StateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-      lcd.clear();
-      lcd.setBacklight(YELLOW);
-      lcd.setCursor(0, 0);
-      lcd.print("IN FIELD ACTION");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
+#ifdef ENABLE_PROGRAM_SWITCH
+    if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "IN FIELD ACTION", _data.linearMove, " mm", YELLOW, 0, 0);
     }
 
-    if (data.StateIntermediate && !data.StateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-      lcd.clear();
-      lcd.setBacklight(WHITE);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT TOP PROG");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-
+    if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT TOP PROG", _data.linearMove, " mm", WHITE, 0, 0);
     }
 
-    if (data.StateIntermediate && !data.StateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(WHITE);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT BOOTOM PROG");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
+    if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT BOOTOM PROG", _data.linearMove, " mm", WHITE, 0, 0);
     }
-    #endif
+#endif
 
-    #ifdef ENABLE_SWITCH
-    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(YELLOW);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT TOP MECHAN");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
+#ifdef ENABLE_SWITCH
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT TOP MECHAN", _data.linearMove, " mm", YELLOW, 0, 0);
     }
 
-    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(GREEN);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT BOOTOM MECHAN");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT BOOTOM MECHAN", _data.linearMove, " mm", GREEN, 0, 0);
     }
-    #endif
+#endif
   }
+
   if (!stateStartFeed) {  // Кнопку Общий стоп нажали
-
-    lcd.clear();
-    lcd.setBacklight(WHITE);
-
-    EEPROM.get(0, dataBuffer);
-    if (data != dataBuffer) {
-      EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
-      EEPROM.get(0, data); // Чтение структуры data из EEPROM
-
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("SAVE EEPROM OK");
-      lcd.setCursor(0, 1);
-      lcd.print(data.InitData);
-      delay(1000);
-    }
-
-
 
     stateSpindle = trigerRS(stateSpindle,
                             !digitalRead(buttonSpindleStart),
@@ -1225,6 +926,19 @@ void loop() {
     digitalWrite(electromagnetManual, true);        // выключаем электромагнит ручной подачи
     digitalWrite(electromagnetBrake, true);         // выключаем электромагнит растормаживания
 
+    /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
+    _lcd.clear();
+    _lcd.setBacklight(WHITE);
+
+    EEPROM.get(0, _dataBuffer);
+    if (_data != _dataBuffer) {
+      EEPROM.put(0, _data);  // Сохранение изменений структуры data в EEPROM
+      EEPROM.get(0, _data);  // Чтение структуры data из EEPROM
+
+      lcdPrintChar(_lcd, "SAVE EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
+      delay(1000);
+    }
+
     /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
     Menu();
   }
@@ -1232,30 +946,30 @@ void loop() {
   /////////////////////////////////////////////////////ЦИКЛ///////////////////////////////////////////////////////
   while (stateStartCycle) {  // Включён режим Цикл
 
-    #ifdef ENABLE_PROGRAM_SWITCH
-    if (data.LinearMove <= data.LimitTop) {  // Если переключатель включен в положение верх
+#ifdef ENABLE_PROGRAM_SWITCH
+    if (_data.linearMove <= _data.limitTop) {  // Если переключатель включен в положение верх
 
-      data.StateElectromagnetTop = true;  // включить стояние вверх программного переключателя
-      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
-      data.StateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
+      _data.stateElectromagnetTop = true;      // включить стояние вверх программного переключателя
+      _data.stateIntermediate = true;          // ползун вышел из промежуточного состояния
+      _data.stateElectromagnetBottom = false;  // выключить стояние вниз программного переключателя
     }
-    if (data.LimitTop < data.LinearMove && data.LinearMove < data.LimitBottom){
+    if (_data.limitTop < _data.linearMove && _data.linearMove < _data.limitBottom) {
 
-      data.StateIntermediate = false; // ползун находиться в промежуточном состоянии, между лимитами
+      _data.stateIntermediate = false;  // ползун находиться в промежуточном состоянии, между лимитами
     }
-    if (data.LinearMove >= data.LimitBottom) {  // Если переключатель включен в положение низ
+    if (_data.linearMove >= _data.limitBottom) {  // Если переключатель включен в положение низ
 
-      data.StateElectromagnetTop = false;  // выключить стояние вверх программного переключателя
-      data.StateIntermediate = true; // ползун вышел из промежуточного состояния
-      data.StateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
+      _data.stateElectromagnetTop = false;    // выключить стояние вверх программного переключателя
+      _data.stateIntermediate = true;         // ползун вышел из промежуточного состояния
+      _data.stateElectromagnetBottom = true;  // включить стояние вниз программного переключателя
     }
-    #endif
+#endif
 
-    data.LinearMove = getLinearMotion(); // Получаем данные с энкодера
+    _data.linearMove = getLinearMotion();  // Получаем данные с энкодера
 
     stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
     stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
-    digitalWrite(motorStartFeed, !stateStartFeed); // Запускаем мотор возвратно поступательного движения
+    digitalWrite(motorStartFeed, !stateStartFeed);                                                                                   // Запускаем мотор возвратно поступательного движения
     stateAutoCycleManual = trigerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual));  // Переключатель режимов: "Ввод хоны", "Ручной"
     stateTopSlider = trigerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider));                          // Концевик парковки ползуна в верху исходного состояния
     stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                                         // Конец цикла
@@ -1272,8 +986,8 @@ void loop() {
 
         digitalWrite(motorSpindle, !stateSpindle);      // выключаем мотор шпинделя
         digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
-        digitalWrite(electromagnetBottom, true); // выключить электромагнит движения вниз
-        digitalWrite(electromagnetTop, false);      // включить электромагнит движения вверх
+        digitalWrite(electromagnetBottom, true);        // выключить электромагнит движения вниз
+        digitalWrite(electromagnetTop, false);          // включить электромагнит движения вверх
 
         if (stateTopSlider) {  // Ползун поднялся в верх, исходное состояние конец цикла
 
@@ -1283,46 +997,58 @@ void loop() {
           stateStartCycle = false;                 // выходим из цикла
           //break;
         }
-
       }
 
-      if (!stateEndCycle && stateSpindle) { //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Eсли включен
+      if (!stateEndCycle && stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Eсли включен
 
         digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя
         digitalWrite(motorSelfCoolant, !stateSpindle);  // включаем мотор помпы СОЖ
 
-        #ifdef ENABLE_PROGRAM_SWITCH
-          if (!data.StateElectromagnetBottom) {  // Если переключатель включен в положение верх
+#if defined(ENABLE_PROGRAM_SWITCH) && !defined(ENABLE_SWITCH)
+        if (!data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // включить электромагнит движения вниз
+          digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // включить электромагнит движения вниз
+        }
 
-          }
+        if (!data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-          if (!data.StateElectromagnetTop) {  // Если переключатель включен в положение низ
+          digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // включить электромагнит движения вверх
+        }
+#endif
 
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom );  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // включить электромагнит движения вверх
-          }
-        #endif
+#if defined(ENABLE_PROGRAM_SWITCH) && defined(ENABLE_SWITCH)
+        if (!_data.stateElectromagnetBottom || !digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
 
-        #ifdef ENABLE_SWITCH
-          if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
+        if (!_data.stateElectromagnetTop || !digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
-          }
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+#endif
 
-          if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
+#if defined(ENABLE_SWITCH) && !defined(ENABLE_PROGRAM_SWITCH)
+        if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
-          }
-        #endif
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
+        if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
+
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+#endif
       }
 
       if (!stateEndCycle && !stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Если выключен
@@ -1330,41 +1056,41 @@ void loop() {
         digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
         digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
 
-        #ifdef ENABLE_PROGRAM_SWITCH
-          if (!data.StateElectromagnetBottom) {  // Если переключатель включен в положение верх
+#ifdef ENABLE_PROGRAM_SWITCH
+        if (!_data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom );  // включить электромагнит движения вниз
-          }
+          digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // включить электромагнит движения вниз
+        }
 
-          if (!data.StateElectromagnetTop) {  // Если переключатель включен в положение низ
+        if (!_data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetBottom, data.StateElectromagnetBottom);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, data.StateElectromagnetTop);  // включить электромагнит движения вверх
-          }
-        #endif
+          digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // включить электромагнит движения вверх
+        }
+#endif
 
-        #ifdef ENABLE_SWITCH
-          if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
+#ifdef ENABLE_SWITCH
+        if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
-          }
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
 
-          if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
+        if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
-          }
-        #endif
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+#endif
       }
     }
 
-    if (!stateAutoCycleManual) { // Переключатель включен в режим Ручной
+    if (!stateAutoCycleManual) {  // Переключатель включен в режим Ручной
 
       stateSpindle = trigerRS(stateSpindle,
                               !digitalRead(buttonSpindleStart),
@@ -1378,27 +1104,37 @@ void loop() {
       digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя или отключить в зависимости от stateSpindle
       digitalWrite(motorSelfCoolant, !stateSpindle);  // включить мотор помпы СОЖ или отключить в зависимости от stateSpindle
 
-      if (!stateSpindle) { // Если шпиндель выключен, есть возможность запустить меню настройки
+      if (!stateSpindle) {  // Если шпиндель выключен, есть возможность запустить меню настройки
         /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-        Menu(); // Запуск меню настроек по удержанию кнопки в течение 3 секунд
+        Menu();  // Запуск меню настроек по удержанию кнопки в течение 3 секунд
       }
     }
 
-    if (stateGeneralStop) {  // Нажата кнопка Общий стоп
+#ifdef ENABLE_PROGRAM_SWITCH
+    if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "IN FIELD ACTION", _data.linearMove, " mm", GREEN, 0, 0);
+    }
 
-      EEPROM.get(0, dataBuffer);
-      if (data != dataBuffer) {
-        EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
-        EEPROM.get(0, data); // Чтение структуры data из EEPROM
+    if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT TOP PROG", _data.linearMove, " mm", YELLOW, 0, 0);
+    }
 
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("SAVE EEPROM OK");
-        lcd.setCursor(0, 1);
-        lcd.print(data.InitData);
-        delay(1000);
-      }
+    if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT BOOTOM PROG", _data.linearMove, " mm", YELLOW, 0, 0);
+    }
+#endif
 
+#ifdef ENABLE_SWITCH
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT TOP MECHAN", _data.linearMove, " mm", YELLOW, 0, 0);
+    }
+
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintFloat(_lcd, "LIMIT BOOTOM MECHAN", _data.linearMove, " mm", GREEN, 0, 0);
+    }
+#endif
+
+    if (stateGeneralStop) {                           // Нажата кнопка Общий стоп
       digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
       digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
       digitalWrite(motorStartFeed, !stateStartFeed);  // отключаем мотор возвратно поступательного движения
@@ -1409,70 +1145,22 @@ void loop() {
       digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления
 
       stateStartCycle = false;  // выходим из цикла
+
+      /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
+      saveEprom(_lcd, _dataBuffer, _data);
+      EEPROM.get(0, _dataBuffer);
+      if (_data != _dataBuffer) {
+        EEPROM.put(0, _data);  // Сохранение изменений структуры data в EEPROM
+        EEPROM.get(0, _data);  // Чтение структуры data из EEPROM
+
+        lcdPrintChar(_lcd, "SAVE EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
+        delay(1000);
+      }
     }
-
-    #ifdef ENABLE_PROGRAM_SWITCH
-    if (!data.StateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-      lcd.clear();
-      lcd.setBacklight(GREEN);
-      lcd.setCursor(0, 0);
-      lcd.print("IN FIELD ACTION");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-    }
-
-    if (data.StateIntermediate && !data.StateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-      lcd.clear();
-      lcd.setBacklight(YELLOW);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT TOP PROG");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-
-    }
-
-    if (data.StateIntermediate && !data.StateElectromagnetTop  && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(YELLOW);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT BOOTOM PROG");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-    }
-    #endif
-
-    #ifdef ENABLE_SWITCH
-    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(YELLOW);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT TOP MECHAN");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-    }
-
-    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)){
-
-      lcd.clear();
-      lcd.setBacklight(GREEN);
-      lcd.setCursor(0, 0);
-      lcd.print("LIMIT BOOTOM MECHAN");
-      lcd.setCursor(0, 1);
-      lcd.print(data.LinearMove, 2);
-      lcd.print(" mm");
-    }
-    #endif
-
   }
 }
 
-#ifdef ENABLE_KYPAD
+#if defined(ENABLE_KYPAD)
 ISR(PCINT0_vect) {  // Обработчик запросов прерывания от пинов PCINT0..PCINT7
 
   cli();         // сбрасываем флаг прерывания (Запретить прерывания)
@@ -1482,33 +1170,34 @@ ISR(PCINT0_vect) {  // Обработчик запросов прерывани�
 #endif
 
 
+
 void Menu() {
 
-  //lcd.clear();
+  //_lcd.clear();
   //previousMillisMenu = 0;
-  while (lcd.readButtons() > 0 && !startMenu) {
+  while (_lcd.readButtons() > 0 && !startMenu) {
     startMenu = stateMillisDelay(&previousMillisMenu, &intervalMenu);
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(second += 1);
+    _lcd.clear();
+    _lcd.setCursor(0, 0);
+    _lcd.print(second += 1);
     delay(1000);
-    lcd.clear();
+    _lcd.clear();
   }
 
   if (startMenu) {
     second = 0;
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Start Menu");
+    _lcd.clear();
+    _lcd.setCursor(0, 0);
+    _lcd.print("Start Menu");
     delay(1000);
     if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
-      menu_system.change_menu(limit_menu);
-      menu_system.change_screen(&bootom_screen);
-      menu_system.set_focusedLine(1);
+      menuSystem.change_menu(limitMenu);
+      menuSystem.change_screen(&bootomScreen);
+      menuSystem.set_focusedLine(1);
     }
     if (stateGeneralStop) {
-      menu_system.change_menu(main_menu);
-      menu_system.change_screen(&welcome_screen);
+      menuSystem.change_menu(mainMenu);
+      menuSystem.change_screen(&welcomeScreen);
     }
 
   } else {
@@ -1520,28 +1209,28 @@ void Menu() {
   while (startMenu) {
 
     if (stateTopSlider) {  // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
-      data.AbsoluteAngle = 0;
-      data.AnglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+      _data.absoluteAngle = 0;
+      _data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
     }
 
-    data.LinearMove = getLinearMotion();
+    _data.linearMove = getLinearMotion();
 
-    if (buttons = lcd.readButtons()) {
+    if (buttons = _lcd.readButtons()) {
 
       if (buttons & BUTTON_UP) {
         if (IncDecMode) {
           delay(10);
-          menu_system.call_function(FunctionTypes::increase);
+          menuSystem.call_function(FunctionTypes::increase);
         } else {
           delay(500);
-          if (menu_system.get_currentScreen() == &top_screen
-              || menu_system.get_currentScreen() == &bootom_screen
-              || menu_system.get_currentScreen() == &diametr_screen
-              || menu_system.get_currentScreen() == &angle_screen
-              || menu_system.get_currentScreen() == &oSecondary_screen) {
+          if (menuSystem.get_currentScreen() == &topScreen
+              || menuSystem.get_currentScreen() == &bootomScreen
+              || menuSystem.get_currentScreen() == &diametrScreen
+              || menuSystem.get_currentScreen() == &angleScreen
+              || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
-            menu_system.switch_focus(false);
+            menuSystem.switch_focus(false);
           }
         }
       }
@@ -1549,17 +1238,17 @@ void Menu() {
       if (buttons & BUTTON_DOWN) {
         if (IncDecMode) {
           delay(10);
-          menu_system.call_function(FunctionTypes::decrease);
+          menuSystem.call_function(FunctionTypes::decrease);
         } else {
           delay(500);
-          if (menu_system.get_currentScreen() == &top_screen
-              || menu_system.get_currentScreen() == &bootom_screen
-              || menu_system.get_currentScreen() == &diametr_screen
-              || menu_system.get_currentScreen() == &angle_screen
-              || menu_system.get_currentScreen() == &oSecondary_screen) {
+          if (menuSystem.get_currentScreen() == &topScreen
+              || menuSystem.get_currentScreen() == &bootomScreen
+              || menuSystem.get_currentScreen() == &diametrScreen
+              || menuSystem.get_currentScreen() == &angleScreen
+              || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
-            menu_system.switch_focus(true);
+            menuSystem.switch_focus(true);
           }
         }
       }
@@ -1569,21 +1258,21 @@ void Menu() {
         if (IncDecMode) {
           ///
         } else {
-          menu_system.previous_screen();
+          menuSystem.previous_screen();
 
-          if (menu_system.get_currentScreen() == &top_screen
-              || menu_system.get_currentScreen() == &bootom_screen
-              || menu_system.get_currentScreen() == &diametr_screen
-              || menu_system.get_currentScreen() == &angle_screen
-              || menu_system.get_currentScreen() == &oSecondary_screen) {
+          if (menuSystem.get_currentScreen() == &topScreen
+              || menuSystem.get_currentScreen() == &bootomScreen
+              || menuSystem.get_currentScreen() == &diametrScreen
+              || menuSystem.get_currentScreen() == &angleScreen
+              || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
-            menu_system.set_focusedLine(1);
-            menu_system.softUpdate();
+            menuSystem.set_focusedLine(1);
+            menuSystem.softUpdate();
           }
 
-          if (menu_system.get_currentScreen() == &settings_screen) {
-            menu_system.set_focusedLine(0);
-            menu_system.update();
+          if (menuSystem.get_currentScreen() == &settingsScreen) {
+            menuSystem.set_focusedLine(0);
+            menuSystem.update();
           }
         }
       }
@@ -1593,93 +1282,109 @@ void Menu() {
         if (IncDecMode) {
           ///
         } else {
-          menu_system.next_screen();
+          menuSystem.next_screen();
 
-          if (menu_system.get_currentScreen() == &top_screen
-              || menu_system.get_currentScreen() == &bootom_screen
-              || menu_system.get_currentScreen() == &diametr_screen
-              || menu_system.get_currentScreen() == &angle_screen
-              || menu_system.get_currentScreen() == &oSecondary_screen) {
+          if (menuSystem.get_currentScreen() == &topScreen
+              || menuSystem.get_currentScreen() == &bootomScreen
+              || menuSystem.get_currentScreen() == &diametrScreen
+              || menuSystem.get_currentScreen() == &angleScreen
+              || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
-            menu_system.set_focusedLine(1);
-            menu_system.softUpdate();
+            menuSystem.set_focusedLine(1);
+            menuSystem.softUpdate();
           }
 
-          if (menu_system.get_currentScreen() == &settings_screen) {
-            menu_system.set_focusedLine(0);
-            menu_system.update();
+          if (menuSystem.get_currentScreen() == &settingsScreen) {
+            menuSystem.set_focusedLine(0);
+            menuSystem.update();
           }
         }
       }
 
       if (buttons & BUTTON_SELECT) {
         delay(500);
-        menu_system.call_function(FunctionTypes::edit);
-        menu_system.update();
+        menuSystem.call_function(FunctionTypes::edit);
+        menuSystem.update();
       }
 
       //previousMillisMenu = millis();
       if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
-      ////
+        ////
       } else {
-        while (lcd.readButtons() > 0 && startMenu && !IncDecMode) {
+        while (_lcd.readButtons() > 0 && startMenu && !IncDecMode) {
           startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
-          lcd.clear();
-          lcd.setCursor(0, 0);
-          lcd.print(second += 1);
+          _lcd.clear();
+          _lcd.setCursor(0, 0);
+          _lcd.print(second += 1);
           delay(1000);
         }
       }
 
     } else {
-      oneBool = false;
-      twoBool = false;
-      threeBool = false;
-      previousMillisSped1 = 0;
-      previousMillisSped2 = 0;
-      previousMillisSped3 = 0;
+      _speeds[0] = false;
+      _speeds[1] = false;
+      _speeds[2] = false;
+      _previousMillisSped = 0;
     }
 
     if (startMenu) {
       if (second > 0) {
         second = 0;
-        menu_system.update();
+        menuSystem.update();
       }
 
       if (stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-        if (menu_system.get_currentScreen() == &top_screen \
-            || menu_system.get_currentScreen() == &bootom_screen
-            || menu_system.get_currentScreen() == &diametr_screen
-            || menu_system.get_currentScreen() == &angle_screen) {
+        if (menuSystem.get_currentScreen() == &topScreen
+            || menuSystem.get_currentScreen() == &bootomScreen
+            || menuSystem.get_currentScreen() == &diametrScreen
+            || menuSystem.get_currentScreen() == &angleScreen) {
 
-          //menu_system.softUpdate();
-          menu_system.update();
+          //menuSystem.softUpdate();
+          menuSystem.update();
         } else {
-          menu_system.softUpdate();
+          menuSystem.softUpdate();
         }
       }
 
     } else {
-
-      EEPROM.get(0, dataBuffer);
-      if (data != dataBuffer) {
-        EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
-        EEPROM.get(0, data); // Чтение структуры data из EEPROM
-
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("SAVE EEPROM OK");
-        lcd.setCursor(0, 1);
-        lcd.print(data.InitData);
-        delay(1000);
-      }
-
+      /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
       second = 0;
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Close Menu");
+      saveEprom(_lcd, _dataBuffer, _data);
+      lcdPrintChar(_lcd, "Close Menu", "", "", WHITE, 0, 0, 0, false);
       delay(1000);
-      lcd.clear();
+      _lcd.clear();
     }
+  }
+}
+
+void lcdPrintFloat(Adafruit_RGBLCDShield lcd, String msg, float dataFloat, String dataCharPostfix, uint8_t color, uint8_t posLineOne, uint8_t posLineTwo) {
+  lcd.clear();
+  lcd.setBacklight(color);
+  lcd.setCursor(posLineOne, 0);
+  lcd.print(msg);
+  lcd.setCursor(posLineTwo, 1);
+  lcd.print(dataFloat, 2);
+  lcd.print(dataCharPostfix);
+}
+
+void lcdPrintChar(Adafruit_RGBLCDShield lcd, String msg, String dataChar, String dataCharPostfix, uint8_t color, uint8_t posLineOne, uint8_t posLineTwo, unsigned long msgDelay, bool msgClear ) {
+  lcd.clear();
+  lcd.setBacklight(color);
+  lcd.setCursor(posLineOne, 0);
+  lcd.print(msg);
+  lcd.setCursor(posLineTwo, 1);
+  lcd.print(dataChar);
+  lcd.print(dataCharPostfix);
+  if (msgDelay > 0) delay(msgDelay);
+  if (msgClear) lcd.clear();
+}
+
+
+template< typename LCD, typename T, typename D >
+void saveEprom(LCD lcd, T &dataBuffer, D &data) {
+  EEPROM.get(0, dataBuffer);
+  if (data != dataBuffer) {
+    EEPROM.put(0, data);  // Сохранение изменений структуры data в EEPROM
+    lcdPrintChar(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, 0, 0, 1000, true);
   }
 }
