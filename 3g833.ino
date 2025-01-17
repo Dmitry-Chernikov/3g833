@@ -154,11 +154,13 @@ LiquidScreen angleScreen(angleTitleLine, angleValueLine);
 LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
 
 /*
- * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы мен= 3000ю.
+ * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы меню.
  * Он обеспечивает те же функции, что и LiquidMenu с добавлением add_menu () и change_menu ().
  */
 LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
 
+///////////////////////////Prototype function///////////////////////////
+void lcdPrintString(Adafruit_RGBLCDShield lcd, String msg = "", String dataChar = "", String dataCharPostfix = "", uint8_t color = -1, uint8_t posLineOne = 0, uint8_t posLineTwo = 0, unsigned long msgDelay = 0, bool clearBeforeRendering = false, bool clearAfterRendering = false);
 
 ///////////////////////////Процедуры меню begin///////////////////////////////////
 // Функция для проверки выхода за пределы
@@ -176,8 +178,7 @@ void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mes
 
   mesLineTwo = (typeOperation == DecIncrTypes::inc) ? messInc : messDec;
   mesLineTwo += (paramManipulation = (typeOperation == DecIncrTypes::inc) ? maxParam : minParam);
-  lcdPrintChar(lcd, mesLineOne, mesLineTwo, "", RED, posLineOne, posLineTwo, 0, false);
-  delay(2000);
+  lcdPrintString(lcd, mesLineOne, mesLineTwo, "", RED, posLineOne, posLineTwo, 2000, true, false);
   lcd.setBacklight(GREEN);
   menuSystem.update();
 }
@@ -539,7 +540,6 @@ void setup() {
 
   initSetupInputManipulation();
 
-
   /*****SERIAL*****/
   Serial.begin(9600);
   //Serial1.begin(9600);  // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
@@ -556,32 +556,24 @@ void setup() {
   // data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
 
   _lcd.begin(16, 2);
-  //_lcd.setBacklight(WHITE);
   _lcd.setBacklight(WHITE);
 
 #ifdef CLEAR_EEPROM
-  _lcd.clear();
-  _lcd.setCursor(0, 0);
-  _lcd.print("CLEAR EEPROM");
+  lcdPrintString(_lcd, "CLEAR EEPROM", "", "", NOT_CHANGE_COLOR, 0, 0, 0, true, false);
 
-  char procesClear[16] = "                ";
-  uint8_t indexClear = 0;
+  uint8_t indexLine = 0;
   uint16_t compareParam = EEPROM.length() / 16;
 
   for (int i = 0; i < EEPROM.length(); i++) {
-    EEPROM.write(i, 0);
-    if (i = compareParam) {
-      _lcd.setCursor(0, 1);
-      procesClear[indexClear] = '0';
-      _lcd.print(procesClear);
+    EEPROM.write(i, 0);   
+    if (i = compareParam) {     
+      lcdPrintString(_lcd, "", "0", "", NOT_CHANGE_COLOR, 0, indexLine, 0, false, false);
       compareParam = compareParam + (EEPROM.length() / 16);
-      indexClear = indexClear + 1;
+      indexLine = indexLine + 1;
     }
   }
 
-  _lcd.setCursor(0, 0);
-  _lcd.print("CLEAR EEPROM OK");
-  delay(1000);
+  lcdPrintString(_lcd, "CLEAR EEPROM OK", "", "", NOT_CHANGE_COLOR, 0, 0, 1000, true, false);  
 #endif
 
 #ifdef ENABLE_EEPROM
@@ -605,8 +597,7 @@ void setup() {
 
     EEPROM.put(0, _data);
 
-    lcdPrintChar(_lcd, "INIT EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
-    delay(1000);
+    lcdPrintString(_lcd, "INIT EEPROM OK", String(_data.initData), "", NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
   }
 #endif
 
@@ -785,9 +776,8 @@ void loop() {
 
         if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
 
-          if (stateSpindle) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён
-            _lcd.clear();
-            _lcd.setBacklight(WHITE);
+          if (stateSpindle) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён              
+            lcdPrintString(_lcd, "", "", "", WHITE, 0, 0, 0, true, false);
             digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
             stateStartCycle = true;                   // вход в цикл
           }
@@ -890,25 +880,25 @@ void loop() {
 
 #ifdef ENABLE_PROGRAM_SWITCH
     if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "IN FIELD ACTION", _data.linearMove, " mm", YELLOW, 0, 0);
+      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", YELLOW, 0, 0, 0, true, false);      
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT TOP PROG", _data.linearMove, " mm", WHITE, 0, 0);
+      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", WHITE, 0, 0, 0, true, false);      
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT BOOTOM PROG", _data.linearMove, " mm", WHITE, 0, 0);
+      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", WHITE, 0, 0, 0, true, false);      
     }
 #endif
 
 #ifdef ENABLE_SWITCH
     if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT TOP MECHAN", _data.linearMove, " mm", YELLOW, 0, 0);
+      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, 0, 0, 0, true, false);      
     }
 
     if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT BOOTOM MECHAN", _data.linearMove, " mm", GREEN, 0, 0);
+      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, 0, 0, 0, true, false);      
     }
 #endif
   }
@@ -927,17 +917,7 @@ void loop() {
     digitalWrite(electromagnetBrake, true);         // выключаем электромагнит растормаживания
 
     /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
-    _lcd.clear();
-    _lcd.setBacklight(WHITE);
-
-    EEPROM.get(0, _dataBuffer);
-    if (_data != _dataBuffer) {
-      EEPROM.put(0, _data);  // Сохранение изменений структуры data в EEPROM
-      EEPROM.get(0, _data);  // Чтение структуры data из EEPROM
-
-      lcdPrintChar(_lcd, "SAVE EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
-      delay(1000);
-    }
+    saveEeprom(_lcd, _dataBuffer, _data);
 
     /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
     Menu();
@@ -1112,25 +1092,25 @@ void loop() {
 
 #ifdef ENABLE_PROGRAM_SWITCH
     if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "IN FIELD ACTION", _data.linearMove, " mm", GREEN, 0, 0);
+      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", GREEN, 0, 0, 0, true, false);
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT TOP PROG", _data.linearMove, " mm", YELLOW, 0, 0);
+      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", YELLOW, 0, 0, 0, true, false);
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT BOOTOM PROG", _data.linearMove, " mm", YELLOW, 0, 0);
+      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, 0, 0, 0, true, false);
     }
 #endif
 
 #ifdef ENABLE_SWITCH
     if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT TOP MECHAN", _data.linearMove, " mm", YELLOW, 0, 0);
+      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, 0, 0, 0, true, false);
     }
 
     if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintFloat(_lcd, "LIMIT BOOTOM MECHAN", _data.linearMove, " mm", GREEN, 0, 0);
+      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, 0, 0, 0, true, false);
     }
 #endif
 
@@ -1147,15 +1127,7 @@ void loop() {
       stateStartCycle = false;  // выходим из цикла
 
       /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
-      saveEprom(_lcd, _dataBuffer, _data);
-      EEPROM.get(0, _dataBuffer);
-      if (_data != _dataBuffer) {
-        EEPROM.put(0, _data);  // Сохранение изменений структуры data в EEPROM
-        EEPROM.get(0, _data);  // Чтение структуры data из EEPROM
-
-        lcdPrintChar(_lcd, "SAVE EEPROM OK", String(_data.initData), "", WHITE, 0, 0, 0, false);
-        delay(1000);
-      }
+      saveEeprom(_lcd, _dataBuffer, _data);
     }
   }
 }
@@ -1170,26 +1142,17 @@ ISR(PCINT0_vect) {  // Обработчик запросов прерывани�
 #endif
 
 
-
 void Menu() {
 
-  //_lcd.clear();
-  //previousMillisMenu = 0;
   while (_lcd.readButtons() > 0 && !startMenu) {
     startMenu = stateMillisDelay(&previousMillisMenu, &intervalMenu);
-    _lcd.clear();
-    _lcd.setCursor(0, 0);
-    _lcd.print(second += 1);
-    delay(1000);
-    _lcd.clear();
+    lcdPrintString(_lcd, String(second += 1), "", "", WHITE, 0, 0, 1000, true, true);
   }
 
   if (startMenu) {
     second = 0;
-    _lcd.clear();
-    _lcd.setCursor(0, 0);
-    _lcd.print("Start Menu");
-    delay(1000);
+    lcdPrintString(_lcd, "Start Menu", "", "", NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
+
     if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
       menuSystem.change_menu(limitMenu);
       menuSystem.change_screen(&bootomScreen);
@@ -1313,10 +1276,7 @@ void Menu() {
       } else {
         while (_lcd.readButtons() > 0 && startMenu && !IncDecMode) {
           startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
-          _lcd.clear();
-          _lcd.setCursor(0, 0);
-          _lcd.print(second += 1);
-          delay(1000);
+          lcdPrintString(_lcd, String(second += 1), "", "", NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
         }
       }
 
@@ -1349,42 +1309,34 @@ void Menu() {
     } else {
       /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
       second = 0;
-      saveEprom(_lcd, _dataBuffer, _data);
-      lcdPrintChar(_lcd, "Close Menu", "", "", WHITE, 0, 0, 0, false);
-      delay(1000);
-      _lcd.clear();
+      saveEeprom(_lcd, _dataBuffer, _data);
+      lcdPrintString(_lcd, "Close Menu", "", "", WHITE, 0, 0, 1000, true, true);
     }
   }
 }
 
-void lcdPrintFloat(Adafruit_RGBLCDShield lcd, String msg, float dataFloat, String dataCharPostfix, uint8_t color, uint8_t posLineOne, uint8_t posLineTwo) {
-  lcd.clear();
-  lcd.setBacklight(color);
-  lcd.setCursor(posLineOne, 0);
-  lcd.print(msg);
-  lcd.setCursor(posLineTwo, 1);
-  lcd.print(dataFloat, 2);
-  lcd.print(dataCharPostfix);
-}
-
-void lcdPrintChar(Adafruit_RGBLCDShield lcd, String msg, String dataChar, String dataCharPostfix, uint8_t color, uint8_t posLineOne, uint8_t posLineTwo, unsigned long msgDelay, bool msgClear ) {
-  lcd.clear();
-  lcd.setBacklight(color);
-  lcd.setCursor(posLineOne, 0);
-  lcd.print(msg);
-  lcd.setCursor(posLineTwo, 1);
-  lcd.print(dataChar);
-  lcd.print(dataCharPostfix);
+void lcdPrintString(Adafruit_RGBLCDShield lcd, String msg, String msgData, String msgAfterData, uint8_t color, uint8_t posLineOne, uint8_t posLineTwo, unsigned long msgDelay, bool clearBeforeRendering, bool clearAfterRendering ) {
+  if (clearBeforeRendering) lcd.clear();
+  if (color != -1) lcd.setBacklight(color);
+  if (msg != ""){
+    lcd.setCursor(posLineOne, 0);
+    lcd.print(msg);
+  }
+  if (msgData != ""){
+    lcd.setCursor(posLineTwo, 1);
+    lcd.print(msgData);
+    if (msgAfterData != "") lcd.print(msgAfterData);    
+  }
   if (msgDelay > 0) delay(msgDelay);
-  if (msgClear) lcd.clear();
+  if (clearAfterRendering) lcd.clear();  
 }
 
 
-template< typename LCD, typename T, typename D >
-void saveEprom(LCD lcd, T &dataBuffer, D &data) {
+template< typename LCD, typename B, typename D >
+void saveEeprom(LCD lcd, B &dataBuffer, D &data) {
   EEPROM.get(0, dataBuffer);
   if (data != dataBuffer) {
     EEPROM.put(0, data);  // Сохранение изменений структуры data в EEPROM
-    lcdPrintChar(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, 0, 0, 1000, true);
+    lcdPrintString(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, 0, 0, 1000, true, true);
   }
 }

@@ -1,10 +1,11 @@
 #pragma once
 
-#define OFF 0x0
-#define RED 0x1
-#define GREEN 0x2
-#define YELLOW 0x3
-#define BLUE 0x4
-#define VIOLET 0x5
-#define TEAL 0x6
-#define WHITE 0x7
+#define NOT_CHANGE_COLOR -1
+#define OFF 0
+#define RED 1
+#define GREEN 2
+#define YELLOW 3
+#define BLUE 4
+#define VIOLET 5
+#define TEAL 6
+#define WHITE 7
