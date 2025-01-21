@@ -1,11 +1,11 @@
 #pragma once
 
 //Состояние режимов
-volatile bool stateEndCycle = false;         // Состояние Конец-Цикла
-volatile bool statePush = false;             // Состояние Толчок-Ползун
-volatile bool stateStartFeed = false;        // Состояние Подача-Пуск
-volatile bool stateSpindle = false;          // Состояние Шпиндель-Старт\Стоп
-volatile bool stateAutoCycleManual = false;  // Состояние Цикл-Ручной
-volatile bool stateTopSlider = false;        // Состояние концевика верхнего положения ползуна
-volatile bool stateStartCycle = false;       // Состояние Цикла
-volatile bool stateGeneralStop = true;       // Состояние Общий Стоп
+extern volatile bool stateEndCycle;         // Состояние Конец-Цикла
+extern volatile bool statePush;             // Состояние Толчок-Ползун
+extern volatile bool stateStartFeed;        // Состояние Подача-Пуск
+extern volatile bool stateSpindle;          // Состояние Шпиндель-Старт\Стоп
+extern volatile bool stateAutoCycleManual;  // Состояние Цикл-Ручной
+extern volatile bool stateTopSlider;        // Состояние концевика верхнего положения ползуна
+extern volatile bool stateStartCycle;       // Состояние Цикла
+extern volatile bool stateGeneralStop;      // Состояние Общий Стоп
