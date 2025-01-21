@@ -5,13 +5,14 @@
 #include "IOPorts.h"
 #include "StatesActuators.h"
 #include "AllEnumProject.h"
+#include "Encoder.h"
 
 bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset);
 // Объявление функций
 void handleButtonStates();
 void handleMotorStates();
 void handleStartFeed();
-void handleMechanicalSwitch();
+void handleProgramSwitch();
 void setElectromagnetState(bool top, bool bottom);
 void handleAutoCycleManual();
 void handleAutoCycle();
