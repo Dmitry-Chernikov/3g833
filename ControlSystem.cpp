@@ -134,7 +134,7 @@ void handleAutoCycle() {
     if (!stateEndCycle) {  // Если кнопку Конец Цикла не нажали
 
       if (stateSpindle) {  // Если в ручном режиме ввели в цилиндр и запустили шпиндель и перевели переключатель в Цикл или просто Включён              
-        lcdPrintString(_lcd, "", "", "", WHITE, 0, 0, 0, true, false);
+        lcdPrintString(_lcd, "", "", "", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
         digitalWrite(electromagnetBrake, false);  // включаем электромагнит растормаживания
         stateStartCycle = true;                   // вход в цикл
       }

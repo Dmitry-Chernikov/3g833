@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Adafruit_RGBLCDShield.h>
+
 #define NOT_CHANGE_COLOR -1
 #define OFF 0
 #define RED 1
@@ -9,3 +11,5 @@
 #define VIOLET 5
 #define TEAL 6
 #define WHITE 7
+
+extern Adafruit_RGBLCDShield _lcd;
