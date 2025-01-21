@@ -12,7 +12,7 @@ unsigned long intervalMenu = 2000;
 unsigned long updateMenu = 500;
 uint8_t buttons, second = 0;
 
-char symbolDegree = (char)223;
+char _symbolDegree = (char)223;
 
 unsigned long _previousMillisSped = 0;
 const unsigned long _intervals[] = { 3000, 3000, 3000 };
@@ -93,7 +93,7 @@ LiquidLine diametrValueLine(1, 1, "Set ", _data.cylinderDiametr, "mm");
 LiquidScreen diametrScreen(diametrTitleLine, diametrValueLine);
 
 LiquidLine angleTitleLine(0, 0, "Grid Angle");
-LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, symbolDegree);
+LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, _symbolDegree);
 LiquidScreen angleScreen(angleTitleLine, angleValueLine);
 
 // И это последнее третье меню.
