@@ -91,13 +91,7 @@ LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
  * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы меню.
  * Он обеспечивает те же функции, что и LiquidMenu с добавлением add_menu () и change_menu ().
  */
-LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
-
-///////////////////////////Prototype function///////////////////////////
-void lcdPrintString(Adafruit_RGBLCDShield lcd, String msg = "", String msgData = "", String msgAfterData = "", 
-                    uint8_t colorBefore = -1, uint8_t colorAfter = -1, 
-                    uint8_t posLineOne = 0, uint8_t posLineTwo = 0, 
-                    unsigned long msgDelay = 0, bool clearBeforeRendering = false, bool clearAfterRendering = false);                    
+LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);              
 
 ///////////////////////////Процедуры меню begin///////////////////////////////////
 // Функция для проверки выхода за пределы
@@ -837,22 +831,7 @@ void Menu() {
   }
 }
 
-void lcdPrintString(Adafruit_RGBLCDShield lcd, String msg, String msgData, String msgAfterData, uint8_t colorBefore, uint8_t colorAfter, uint8_t posLineOne, uint8_t posLineTwo, unsigned long msgDelay, bool clearBeforeRendering, bool clearAfterRendering ) {
-  if (clearBeforeRendering) lcd.clear();
-  if (colorBefore != -1) lcd.setBacklight(colorBefore);
-  if (msg != ""){
-    lcd.setCursor(posLineOne, 0);
-    lcd.print(msg);
-  }
-  if (msgData != ""){
-    lcd.setCursor(posLineTwo, 1);
-    lcd.print(msgData);
-    if (msgAfterData != "") lcd.print(msgAfterData);    
-  }
-  if (msgDelay > 0) delay(msgDelay);
-  if (colorAfter != -1) lcd.setBacklight(colorAfter);
-  if (clearAfterRendering) lcd.clear();  
-}
+
 
 template< typename LCD, typename B, typename D >
 void saveEeprom(LCD lcd, B &dataBuffer, D &data) {
