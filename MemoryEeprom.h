@@ -1,24 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "config.h"
-
-enum FunctionTypes : uint8_t {
-  Increase = 1,
-  Decrease = 2,
-  Edit = 3
-};
-
-enum DecIncrTypes : uint8_t {
-  Inc = 1,
-  Dec = 2
-};
-
-enum StartLevelSpeed : uint8_t {
-    Speed_1 = 0,  // Первая скорость
-    Speed_2,      // Вторая скорость
-    Speed_3       // Третья скорость
-};
+#include "Display.h"
 
 #if defined ENABLE_EEPROM || defined CLEAR_EEPROM
 struct Data {
@@ -56,3 +41,15 @@ struct Data {
 extern Data _data;
 extern Data _dataBuffer;  // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
 #endif
+
+void initMemory();
+void clearMemory();
+
+template< typename LCD, typename B, typename D >
+void saveEeprom(LCD lcd, B &dataBuffer, D &data) {
+  EEPROM.get(0, dataBuffer);
+  if (data != dataBuffer) {
+    EEPROM.put(0, data);  // Сохранение изменений структуры data в EEPROM
+    lcdPrintString(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
+  }
+}

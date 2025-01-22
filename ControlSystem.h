@@ -1,15 +1,16 @@
 #pragma once
 
-#include <Arduino.h> // или другой нужный заголовок
+#include <Arduino.h>
+
 #include "config.h"
 #include "IOPorts.h"
 #include "StatesActuators.h"
-#include "AllEnumProject.h"
+#include "VariablesProject.h"
+#include "MemoryEeprom.h"
 #include "Encoder.h"
 #include "Display.h"
+#include "TextMenu.h"
 
-bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset);
-// Объявление функций
 void handleButtonStates();
 void handleMotorStates();
 void handleStartFeed();

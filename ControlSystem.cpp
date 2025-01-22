@@ -1,37 +1,27 @@
-#include "Encoder.h"
-// ControlSystem.cpp
-
-
 #include "ControlSystem.h"
-
-bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset) {  //Триггер с приоритетом сброса
-  if (TrigReset) { return false; }
-  if (TrigSet) { return true; }
-  return currentState;
-}
 
 // Определение функций
 void handleButtonStates() {
-    stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
-    stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
-    stateAutoCycleManual = trigerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual));  // Переключатель режимов: "Ввод хоны", "Ручной"
-    stateTopSlider = trigerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider));                          // Концевик парковки ползуна в верху исходного состояния
-    stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                                         // Конец цикла
+  stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                   // Общий стоп
+  stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                       // Подача-пуск
+  stateAutoCycleManual = trigerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual));  // Переключатель режимов: "Ввод хоны", "Ручной"
+  stateTopSlider = trigerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider));                          // Концевик парковки ползуна в верху исходного состояния
+  stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                                         // Конец цикла
 }
 
 void handleMotorStates() {
-    digitalWrite(motorStartFeed, !stateStartFeed); // Запускаем мотор возвратно поступательного движения
+  digitalWrite(motorStartFeed, !stateStartFeed); // Запускаем мотор возвратно поступательного движения
 }
 
 void handleStartFeed() {
-    if (stateTopSlider) {// Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
-        _data.absoluteAngle = 0;
-        _data.anglePrevious = getAngle();
-    }
+  if (stateTopSlider) {// Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
+      _data.absoluteAngle = 0;
+      _data.anglePrevious = getAngle();
+  }
 
-    _data.linearMove = getLinearMotion(); // Получаем данные с энкодера
-    handleProgramSwitch();
-    handleAutoCycleManual();
+  _data.linearMove = getLinearMotion(); // Получаем данные с энкодера
+  handleProgramSwitch();
+  handleAutoCycleManual();
 }
 
 /**
@@ -45,28 +35,28 @@ void handleStartFeed() {
 */
 void handleProgramSwitch() {
   #ifdef ENABLE_PROGRAM_SWITCH
-      if (_data.linearMove <= _data.limitTop) {
-          setElectromagnetState(true, false);
-      } else if (_data.linearMove >= _data.limitBottom) {
-          setElectromagnetState(false, true);
-      } else {
-          _data.stateIntermediate = false; // Ползун в промежуточном состоянии
-      }
+    if (_data.linearMove <= _data.limitTop) {
+        setElectromagnetState(true, false);
+    } else if (_data.linearMove >= _data.limitBottom) {
+        setElectromagnetState(false, true);
+    } else {
+        _data.stateIntermediate = false; // Ползун в промежуточном состоянии
+    }
   #endif
 }
 
 void setElectromagnetState(bool top, bool bottom) {
-    _data.stateElectromagnetTop = top; // True|False включить|выключить состояние вверх программного переключателя
-    _data.stateElectromagnetBottom = bottom; // True|False включить|выключить состояние вниз программного переключателя
-    _data.stateIntermediate = true; // ползун вышел из промежуточного состояния
+  _data.stateElectromagnetTop = top; // True|False включить|выключить состояние вверх программного переключателя
+  _data.stateElectromagnetBottom = bottom; // True|False включить|выключить состояние вниз программного переключателя
+  _data.stateIntermediate = true; // ползун вышел из промежуточного состояния
 }
 
 void handleAutoCycleManual() {
-    if (stateAutoCycleManual) {// Переключатель включен в режим Цикл
-        handleAutoCycle();
-    } else {// Переключатель включен в режим Ручной
-        handleManualMode();
-    }
+  if (stateAutoCycleManual) {// Переключатель включен в режим Цикл
+      handleAutoCycle();
+  } else {// Переключатель включен в режим Ручной
+      handleManualMode();
+  }
 }
 
 void handleAutoCycle() {
@@ -208,19 +198,19 @@ void handleManualMode() {
                             !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Стоп
 
     #ifdef ENABLE_PROGRAM_SWITCH
-    if (stateSpindle && ((_data.limitTop - 5 /*мм*/) < _data.linearMove) && (_data.linearMove < (_data.limitBottom + 5 /*мм*/))) {
-      digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
-      digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
-    } else {
-      stateSpindle = false;
-    }
+      if (stateSpindle && ((_data.limitTop - 5 /*мм*/) < _data.linearMove) && (_data.linearMove < (_data.limitBottom + 5 /*мм*/))) {
+        digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+        digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+      } else {
+        stateSpindle = false;
+      }
     #endif
 
     #ifdef ENABLE_SWITCH
-    if (stateSpindle) {
-      digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
-      digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
-    }
+      if (stateSpindle) {
+        digitalWrite(motorSpindle, !stateSpindle);      // включение выключение мотора шпинделя
+        digitalWrite(motorSelfCoolant, !stateSpindle);  // включение выключение мотора помпы СОЖ
+      }
     #endif
 
     if (!stateSpindle) {
@@ -248,168 +238,169 @@ void handleStop() {
 }
 
 void handleCycle() {
-handleProgramSwitch();
 
-    _data.linearMove = getLinearMotion();  // Получаем данные с энкодера
+  handleProgramSwitch();
 
-    handleButtonStates();
-    handleMotorStates();
+  _data.linearMove = getLinearMotion();  // Получаем данные с энкодера
 
-    if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
+  handleButtonStates();
+  handleMotorStates();
 
-      digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления если был на ручном
+  if (stateAutoCycleManual) {  // Переключатель включен в режим Цикл
 
-      stateSpindle = trigerRS(stateSpindle,
-                              !digitalRead(buttonSpindleStart),
-                              !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Старт
+    digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления если был на ручном
 
-      if (stateEndCycle) {  // Если кнопку Конец Цикла нажали
+    stateSpindle = trigerRS(stateSpindle,
+                            !digitalRead(buttonSpindleStart),
+                            !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Старт
 
-        digitalWrite(motorSpindle, !stateSpindle);      // выключаем мотор шпинделя
-        digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
-        digitalWrite(electromagnetBottom, true);        // выключить электромагнит движения вниз
-        digitalWrite(electromagnetTop, false);          // включить электромагнит движения вверх
+    if (stateEndCycle) {  // Если кнопку Конец Цикла нажали
 
-        if (stateTopSlider) {  // Ползун поднялся в верх, исходное состояние конец цикла
+      digitalWrite(motorSpindle, !stateSpindle);      // выключаем мотор шпинделя
+      digitalWrite(motorSelfCoolant, !stateSpindle);  // выключаем мотор помпы СОЖ
+      digitalWrite(electromagnetBottom, true);        // выключить электромагнит движения вниз
+      digitalWrite(electromagnetTop, false);          // включить электромагнит движения вверх
 
-          digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
-          digitalWrite(electromagnetBrake, true);  // выключаем электромагнит растормаживания
-          stateEndCycle = false;                   // сбрасываем состояние выхода из цикла
-          stateStartCycle = false;                 // выходим из цикла
-          //break;
+      if (stateTopSlider) {  // Ползун поднялся в верх, исходное состояние конец цикла
+
+        digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх
+        digitalWrite(electromagnetBrake, true);  // выключаем электромагнит растормаживания
+        stateEndCycle = false;                   // сбрасываем состояние выхода из цикла
+        stateStartCycle = false;                 // выходим из цикла
+        //break;
+      }
+    }
+
+    if (!stateEndCycle && stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Если включен
+
+      digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя
+      digitalWrite(motorSelfCoolant, !stateSpindle);  // включаем мотор помпы СОЖ
+
+      #if defined(ENABLE_PROGRAM_SWITCH) && !defined(ENABLE_SWITCH)
+        if (!data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
+
+          digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // включить электромагнит движения вниз
         }
-      }
 
-      if (!stateEndCycle && stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Если включен
+        if (!data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-        digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя
-        digitalWrite(motorSelfCoolant, !stateSpindle);  // включаем мотор помпы СОЖ
+          digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // включить электромагнит движения вверх
+        }
+      #endif
 
-        #if defined(ENABLE_PROGRAM_SWITCH) && !defined(ENABLE_SWITCH)
-          if (!data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
+      #if defined(ENABLE_PROGRAM_SWITCH) && defined(ENABLE_SWITCH)
+        if (!_data.stateElectromagnetBottom || !digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
 
-            digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // включить электромагнит движения вниз
-          }
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
+        if (!_data.stateElectromagnetTop || !digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
 
-          if (!data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+      #endif
 
-            digitalWrite(electromagnetBottom, data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, data.stateElectromagnetTop);  // включить электромагнит движения вверх
-          }
-        #endif
+      #if defined(ENABLE_SWITCH) && !defined(ENABLE_PROGRAM_SWITCH)
+        if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
 
-        #if defined(ENABLE_PROGRAM_SWITCH) && defined(ENABLE_SWITCH)
-          if (!_data.stateElectromagnetBottom || !digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
+        if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
 
-            digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
-          }
-          if (!_data.stateElectromagnetTop || !digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
-
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
-          }
-        #endif
-
-        #if defined(ENABLE_SWITCH) && !defined(ENABLE_PROGRAM_SWITCH)
-          if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
-
-            digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
-          }
-          if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
-
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
-          }
-        #endif
-      }
-
-      if (!stateEndCycle && !stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Если выключен
-
-        digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
-        digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
-
-        #ifdef ENABLE_PROGRAM_SWITCH
-          if (!_data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
-
-            digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // включить электромагнит движения вниз
-          }
-
-          if (!_data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
-
-            digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // включить электромагнит движения вверх
-          }
-        #endif
-
-        #ifdef ENABLE_SWITCH
-          if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
-
-            digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
-            delay(100);
-            digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
-          }
-
-          if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
-
-            digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-            delay(100);
-            digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
-          }
-        #endif
-      }
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+      #endif
     }
 
-    if (!stateAutoCycleManual) {  // Переключатель включен в режим Ручной
+    if (!stateEndCycle && !stateSpindle) {  //Если кнопку Конец Цикла не нажали, Проверяем состояние шпинделя Если выключен
 
-      stateSpindle = trigerRS(stateSpindle,
-                              !digitalRead(buttonSpindleStart),
-                              !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Старт
+      digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
+      digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
 
-      digitalWrite(electromagnetTop, true);     // выключить электромагнит движения вверх
-      digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+      #ifdef ENABLE_PROGRAM_SWITCH
+        if (!_data.stateElectromagnetBottom) {  // Если переключатель включен в положение верх
 
-      digitalWrite(electromagnetManual, false);  // включить электромагнит ручного управления
+          digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // включить электромагнит движения вниз
+        }
 
-      digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя или отключить в зависимости от stateSpindle
-      digitalWrite(motorSelfCoolant, !stateSpindle);  // включить мотор помпы СОЖ или отключить в зависимости от stateSpindle
+        if (!_data.stateElectromagnetTop) {  // Если переключатель включен в положение низ
 
-      if (!stateSpindle) {  // Если шпиндель выключен, есть возможность запустить меню настройки
-        /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-        Menu();  // Запуск меню настроек по удержанию кнопки в течение 3 секунд
-      }
+          digitalWrite(electromagnetBottom, _data.stateElectromagnetBottom);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, _data.stateElectromagnetTop);  // включить электромагнит движения вверх
+        }
+      #endif
+
+      #ifdef ENABLE_SWITCH
+        if (!digitalRead(endSwitchTop)) {  // Если переключатель включен в положение верх
+
+          digitalWrite(electromagnetTop, true);  // выключить электромагнит движения вверх
+          delay(100);
+          digitalWrite(electromagnetBottom, false);  // включить электромагнит движения вниз
+        }
+
+        if (!digitalRead(endSwitchBottom)) {  // Если переключатель включен в положение низ
+
+          digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+          delay(100);
+          digitalWrite(electromagnetTop, false);  // включить электромагнит движения вверх
+        }
+      #endif
     }
+  }
 
-    if (stateGeneralStop) {
-      // Логика общего стопа
-        handleGeneralStop();
-    }
-}
+  if (!stateAutoCycleManual) {  // Переключатель включен в режим Ручной
 
-void handleGeneralStop() {
-    // Нажата кнопка Общий стоп
-    digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
-    digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
-    digitalWrite(motorStartFeed, !stateStartFeed);  // отключаем мотор возвратно поступательного движения
+    stateSpindle = trigerRS(stateSpindle,
+                            !digitalRead(buttonSpindleStart),
+                            !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);  // Шпиндель Стоп или Старт
 
     digitalWrite(electromagnetTop, true);     // выключить электромагнит движения вверх
     digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
-    digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
-    digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления
 
-    stateStartCycle = false;  // выходим из цикла
+    digitalWrite(electromagnetManual, false);  // включить электромагнит ручного управления
 
-    /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
-    saveEeprom(_lcd, _dataBuffer, _data);
+    digitalWrite(motorSpindle, !stateSpindle);      // включить мотор шпинделя или отключить в зависимости от stateSpindle
+    digitalWrite(motorSelfCoolant, !stateSpindle);  // включить мотор помпы СОЖ или отключить в зависимости от stateSpindle
+
+    if (!stateSpindle) {  // Если шпиндель выключен, есть возможность запустить меню настройки
+      /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
+      Menu();  // Запуск меню настроек по удержанию кнопки в течение 3 секунд
+    }
+  }
+
+  if (stateGeneralStop) {
+    // Логика общего стопа
+      handleGeneralStop();
+  }
+}
+
+void handleGeneralStop() {
+  // Нажата кнопка Общий стоп
+  digitalWrite(motorSpindle, !stateSpindle);      // отключаем мотор шпинделя
+  digitalWrite(motorSelfCoolant, !stateSpindle);  // отключаем мотор помпы СОЖ
+  digitalWrite(motorStartFeed, !stateStartFeed);  // отключаем мотор возвратно поступательного движения
+
+  digitalWrite(electromagnetTop, true);     // выключить электромагнит движения вверх
+  digitalWrite(electromagnetBottom, true);  // выключить электромагнит движения вниз
+  digitalWrite(electromagnetBrake, true);   // выключить электромагнит растормаживания
+  digitalWrite(electromagnetManual, true);  // выключить электромагнит ручного управления
+
+  stateStartCycle = false;  // выходим из цикла
+
+  /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
+  saveEeprom(_lcd, _dataBuffer, _data);
 }

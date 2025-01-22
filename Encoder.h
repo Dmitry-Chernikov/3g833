@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include <AS5048A.h>
-#include "AllEnumProject.h"
+#include "MemoryEeprom.h"
 
 //Переменные энкодера
 const uint8_t _NormalModule = 3;      //Модуль нормальны
