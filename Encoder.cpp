@@ -1,5 +1,7 @@
 #include "Encoder.h"
 
+AS5048A angleSensor(SS);
+
 void initEncoder(){
   angleSensor.init();
 }

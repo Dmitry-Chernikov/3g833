@@ -11,67 +11,65 @@
 #include "Display.h"
 #include "Encoder.h"
 
-unsigned long previousMillisMenu = 0;
-bool startMenu = false;
-unsigned long intervalMenu = 2000;
-unsigned long updateMenu = 500;
-uint8_t buttons, second = 0;
+const unsigned long _intervals[] = { 3000, 3000, 3000 }; 
+const char _symbolDegree = (char)223;
 
-char _symbolDegree = (char)223;
+extern unsigned long previousMillisMenu;
+extern bool startMenu;
+extern unsigned long intervalMenu;
+extern unsigned long updateMenu;
+extern uint8_t buttons, second;
 
-unsigned long _previousMillisSped = 0;
-const unsigned long _intervals[] = { 3000, 3000, 3000 };
-bool _speeds[] = { false, false, false };
+extern unsigned long _previousMillisSped;
+extern bool _speeds[];
 
 //Переменные для инициализации меню, текст, используемый для Меню индикации для линий сохранения.
-volatile bool IncDecMode = false;
+extern volatile bool IncDecMode;
 
 //Объекты Liquidline может быть использован больше, чем один раз.
-LiquidLine backLine(11, 1, "/BACK");
+extern LiquidLine backLine;
 
-
-LiquidLine welcomeLine1(0, 0, "Properties Menu");
-LiquidLine welcomeLine2(1, 1, "Machine 3G833");
-LiquidScreen welcomeScreen(welcomeLine1, welcomeLine2);
+extern LiquidLine welcomeLine1;
+extern LiquidLine welcomeLine2;
+extern LiquidScreen welcomeScreen;
 
 //Эти строки направлены на другие меню.
-LiquidLine limitsLine(1, 0, "Limits position");
-LiquidLine cylinderLine(1, 1, "Cylinder size");
-LiquidScreen settingsScreen(limitsLine, cylinderLine);
+extern LiquidLine limitsLine;
+extern LiquidLine cylinderLine;
+extern LiquidScreen settingsScreen;
 
 //Это первое меню.
-LiquidMenu mainMenu(_lcd, welcomeScreen, settingsScreen, 1);
+extern LiquidMenu mainMenu;
 
+extern LiquidLine linearMoveLine;
+extern LiquidLine limitTopLine;
+extern LiquidLine limitBootomLine;
 
-LiquidLine linearMoveLine(0, 0, "Current ", _data.linearMove, "mm");
-LiquidLine limitTopLine(1, 1, "Top:", _data.limitTop, "mm");
-LiquidLine limitBootomLine(1, 1, "Bottom:", _data.limitBottom, "mm");
+extern LiquidScreen topScreen;
+extern LiquidScreen bootomScreen;
 
-LiquidScreen topScreen(linearMoveLine, limitTopLine);
-LiquidScreen bootomScreen(linearMoveLine, limitBootomLine);
-
-LiquidLine oSaveLine(0, 0, "Save");
-LiquidScreen oSecondaryScreen(oSaveLine, backLine);
+extern LiquidLine oSaveLine;
+extern LiquidScreen oSecondaryScreen;
 
 //Это второе меню.
-LiquidMenu limitMenu(_lcd, bootomScreen, topScreen, oSecondaryScreen, 1);
+extern LiquidMenu limitMenu;
 
-LiquidLine diametrTitleLine(0, 0, "Diameter");
-LiquidLine diametrValueLine(1, 1, "Set ", _data.cylinderDiametr, "mm");
-LiquidScreen diametrScreen(diametrTitleLine, diametrValueLine);
+extern LiquidLine diametrTitleLine;
+extern LiquidLine diametrValueLine;
+extern LiquidScreen diametrScreen;
 
-LiquidLine angleTitleLine(0, 0, "Grid Angle");
-LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, _symbolDegree);
-LiquidScreen angleScreen(angleTitleLine, angleValueLine);
+extern LiquidLine angleTitleLine;
+extern LiquidLine angleValueLine;
+extern LiquidScreen angleScreen;
 
 // И это последнее третье меню.
-LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
+extern LiquidMenu cylinderMenu;
 
 /*
  * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы меню.
  * Он обеспечивает те же функции, что и LiquidMenu с добавлением add_menu () и change_menu ().
  */
-LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
+extern LiquidSystem menuSystem;
 
 
 void settingTextMenu();

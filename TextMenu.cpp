@@ -1,5 +1,52 @@
 #include "TextMenu.h"
 
+unsigned long previousMillisMenu = 0;
+bool startMenu = false;
+unsigned long intervalMenu = 2000;
+unsigned long updateMenu = 500;
+uint8_t buttons, second = 0;
+
+unsigned long _previousMillisSped = 0;
+bool _speeds[] = { false, false, false };
+
+volatile bool IncDecMode = false;
+
+LiquidLine backLine(11, 1, "/BACK");
+
+LiquidLine welcomeLine1(0, 0, "Properties Menu");
+LiquidLine welcomeLine2(1, 1, "Machine 3G833");
+LiquidScreen welcomeScreen(welcomeLine1, welcomeLine2);
+
+LiquidLine limitsLine(1, 0, "Limits position");
+LiquidLine cylinderLine(1, 1, "Cylinder size");
+LiquidScreen settingsScreen(limitsLine, cylinderLine);
+
+LiquidMenu mainMenu(_lcd, welcomeScreen, settingsScreen, 1);
+
+LiquidLine linearMoveLine(0, 0, "Current ", _data.linearMove, "mm");
+LiquidLine limitTopLine(1, 1, "Top:", _data.limitTop, "mm");
+LiquidLine limitBootomLine(1, 1, "Bottom:", _data.limitBottom, "mm");
+
+LiquidScreen topScreen(linearMoveLine, limitTopLine);
+LiquidScreen bootomScreen(linearMoveLine, limitBootomLine);
+
+LiquidLine oSaveLine(0, 0, "Save");
+LiquidScreen oSecondaryScreen(oSaveLine, backLine);
+
+LiquidMenu limitMenu(_lcd, bootomScreen, topScreen, oSecondaryScreen, 1);
+
+LiquidLine diametrTitleLine(0, 0, "Diameter");
+LiquidLine diametrValueLine(1, 1, "Set ", _data.cylinderDiametr, "mm");
+LiquidScreen diametrScreen(diametrTitleLine, diametrValueLine);
+
+LiquidLine angleTitleLine(0, 0, "Grid Angle");
+LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, _symbolDegree);
+LiquidScreen angleScreen(angleTitleLine, angleValueLine);
+
+LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
+
+LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
+
 void settingTextMenu(){
   backLine.set_focusPosition(Position::LEFT);
   //backLine.attach_function(1, goBack);
