@@ -168,7 +168,7 @@ void handleAutoCycle() {
 
           digitalWrite(electromagnetBrake, false); // включаем электромагнит растормаживания
           digitalWrite(electromagnetTop, false);   // включаем электромагнит движения вверх
-          digitalWrite(electromagnetBottom, rue);  // выключаем электромагнит движения вниз
+          digitalWrite(electromagnetBottom, true);  // выключаем электромагнит движения вниз
         }
         if ((!statePush && !digitalRead(endSwitchTop)) || (!statePush && !digitalRead(endSwitchBottom))) { // Если кнопка Толковая не нажата и переключатель путевой включён вниз или вверх
 
