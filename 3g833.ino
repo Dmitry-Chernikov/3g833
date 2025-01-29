@@ -4,12 +4,12 @@
 #include "config.h" //Определены define для вкл/выкл кода в компеляцию
 
 #include "ControlSystem.h" // Основной алгоритм работы станка содержит процедуры используемые в loop
-#include "Display.h" // Работа с дисплеем Adafruit RGB LCD Shield
-#include "Encoder.h" // Обявление обекта типа AS5048A для работы с энкодером AS5048A
-#include "IOPorts.h" //Описаны все порты ввода/вывода процедуры их настройки
-#include "MemoryEeprom.h" // Описывает структуру данных которая сохранияеться в память и процедуры для работы с памятью
+#include "Display.h"       // Работа с дисплеем Adafruit RGB LCD Shield
+#include "Encoder.h"       // Обявление обекта типа AS5048A для работы с энкодером AS5048A
+#include "IOPorts.h"       //Описаны все порты ввода/вывода процедуры их настройки
+#include "MemoryEeprom.h"  // Описывает структуру данных которая сохранияеться в память и процедуры для работы с памятью
 #include "StatesActuators.h" //Описаны пременные которые хранят состояния режимов работы станка и исполнительных механизмов
-#include "TextMenu.h" // Создёться текстовое меню на базе LiquidMenu которая ипользует дисплей Adafruit RGB LCD Shield
+#include "TextMenu.h"        // Создёться текстовое меню на базе LiquidMenu которая ипользует дисплей Adafruit RGB LCD Shield
 #include "VariablesProject.h" //Описаны все пречисления используемые в прокте
 
 // #include <avr/pgmspace.h>
@@ -34,15 +34,13 @@ void pciSetup(byte pin) {
   // PCICR). 4 Установить бит I, разрешающий обработку прерываний глобально
   // (регистр SREG).
   // PCMSK0 |= 1 << 6;
-  *digitalPinToPCMSK(pin) |=
-      bit(digitalPinToPCMSKbit(pin)); // Разрешаем PCINT для указанного пина
+  *digitalPinToPCMSK(pin) |= bit(digitalPinToPCMSKbit(pin)); // Разрешаем PCINT для указанного пина
   // PCIFR |= 0 << 0
   PCIFR |= bit(digitalPinToPCICRbit(pin)); // Очищаем признак запроса прерывания
                                            // для соответствующей группы пинов
   // PCICR |= 1 << 0;
-  PCICR |= bit(digitalPinToPCICRbit(
-      pin)); // Разрешаем PCINT для соответствующей группы пинов
-  SREG |= 1 << SREG_I; // бит 7 Разрешить прерывания микроконтроллера
+  PCICR |= bit(digitalPinToPCICRbit(pin)); // Разрешаем PCINT для соответствующей группы пинов
+  SREG |= 1 << SREG_I;                     // бит 7 Разрешить прерывания микроконтроллера
 }
 
 void readKeypad() {
@@ -66,7 +64,7 @@ void setup() {
 
 #ifdef ENABLE_KYPAD
   pinMode(interruptRemote,
-          INPUT_PULLUP); // Подтянем пины источники PCINT к питанию
+          INPUT_PULLUP);     // Подтянем пины источники PCINT к питанию
   pciSetup(interruptRemote); // И разрешим на них прерывания T6
 #endif
 
@@ -124,7 +122,7 @@ void loop() {
   handleMotorStates();
 
   /////////////////////////////////////////////////////ЛОГИКА
-  ///СОСТОЯНИЯ///////////////////////////////////////////////////////
+  /// СОСТОЯНИЯ///////////////////////////////////////////////////////
   if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно
                         // поступательного движения
 
@@ -136,36 +134,26 @@ void loop() {
     handleManualMode();
 
 #ifdef ENABLE_PROGRAM_SWITCH
-    if (!_data.stateIntermediate &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm",
-                     YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (_data.stateIntermediate && !_data.stateElectromagnetBottom &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm",
-                     WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (_data.stateIntermediate && !_data.stateElectromagnetTop &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2),
-                     "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
 
 #ifdef ENABLE_SWITCH
-    if (!digitalRead(endSwitchTop) &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2),
-                     "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (!digitalRead(endSwitchBottom) &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2),
-                     "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
   }
@@ -175,11 +163,11 @@ void loop() {
     handleStop();
 
     /////////////////////////////////////////////////////EEPROM
-    ///SAVE///////////////////////////////////////////////////////
+    /// SAVE///////////////////////////////////////////////////////
     saveEeprom(_lcd, _dataBuffer, _data);
 
     /////////////////////////////////////////////////////LCD DISPLAY BUTTONS
-    ///READ///////////////////////////////////////////////////////
+    /// READ///////////////////////////////////////////////////////
     Menu();
   }
 
@@ -189,36 +177,26 @@ void loop() {
     handleCycle();
 
 #ifdef ENABLE_PROGRAM_SWITCH
-    if (!_data.stateIntermediate &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm",
-                     GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (_data.stateIntermediate && !_data.stateElectromagnetBottom &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm",
-                     YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (_data.stateIntermediate && !_data.stateElectromagnetTop &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2),
-                     "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
 
 #ifdef ENABLE_SWITCH
-    if (!digitalRead(endSwitchTop) &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2),
-                     "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 
-    if (!digitalRead(endSwitchBottom) &&
-        stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2),
-                     "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+    if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
   }
@@ -227,8 +205,8 @@ void loop() {
 #if defined(ENABLE_KYPAD)
 ISR(PCINT0_vect) { // Обработчик запросов прерывания от пинов PCINT0..PCINT7
 
-  cli(); // сбрасываем флаг прерывания (Запретить прерывания)
+  cli();        // сбрасываем флаг прерывания (Запретить прерывания)
   readKeypad(); // вызов процедуры опроса клавиатуры
-  sei(); // устанавливаем флаг прерывания (Разрешить прерывания)
+  sei();        // устанавливаем флаг прерывания (Разрешить прерывания)
 }
 #endif

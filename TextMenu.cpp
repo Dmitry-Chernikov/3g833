@@ -81,50 +81,37 @@ void settingTextMenu() {
   diametrValueLine.attach_function(FunctionTypes::Edit, modeEditValue);
 
   angleValueLine.set_focusPosition(Position::LEFT);
-  angleValueLine.set_decimalPlaces(
-      0); // Количество цифр после запятой в значении линии
+  angleValueLine.set_decimalPlaces(0); // Количество цифр после запятой в значении линии
   angleValueLine.attach_function(FunctionTypes::Increase, increaseAngle);
   angleValueLine.attach_function(FunctionTypes::Decrease, decreaseAngle);
   angleValueLine.attach_function(FunctionTypes::Edit, modeEditValue);
 }
 
 ///////////////////////////Процедуры меню
-///begin///////////////////////////////////
+/// begin///////////////////////////////////
 // Функция для проверки выхода за пределы
 bool isOutOfBounds(float paramManipulation, float maxParam, float minParam) {
   // Serial.println(maxParam - paramManipulation);
-  return (maxParam - paramManipulation) < 0 ||
-         (paramManipulation - minParam) < 0;
+  return (maxParam - paramManipulation) < 0 || (paramManipulation - minParam) < 0;
 }
 
 // Функция для обновления сообщения об ошибке
-void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne,
-                        String mesLineTwo, uint8_t posLineOne,
-                        uint8_t posLineTwo, DecIncrTypes typeOperation,
-                        float &paramManipulation, float maxParam,
+void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne, uint8_t posLineTwo, DecIncrTypes typeOperation, float &paramManipulation, float maxParam,
                         float minParam, String messInc, String messDec) {
 
   mesLineTwo = (typeOperation == DecIncrTypes::Inc) ? messInc : messDec;
-  mesLineTwo +=
-      (paramManipulation =
-           (typeOperation == DecIncrTypes::Inc) ? maxParam : minParam);
-  lcdPrintString(mesLineOne, mesLineTwo, "", RED, GREEN, posLineOne, posLineTwo,
-                 2000, true, false);
+  mesLineTwo += (paramManipulation = (typeOperation == DecIncrTypes::Inc) ? maxParam : minParam);
+  lcdPrintString(mesLineOne, mesLineTwo, "", RED, GREEN, posLineOne, posLineTwo, 2000, true, false);
   menuSystem.update();
 }
 
 // Функция для проверки достижения порога
-bool hasReachedThreshold(float paramManipulation, float maxParam,
-                         float minParam, float threshold,
-                         DecIncrTypes typeOperation) {
-  return (typeOperation == DecIncrTypes::Inc)
-             ? paramManipulation >= maxParam - threshold
-             : paramManipulation <= minParam + threshold;
+bool hasReachedThreshold(float paramManipulation, float maxParam, float minParam, float threshold, DecIncrTypes typeOperation) {
+  return (typeOperation == DecIncrTypes::Inc) ? paramManipulation >= maxParam - threshold : paramManipulation <= minParam + threshold;
 }
 
 // Функция для управления скоростью
-void manageSpeed(bool currentSpeed, bool &nextSpeed,
-                 unsigned long &previousMillisSped, unsigned long interval) {
+void manageSpeed(bool currentSpeed, bool &nextSpeed, unsigned long &previousMillisSped, unsigned long interval) {
   currentSpeed = stateMillisDelay(&previousMillisSped, &interval);
   nextSpeed = false;
 }
@@ -138,58 +125,44 @@ bool allSpeedsInactive(bool *speeds, int size) {
   return true; // Все элементы неактивны
 }
 
-void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation,
-                     float maxParam, float minParam, bool *speeds,
-                     StartLevelSpeed startSpeed,
-                     unsigned long &previousMillisSped,
-                     const unsigned long *intervals, String messInc,
-                     String messDec, uint8_t posLineOne, uint8_t posLineTwo) {
+void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation, float maxParam, float minParam, bool *speeds, StartLevelSpeed startSpeed, unsigned long &previousMillisSped,
+                     const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo) {
 
   // Определение массивов для инкрементов и интервалов
   const float increments[] = {0.01, 0.10, 1.00, 10.00};
   const float THRESHOLDS[] = {0.002f, 0.004f, 0.006f};
-  const float thresholds[] = {(maxParam - minParam) * THRESHOLDS[0],
-                              (maxParam - minParam) * THRESHOLDS[1],
-                              (maxParam - minParam) * THRESHOLDS[2]};
+  const float thresholds[] = {(maxParam - minParam) * THRESHOLDS[0], (maxParam - minParam) * THRESHOLDS[1], (maxParam - minParam) * THRESHOLDS[2]};
 
   // Проверка выхода за пределы
   if (isOutOfBounds(paramManipulation, maxParam, minParam)) {
     String mesLineTwo;
-    updateErrorMessage(_lcd, "ERROR", mesLineTwo, posLineOne, posLineTwo,
-                       typeOperation, paramManipulation, maxParam, minParam,
-                       messInc, messDec);
+    updateErrorMessage(_lcd, "ERROR", mesLineTwo, posLineOne, posLineTwo, typeOperation, paramManipulation, maxParam, minParam, messInc, messDec);
     return;
   }
 
   for (int i = startSpeed; i < 3; ++i) {
     if (speeds[i]) {
       // Проверка на достижение порога
-      if (hasReachedThreshold(paramManipulation, maxParam, minParam,
-                              thresholds[i], typeOperation)) {
+      if (hasReachedThreshold(paramManipulation, maxParam, minParam, thresholds[i], typeOperation)) {
         if (i > 0)
-          speeds[i - 1] =
-              true; // Активируем предыдущую скорость, если порог достигнут
-        speeds[i] = false; // Отключаем текущую скорость
+          speeds[i - 1] = true; // Активируем предыдущую скорость, если порог достигнут
+        speeds[i] = false;      // Отключаем текущую скорость
         previousMillisSped = 0; // Сбрасываем время
         break;                  // Выход из цикла
       }
 
       // Изменение параметра
-      paramManipulation += (typeOperation == DecIncrTypes::Inc)
-                               ? increments[i + 1]
-                               : -increments[i + 1];
+      paramManipulation += (typeOperation == DecIncrTypes::Inc) ? increments[i + 1] : -increments[i + 1];
       if (i != 2) { // Проверяем, чтобы не выйти за пределы массива
         // Serial.println(i);
-        speeds[i] = !(speeds[i + 1] = stateMillisDelay(&previousMillisSped,
-                                                       &intervals[i + 1]));
+        speeds[i] = !(speeds[i + 1] = stateMillisDelay(&previousMillisSped, &intervals[i + 1]));
       }
       break; // Выход из цикла
     }
 
     // Если ни одна скорость не активна
     if (i == startSpeed && allSpeedsInactive(speeds, 3)) {
-      paramManipulation +=
-          (typeOperation == DecIncrTypes::Inc) ? increments[i] : -increments[i];
+      paramManipulation += (typeOperation == DecIncrTypes::Inc) ? increments[i] : -increments[i];
       speeds[i] = stateMillisDelay(&previousMillisSped, &intervals[i]);
       break; // Выход из цикла
     }
@@ -235,8 +208,7 @@ void setLimitTop() { // Процедура копирует значение э�
                      // лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove > _data.limitBottom) {
-      lcdPrintString("ERROR", "TOP > BOOTOM", "", RED, WHITE, 5, 2, 2000, true,
-                     false);
+      lcdPrintString("ERROR", "TOP > BOOTOM", "", RED, WHITE, 5, 2, 2000, true, false);
       menuSystem.update();
     } else {
       _lcd.setBacklight(GREEN);
@@ -265,19 +237,13 @@ void setLimitTop() { // Процедура копирует значение э�
 
 void increaseLimitTop() { // Процедура увеличевает значение верхнего лимита
                           // программмного концевика
-  changeParamMenu(DecIncrTypes::Inc, _data.limitTop,
-                  _data.limitBottom - smallestLength,
-                  maxVerticalMovementSpindle - largestLength, _speeds,
-                  StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
+  changeParamMenu(DecIncrTypes::Inc, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
 void decreaseLimitTop() { // Процедура уменьшает значение верхнего лимита
                           // программмного концевика
-  changeParamMenu(DecIncrTypes::Dec, _data.limitTop,
-                  _data.limitBottom - smallestLength,
-                  maxVerticalMovementSpindle - largestLength, _speeds,
-                  StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
+  changeParamMenu(DecIncrTypes::Dec, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
@@ -285,8 +251,7 @@ void setLimitBootom() { // Процедура копирует значение 
                         // нижнего лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove < _data.limitTop) {
-      lcdPrintString("ERROR", "BOOTOM < TOP", "", RED, WHITE, 5, 2, 2000, true,
-                     false);
+      lcdPrintString("ERROR", "BOOTOM < TOP", "", RED, WHITE, 5, 2, 2000, true, false);
       menuSystem.update();
     } else {
       _lcd.setBacklight(GREEN);
@@ -315,25 +280,20 @@ void setLimitBootom() { // Процедура копирует значение 
 
 void increaseLimitBootom() { // Процедура увеличивает значение нижнего лимита
                              // программмного концевика
-  changeParamMenu(DecIncrTypes::Inc, _data.limitBottom,
-                  maxVerticalMovementSpindle, _data.limitTop + smallestLength,
-                  _speeds, StartLevelSpeed::Speed_1, _previousMillisSped,
-                  _intervals, "BOOTOM > ", "BOOTOM < ", 5, 2);
+  changeParamMenu(DecIncrTypes::Inc, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
+                  "BOOTOM < ", 5, 2);
 }
 
 void decreaseLimitBootom() { // Процедура уменьшает значение нижнего лимита
                              // программмного концевика
-  changeParamMenu(DecIncrTypes::Dec, _data.limitBottom,
-                  maxVerticalMovementSpindle, _data.limitTop + smallestLength,
-                  _speeds, StartLevelSpeed::Speed_1, _previousMillisSped,
-                  _intervals, "BOOTOM > ", "BOOTOM < ", 5, 2);
+  changeParamMenu(DecIncrTypes::Dec, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
+                  "BOOTOM < ", 5, 2);
 }
 
 void modeEditValue() {
   IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
 
-  if ((menuSystem.get_currentScreen() == &diametrScreen) && IncDecMode ||
-      (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
+  if ((menuSystem.get_currentScreen() == &diametrScreen) && IncDecMode || (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
 
     _lcd.setBacklight(GREEN);
     menuSystem.set_focusPosition(Position::RIGHT);
@@ -346,47 +306,37 @@ void modeEditValue() {
 }
 
 void increaseDiametr() {
-  changeParamMenu(DecIncrTypes::Inc, _data.cylinderDiametr, permissibleDiameter,
-                  smallestDiameter, _speeds, StartLevelSpeed::Speed_1,
-                  _previousMillisSped, _intervals, "Diametr > ", "Diametr < ",
-                  5, 2);
+  changeParamMenu(DecIncrTypes::Inc, _data.cylinderDiametr, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
+                  2);
 }
 
 void decreaseDiametr() {
-  changeParamMenu(DecIncrTypes::Dec, _data.cylinderDiametr, permissibleDiameter,
-                  smallestDiameter, _speeds, StartLevelSpeed::Speed_1,
-                  _previousMillisSped, _intervals, "Diametr > ", "Diametr < ",
-                  5, 2);
+  changeParamMenu(DecIncrTypes::Dec, _data.cylinderDiametr, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
+                  2);
 }
 
 void increaseAngle() {
-  changeParamMenu(DecIncrTypes::Inc, _data.cylinderAngle, maximumScrubbingAngle,
-                  minimalScrubbingAngle, _speeds, StartLevelSpeed::Speed_3,
-                  _previousMillisSped, _intervals, "Angle > ", "Angle < ", 5,
+  changeParamMenu(DecIncrTypes::Inc, _data.cylinderAngle, maximumScrubbingAngle, minimalScrubbingAngle, _speeds, StartLevelSpeed::Speed_3, _previousMillisSped, _intervals, "Angle > ", "Angle < ", 5,
                   3);
 }
 
 void decreaseAngle() {
-  changeParamMenu(DecIncrTypes::Dec, _data.cylinderAngle, maximumScrubbingAngle,
-                  minimalScrubbingAngle, _speeds, StartLevelSpeed::Speed_3,
-                  _previousMillisSped, _intervals, "Angle > ", "Angle < ", 5,
+  changeParamMenu(DecIncrTypes::Dec, _data.cylinderAngle, maximumScrubbingAngle, minimalScrubbingAngle, _speeds, StartLevelSpeed::Speed_3, _previousMillisSped, _intervals, "Angle > ", "Angle < ", 5,
                   3);
 }
 ///////////////////////////Процедуры меню
-///end/////////////////////////////////////
+/// end/////////////////////////////////////
 
 void Menu() {
 
   while (_lcd.readButtons() > 0 && !startMenu) {
     startMenu = stateMillisDelay(&previousMillisMenu, &intervalMenu);
-    lcdPrintString(String(second += 1), "", "", WHITE, NOT_CHANGE_COLOR, 0, 0,
-                   1000, true, true);
+    lcdPrintString(String(second += 1), "", "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
   }
 
   if (startMenu) {
     second = 0;
-    lcdPrintString("Start Menu", "", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0,
-                   0, 1000, true, false);
+    lcdPrintString("Start Menu", "", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
 
     if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
       menuSystem.change_menu(limitMenu);
@@ -409,8 +359,7 @@ void Menu() {
     if (stateTopSlider) { // Если ползун на концевике парковки. Концевик
                           // парковки, ползун в верху исходного состояния
       _data.absoluteAngle = 0;
-      _data.anglePrevious =
-          angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
+      _data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
     }
 
     _data.linearMove = getLinearMotion();
@@ -423,11 +372,8 @@ void Menu() {
           menuSystem.call_function(FunctionTypes::Increase);
         } else {
           delay(500);
-          if (menuSystem.get_currentScreen() == &topScreen ||
-              menuSystem.get_currentScreen() == &bootomScreen ||
-              menuSystem.get_currentScreen() == &diametrScreen ||
-              menuSystem.get_currentScreen() == &angleScreen ||
-              menuSystem.get_currentScreen() == &oSecondaryScreen) {
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+              menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
             menuSystem.switch_focus(false);
@@ -441,11 +387,8 @@ void Menu() {
           menuSystem.call_function(FunctionTypes::Decrease);
         } else {
           delay(500);
-          if (menuSystem.get_currentScreen() == &topScreen ||
-              menuSystem.get_currentScreen() == &bootomScreen ||
-              menuSystem.get_currentScreen() == &diametrScreen ||
-              menuSystem.get_currentScreen() == &angleScreen ||
-              menuSystem.get_currentScreen() == &oSecondaryScreen) {
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+              menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
             menuSystem.switch_focus(true);
@@ -460,11 +403,8 @@ void Menu() {
         } else {
           menuSystem.previous_screen();
 
-          if (menuSystem.get_currentScreen() == &topScreen ||
-              menuSystem.get_currentScreen() == &bootomScreen ||
-              menuSystem.get_currentScreen() == &diametrScreen ||
-              menuSystem.get_currentScreen() == &angleScreen ||
-              menuSystem.get_currentScreen() == &oSecondaryScreen) {
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+              menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
             menuSystem.set_focusedLine(1);
             menuSystem.softUpdate();
@@ -484,11 +424,8 @@ void Menu() {
         } else {
           menuSystem.next_screen();
 
-          if (menuSystem.get_currentScreen() == &topScreen ||
-              menuSystem.get_currentScreen() == &bootomScreen ||
-              menuSystem.get_currentScreen() == &diametrScreen ||
-              menuSystem.get_currentScreen() == &angleScreen ||
-              menuSystem.get_currentScreen() == &oSecondaryScreen) {
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+              menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
             menuSystem.set_focusedLine(1);
             menuSystem.softUpdate();
@@ -513,8 +450,7 @@ void Menu() {
       } else {
         while (_lcd.readButtons() > 0 && startMenu && !IncDecMode) {
           startMenu = !stateMillisDelay(&previousMillisMenu, &intervalMenu);
-          lcdPrintString(String(second += 1), "", "", NOT_CHANGE_COLOR,
-                         NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
+          lcdPrintString(String(second += 1), "", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
         }
       }
 
@@ -532,9 +468,7 @@ void Menu() {
       }
 
       if (stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-        if (menuSystem.get_currentScreen() == &topScreen ||
-            menuSystem.get_currentScreen() == &bootomScreen ||
-            menuSystem.get_currentScreen() == &diametrScreen ||
+        if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
             menuSystem.get_currentScreen() == &angleScreen) {
 
           // menuSystem.softUpdate();
@@ -546,11 +480,10 @@ void Menu() {
 
     } else {
       /////////////////////////////////////////////////////EEPROM
-      ///SAVE///////////////////////////////////////////////////////
+      /// SAVE///////////////////////////////////////////////////////
       second = 0;
       saveEeprom(_lcd, _dataBuffer, _data);
-      lcdPrintString("Close Menu", "", "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000,
-                     true, true);
+      lcdPrintString("Close Menu", "", "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
     }
   }
 }

@@ -34,11 +34,11 @@ class SPI_Command_Frame_t {
 public:
   typedef union {
     typedef struct __attribute__((__packed__)) {
-      uint8_t AddrModbus : 1; // Адрес ведомого устройства
+      uint8_t AddrModbus : 1;  // Адрес ведомого устройства
       uint8_t CodeCommand : 3; // Код команды CMD
-      uint16_t AddrParam : 1; // Адрес параметра H и Адрес параметра L
-      uint16_t DataParam : 1; // Адрес параметра H и Адрес параметра L
-      uint16_t CRC : 1; // Адрес параметра H и Адрес параметра L
+      uint16_t AddrParam : 1;  // Адрес параметра H и Адрес параметра L
+      uint16_t DataParam : 1;  // Адрес параметра H и Адрес параметра L
+      uint16_t CRC : 1;        // Адрес параметра H и Адрес параметра L
     } SPI_Command_Frame_values_t;
 
     uint16_t raw = 0;                  ///< Register values (RAW).
@@ -68,19 +68,19 @@ const int MODBUS_GROUP_WRITE_CONTINIUOU = 0x0001;
 enum ParameterGroup {
   GROUP_F0 = 0, // Основные рабочие параметры
   GROUP_F1,     // Параметры управления V/F
-  GROUP_F2, // Параметры векторного управления V
-  GROUP_F3, // Вспомогательные эксплуатационные параметры 1
-  GROUP_F4, // Вспомогательные эксплуатационные параметры 2
-  GROUP_F5, // Параметры цифровых фходов выходов
-  GROUP_F6, // Аналоговые входные и выходные функции
-  GROUP_F7,   // Параметры запуска программы (ПЛК)
-  GROUP_F8,   // Параметры PID регулятора
-  GROUP_F9,   // Параметры мотора
-  GROUP_FA,   // Параметры защиты
-  GROUP_FB,   // Параметры дисплея и специальные
-  GROUP_FC,   // Парамтеры комуникации RS485
-  GROUP_FP,   // Заводские параметры
-  GROUP_COUNT // Количество групп
+  GROUP_F2,     // Параметры векторного управления V
+  GROUP_F3,     // Вспомогательные эксплуатационные параметры 1
+  GROUP_F4,     // Вспомогательные эксплуатационные параметры 2
+  GROUP_F5,     // Параметры цифровых фходов выходов
+  GROUP_F6,     // Аналоговые входные и выходные функции
+  GROUP_F7,     // Параметры запуска программы (ПЛК)
+  GROUP_F8,     // Параметры PID регулятора
+  GROUP_F9,     // Параметры мотора
+  GROUP_FA,     // Параметры защиты
+  GROUP_FB,     // Параметры дисплея и специальные
+  GROUP_FC,     // Парамтеры комуникации RS485
+  GROUP_FP,     // Заводские параметры
+  GROUP_COUNT   // Количество групп
 };
 
 /**
@@ -105,12 +105,9 @@ public:
   uint16_t address; // Адрес параметра
   uint16_t value;   // Значение параметра
 
-  FrequencyConverterParameter(uint16_t addr, uint16_t val)
-      : address(addr), value(val) {}
+  FrequencyConverterParameter(uint16_t addr, uint16_t val) : address(addr), value(val) {}
 
-  void print() const {
-    std::cout << "Address: " << address << ", Value: " << value << std::endl;
-  }
+  void print() const { std::cout << "Address: " << address << ", Value: " << value << std::endl; }
 };
 
 /**
@@ -119,24 +116,21 @@ public:
  */
 class FrequencyConverter {
 public:
-  std::array<std::array<FrequencyConverterParameter, 16>, GROUP_COUNT>
-      parameters; // Массив параметров
+  std::array<std::array<FrequencyConverterParameter, 16>, GROUP_COUNT> parameters; // Массив параметров
 
   // Конструктор для инициализации параметров
   FrequencyConverter() {
     for (int group = 0; group < GROUP_COUNT; ++group) {
       for (int param = 0; param < 16; ++param) {
-        uint16_t address = (group << 8) | param; // Формирование адреса
-        parameters[group][param] =
-            FrequencyConverterParameter(address, 0); // Инициализация значений
+        uint16_t address = (group << 8) | param;                            // Формирование адреса
+        parameters[group][param] = FrequencyConverterParameter(address, 0); // Инициализация значений
       }
     }
   }
 
   // Метод для установки параметра
   void setParameter(ParameterGroup group, int paramIndex, uint16_t value) {
-    if (group >= 0 && group < GROUP_COUNT && paramIndex >= 0 &&
-        paramIndex < 16) {
+    if (group >= 0 && group < GROUP_COUNT && paramIndex >= 0 && paramIndex < 16) {
       parameters[group][paramIndex].value = value;
     }
   }
@@ -188,65 +182,38 @@ ModbusFunctionCode functionCode = READ_COILS;
 };
 
 const ModbusFunction functionCodes[] = {
-    {0x01, "Читать состояния дискретных выходов"},
-    {0x02, "Читать состояния дискретных входов"},
-    {0x03, "Читать регистры хранения"},
+    {0x01, "Читать состояния дискретных выходов"}, {0x02, "Читать состояния дискретных входов"}, {0x03, "Читать регистры хранения"},
     // и так далее...
 };
 
 // Пример использования
 uint8_t functionCode = functionCodes[0].code; // 0x01
 
-? ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ?
-  ? +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ |
-          Адрес устройства | Код функции | Данные | CRC |
-          +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ |
-          1 байт | 1 байт | N байт | 2 байта |
-          +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+                                  ?
+                                  ?
+                                  ?
+                                  ?
+                                  ?
+                                  ? +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ |
+                                          Адрес устройства | Код функции | Данные | CRC |
+                                          +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ | 1 байт | 1 байт |
+                                          N байт | 2 байта |
+                                          +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+
 
-                                                                                                                                           -**Адрес устройства(
-                                                                                                                                               1 байт) *
-              *
-  : Адрес устройства(от 1 до 247),
-    к которому направлено сообщение.- **Код функции(1 байт) * * : Код функции,
-    определяющий тип операции(например, чтение, запись и т.д.).-
-        **Данные(N байт) * *
-  : Данные,
+                                                                                                                                                                           -**Адрес устройства(1 байт) *
+                                              *
+                                  : Адрес устройства(от 1 до 247),
+    к которому направлено сообщение.- **Код функции(1 байт) * * : Код функции, определяющий тип операции(например, чтение, запись и т.д.).- **Данные(N байт) * * : Данные,
     передаваемые в зависимости от кода функции.Это может быть, например,
     адрес регистра и количество регистров для чтения.- **CRC(2 байта) * *
-  : Контрольная сумма(Cyclic Redundancy Check) для проверки целостности данных.
+                                  : Контрольная сумма(Cyclic Redundancy Check) для проверки целостности данных.
 
-    Пример пакета Modbus RTU для чтения 2 регистров
-  : +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- -+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ |
-        0x01 | 0x03 | 0x00 0x00 0x00 0x02 | CRC |
-        +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- -+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+
+                                    Пример пакета Modbus RTU для чтения 2 регистров
+                                  : +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- -+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+ | 0x01 | 0x03 | 0x00 0x00 0x00 0x02 | CRC |
+                                        +-- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- -+-- -- -- -- -- -- -- -- --+-- -- -- -- -- -- -- -- --+
 
-    ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
-                                          ?
-                                          ?
-                                          ?
-                                          ? Структура для представления регистра
+    ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? Структура для представления регистра
 #include <cstdint>
 #include <string>
 
@@ -261,10 +228,9 @@ struct ModbusRegister {
   uint16_t address;        // Адрес регистра
   DataType type;           // Тип данных
   std::string description; // Описание регистра (по желанию)
-  uint16_t size; // Количество регистров, необходимых для хранения данных
+  uint16_t size;           // Количество регистров, необходимых для хранения данных
 
-  ModbusRegister(uint16_t addr, DataType t, uint16_t s, const std::string &desc)
-      : address(addr), type(t), size(s), description(desc) {}
+  ModbusRegister(uint16_t addr, DataType t, uint16_t s, const std::string &desc) : address(addr), type(t), size(s), description(desc) {}
 };
 
 Контейнер для хранения регистров
@@ -295,18 +261,13 @@ private:
   ModbusRegisterMap registerMap;
 
   // Добавление регистров
-  registerMap.addRegister(
-      ModbusRegister(0x0001, DataType::INT16, 1, "Температура"));
-  registerMap.addRegister(
-      ModbusRegister(0x0002, DataType::FLOAT32, 2, "Давление"));
+  registerMap.addRegister(ModbusRegister(0x0001, DataType::INT16, 1, "Температура"));
+  registerMap.addRegister(ModbusRegister(0x0002, DataType::FLOAT32, 2, "Давление"));
 
   // Получение регистра по адресу
   const ModbusRegister *reg = registerMap.getRegister(0x0001);
   if (reg) {
-    std::cout << "Адрес: " << reg->address
-              << ", Тип: " << static_cast<int>(reg->type)
-              << ", Размер: " << reg->size << ", Описание: " << reg->description
-              << std::endl;
+    std::cout << "Адрес: " << reg->address << ", Тип: " << static_cast<int>(reg->type) << ", Размер: " << reg->size << ", Описание: " << reg->description << std::endl;
   } else {
     std::cout << "Регистры не найдены!" << std::endl;
   }
@@ -314,17 +275,16 @@ private:
   return 0;
 }
 
-? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? int16_t value =
-                                                    25; // Пример значения
-Serial.print(value); // Отправит значение в текстовом формате
-Serial.println(value); // Отправит значение и добавит перевод строки
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? int16_t value = 25; // Пример значения
+Serial.print(value);                                                // Отправит значение в текстовом формате
+Serial.println(value);                                              // Отправит значение и добавит перевод строки
 
-float floatValue = 25.5;     // Пример значения
-Serial.print(floatValue, 2); // Отправит значение с двумя знаками после запятой
+float floatValue = 25.5;       // Пример значения
+Serial.print(floatValue, 2);   // Отправит значение с двумя знаками после запятой
 Serial.println(floatValue, 2); // Отправит значение с переводом строки
 
 uint8_t buffer[] = {0x01, 0x02, 0x03}; // Пример массива байтов
-Serial.write(buffer, sizeof(buffer)); // Отправит массив байтов
+Serial.write(buffer, sizeof(buffer));  // Отправит массив байтов
 
 #include <Arduino.h>
 
@@ -335,9 +295,9 @@ enum class DataType {
 };
 
 struct ModbusRegister {
-  uint16_t address; // Адрес регистра
-  DataType type;    // Тип данных
-  uint16_t size; // Количество регистров, необходимых для хранения данных
+  uint16_t address;        // Адрес регистра
+  DataType type;           // Тип данных
+  uint16_t size;           // Количество регистров, необходимых для хранения данных
   const char *description; // Описание регистра
   union {
     int16_t intValue;   // Для INT16
@@ -384,9 +344,9 @@ void loop(){
                                               };
 
 struct ModbusRegister {
-  uint16_t address; // Адрес регистра
-  DataType type;    // Тип данных
-  uint16_t size; // Количество регистров, необходимых для хранения данных
+  uint16_t address;        // Адрес регистра
+  DataType type;           // Тип данных
+  uint16_t size;           // Количество регистров, необходимых для хранения данных
   const char *description; // Описание регистра
   union {
     int16_t intValue; // Для INT16
@@ -434,11 +394,11 @@ void setup() {
 
   // Адрес регистра
   message[index++] = (reg.address >> 8) & 0xFF; // Старший байт адреса
-  message[index++] = reg.address & 0xFF; // Младший байт адреса
+  message[index++] = reg.address & 0xFF;        // Младший байт адреса
 
   // Количество регистров
   message[index++] = (reg.size >> 8) & 0xFF; // Старший байт размера
-  message[index++] = reg.size & 0xFF; // Младший байт размера
+  message[index++] = reg.size & 0xFF;        // Младший байт размера
 
   // Вычисление CRC
   uint16_t crc = calculateCRC(message, index);
@@ -457,7 +417,7 @@ void loop(){
 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
 #include <Arduino.h>
 
-#define SLAVE_ADDRESS 0x01 // Адрес ведомого устройства
+#define SLAVE_ADDRESS 0x01       // Адрес ведомого устройства
 #define READ_FUNCTION_CODE 0x03  // Код функции для чтения
 #define WRITE_FUNCTION_CODE 0x06 // Код функции для записи
 
@@ -484,13 +444,12 @@ void sendReadCommand(uint16_t parameterAddress) {
   size_t index = 0;
 
   // Заполнение сообщения
-  message[index++] = SLAVE_ADDRESS; // Адрес ведомого устройства
-  message[index++] = READ_FUNCTION_CODE; // Код функции
-  message[index++] =
-      (parameterAddress >> 8) & 0xFF; // Старший байт адреса параметра
-  message[index++] = parameterAddress & 0xFF; // Младший байт адреса параметра
-  message[index++] = 0x00; // Количество слов (1)
-  message[index++] = 0x01; // Количество слов (1)
+  message[index++] = SLAVE_ADDRESS;                  // Адрес ведомого устройства
+  message[index++] = READ_FUNCTION_CODE;             // Код функции
+  message[index++] = (parameterAddress >> 8) & 0xFF; // Старший байт адреса параметра
+  message[index++] = parameterAddress & 0xFF;        // Младший байт адреса параметра
+  message[index++] = 0x00;                           // Количество слов (1)
+  message[index++] = 0x01;                           // Количество слов (1)
 
   // Вычисление и добавление CRC
   uint16_t crc = calculateCRC(message, index);
@@ -508,13 +467,12 @@ void sendWriteCommand(uint16_t parameterAddress, uint16_t value) {
   size_t index = 0;
 
   // Заполнение сообщения
-  message[index++] = SLAVE_ADDRESS; // Адрес ведомого устройства
-  message[index++] = WRITE_FUNCTION_CODE; // Код функции
-  message[index++] =
-      (parameterAddress >> 8) & 0xFF; // Старший байт адреса параметра
-  message[index++] = parameterAddress & 0xFF; // Младший байт адреса параметра
-  message[index++] = (value >> 8) & 0xFF; // Старший байт значения
-  message[index++] = value & 0xFF; // Младший байт значения
+  message[index++] = SLAVE_ADDRESS;                  // Адрес ведомого устройства
+  message[index++] = WRITE_FUNCTION_CODE;            // Код функции
+  message[index++] = (parameterAddress >> 8) & 0xFF; // Старший байт адреса параметра
+  message[index++] = parameterAddress & 0xFF;        // Младший байт адреса параметра
+  message[index++] = (value >> 8) & 0xFF;            // Старший байт значения
+  message[index++] = value & 0xFF;                   // Младший байт значения
 
   // Вычисление и добавление CRC
   uint16_t crc = calculateCRC(message, index);
@@ -528,7 +486,7 @@ void sendWriteCommand(uint16_t parameterAddress, uint16_t value) {
 
 void setup() {
   Serial.begin(9600); // Настройка скорости последовательного порта
-  delay(1000); // Задержка для стабилизации связи
+  delay(1000);        // Задержка для стабилизации связи
 
   // Пример чтения параметра d-01 (установленная частота)
   sendReadCommand(0x7001); // Адрес для чтения параметра d-01

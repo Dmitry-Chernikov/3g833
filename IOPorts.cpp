@@ -1,7 +1,7 @@
 #include "IOPorts.h"
 
 /////////////Инициализация входов и подтягивание входов к положительному
-///потенциалу с помощью внутренних резисторов/////////////
+/// потенциалу с помощью внутренних резисторов/////////////
 void initSetupInputManipulation() {
   pinMode(buttonEndCycle, INPUT_PULLUP);
   pinMode(buttonStartFeed, INPUT_PULLUP);
@@ -16,7 +16,7 @@ void initSetupInputManipulation() {
 }
 
 /////////////Инициализация выходов и устанавливаем высокое состояние на
-///выходе/////////////
+/// выходе/////////////
 void initSetupOutpuExecutiveMechanism() {
   pinMode(electromagnetTop, OUTPUT);
   digitalWrite(electromagnetTop, true);

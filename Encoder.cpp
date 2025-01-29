@@ -4,17 +4,11 @@ AS5048A angleSensor(SS);
 
 void initEncoder() { angleSensor.init(); }
 
-float getAngle() {
-  return angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
-}
+float getAngle() { return angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)); }
 
 float getLinearMotion() {
-  return angleSensor.LinearDisplacementRack(
-      angleSensor.AbsoluteAngleRotation(
-          &_data.absoluteAngle,
-          angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)),
-          &_data.anglePrevious),
-      _NormalModule, _NumberGearTeeth);
+  return angleSensor.LinearDisplacementRack(angleSensor.AbsoluteAngleRotation(&_data.absoluteAngle, angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)), &_data.anglePrevious),
+                                            _NormalModule, _NumberGearTeeth);
 
   // _lcd.clear();
   // _lcd.setCursor(0, 0);

@@ -26,16 +26,14 @@ void initMemory() {
 
     EEPROM.put(0, _data);
 
-    lcdPrintString(_lcd, "INIT EEPROM OK", String(_data.initData), "",
-                   NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
+    lcdPrintString(_lcd, "INIT EEPROM OK", String(_data.initData), "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
   }
 #endif
 }
 
 void clearMemory() {
 #ifdef CLEAR_EEPROM
-  lcdPrintString(_lcd, "CLEAR EEPROM", "", "", NOT_CHANGE_COLOR,
-                 NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+  lcdPrintString(_lcd, "CLEAR EEPROM", "", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
 
   uint8_t indexLine = 0;
   uint16_t compareParam = EEPROM.length() / 16;
@@ -43,15 +41,13 @@ void clearMemory() {
   for (int i = 0; i < EEPROM.length(); i++) {
     EEPROM.write(i, 0);
     if (i = compareParam) {
-      lcdPrintString(_lcd, "", "0", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0,
-                     indexLine, 0, false, false);
+      lcdPrintString(_lcd, "", "0", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, indexLine, 0, false, false);
       compareParam = compareParam + (EEPROM.length() / 16);
       indexLine = indexLine + 1;
     }
   }
 
-  lcdPrintString(_lcd, "CLEAR EEPROM OK", "", "", NOT_CHANGE_COLOR,
-                 NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
+  lcdPrintString(_lcd, "CLEAR EEPROM OK", "", "", NOT_CHANGE_COLOR, NOT_CHANGE_COLOR, 0, 0, 1000, true, false);
 #endif
 }
 

@@ -17,17 +17,8 @@ extern Adafruit_RGBLCDShield _lcd;
 
 void initDisplay();
 
-void lcdPrintString(Adafruit_RGBLCDShield &lcd, String msg = "",
-                    String msgData = "", String msgAfterData = "",
-                    uint8_t colorBefore = -1, uint8_t colorAfter = -1,
-                    uint8_t posLineOne = 0, uint8_t posLineTwo = 0,
-                    unsigned long msgDelay = 0,
-                    bool clearBeforeRendering = false,
-                    bool clearAfterRendering = false);
+void lcdPrintString(Adafruit_RGBLCDShield &lcd, String msg = "", String msgData = "", String msgAfterData = "", uint8_t colorBefore = -1, uint8_t colorAfter = -1, uint8_t posLineOne = 0,
+                    uint8_t posLineTwo = 0, unsigned long msgDelay = 0, bool clearBeforeRendering = false, bool clearAfterRendering = false);
 
-void lcdPrintString(String msg = "", String msgData = "",
-                    String msgAfterData = "", uint8_t colorBefore = -1,
-                    uint8_t colorAfter = -1, uint8_t posLineOne = 0,
-                    uint8_t posLineTwo = 0, unsigned long msgDelay = 0,
-                    bool clearBeforeRendering = false,
-                    bool clearAfterRendering = false);
+void lcdPrintString(String msg = "", String msgData = "", String msgAfterData = "", uint8_t colorBefore = -1, uint8_t colorAfter = -1, uint8_t posLineOne = 0, uint8_t posLineTwo = 0,
+                    unsigned long msgDelay = 0, bool clearBeforeRendering = false, bool clearAfterRendering = false);
