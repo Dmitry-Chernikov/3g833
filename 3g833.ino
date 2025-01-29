@@ -63,8 +63,7 @@ void setup() {
   cli();
 
 #ifdef ENABLE_KYPAD
-  pinMode(interruptRemote,
-          INPUT_PULLUP);     // Подтянем пины источники PCINT к питанию
+  pinMode(interruptRemote, INPUT_PULLUP); // Подтянем пины источники PCINT к питанию
   pciSetup(interruptRemote); // И разрешим на них прерывания T6
 #endif
 

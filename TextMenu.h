@@ -23,8 +23,7 @@ extern uint8_t buttons, second;
 extern unsigned long _previousMillisSped;
 extern bool _speeds[];
 
-// Переменные для инициализации меню, текст, используемый для Меню индикации для
-// линий сохранения.
+// Переменные для инициализации меню, текст, используемый для Меню индикации для линий сохранения.
 extern volatile bool IncDecMode;
 
 // Объекты Liquidline может быть использован больше, чем один раз.
