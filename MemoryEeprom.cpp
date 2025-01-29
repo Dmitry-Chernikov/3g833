@@ -1,8 +1,7 @@
 #include "MemoryEeprom.h"
 
 Data _data;
-Data _dataBuffer; // временная переменная для проверки данных в EEPROM с data,
-                  // чтобы не писать в EEPROM часто
+Data _dataBuffer; // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
 
 void initMemory() {
 #ifdef ENABLE_EEPROM

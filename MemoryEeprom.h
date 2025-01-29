@@ -27,17 +27,20 @@ struct Data {
                                  // электричество отключили
 
   bool operator!=(const Data &otcher) const {
-    return initData != otcher.initData || abs(linearMove - otcher.linearMove) > 0.1 || abs(anglePrevious - otcher.anglePrevious) > 0.1 || abs(absoluteAngle - otcher.absoluteAngle) > 0.1 ||
-           abs(limitTop - otcher.limitTop) > 0.1 || abs(limitBottom - otcher.limitBottom) > 0.1 || abs(cylinderDiametr - otcher.cylinderDiametr) > 0.1 ||
-           abs(cylinderAngle - otcher.cylinderAngle) > 0.1 ||
+    return initData != otcher.initData || abs(linearMove - otcher.linearMove) > 0.1 || 
+                                          abs(anglePrevious - otcher.anglePrevious) > 0.1 || 
+                                          abs(absoluteAngle - otcher.absoluteAngle) > 0.1 ||
+                                          abs(limitTop - otcher.limitTop) > 0.1 || 
+                                          abs(limitBottom - otcher.limitBottom) > 0.1 || 
+                                          abs(cylinderDiametr - otcher.cylinderDiametr) > 0.1 ||
+                                          abs(cylinderAngle - otcher.cylinderAngle) > 0.1 ||
 
            stateElectromagnetTop != otcher.stateElectromagnetTop || stateElectromagnetBottom != otcher.stateElectromagnetBottom || stateIntermediate != otcher.stateIntermediate;
   }
 };
 
 extern Data _data;
-extern Data _dataBuffer; // временная переменная для проверки данных в EEPROM с
-                         // data, чтобы не писать в EEPROM часто
+extern Data _dataBuffer; // временная переменная для проверки данных в EEPROM с data, чтобы не писать в EEPROM часто
 #endif
 
 void initMemory();

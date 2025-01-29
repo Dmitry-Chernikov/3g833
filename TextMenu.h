@@ -75,8 +75,7 @@ extern LiquidSystem menuSystem;
 
 void settingTextMenu();
 
-///////////////////////////Процедуры меню
-/// begin///////////////////////////////////
+///////////////////////////Процедуры меню begin///////////////////////////////////
 // Функция для проверки выхода за пределы
 bool isOutOfBounds(float paramManipulation, float maxParam, float minParam);
 

@@ -87,8 +87,7 @@ void settingTextMenu() {
   angleValueLine.attach_function(FunctionTypes::Edit, modeEditValue);
 }
 
-///////////////////////////Процедуры меню
-/// begin///////////////////////////////////
+///////////////////////////Процедуры меню begin///////////////////////////////////
 // Функция для проверки выхода за пределы
 bool isOutOfBounds(float paramManipulation, float maxParam, float minParam) {
   // Serial.println(maxParam - paramManipulation);
@@ -169,8 +168,7 @@ void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation, float
   }
 }
 
-void goBack() { // Функция обратного вызова, которая будет прикреплена к
-                // backLine. Выход в основное меню
+void goBack() { // Функция обратного вызова, которая будет прикреплена к backLine. Выход в основное меню
   // Эта функция принимает ссылку на разыскиваемое меню.
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     startMenu = false;
@@ -204,8 +202,7 @@ void gotoCylinderMenu() { // Процедура вызывает экран ме
   menuSystem.set_focusedLine(1);
 }
 
-void setLimitTop() { // Процедура копирует значение энкодера в значение верхнего
-                     // лимита программмного концевика
+void setLimitTop() { // Процедура копирует значение энкодера в значение верхнего лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove > _data.limitBottom) {
       lcdPrintString("ERROR", "TOP > BOOTOM", "", RED, WHITE, 5, 2, 2000, true, false);
@@ -235,20 +232,17 @@ void setLimitTop() { // Процедура копирует значение э�
   }
 }
 
-void increaseLimitTop() { // Процедура увеличевает значение верхнего лимита
-                          // программмного концевика
+void increaseLimitTop() { // Процедура увеличевает значение верхнего лимита программмного концевика
   changeParamMenu(DecIncrTypes::Inc, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
-void decreaseLimitTop() { // Процедура уменьшает значение верхнего лимита
-                          // программмного концевика
+void decreaseLimitTop() { // Процедура уменьшает значение верхнего лимита программмного концевика
   changeParamMenu(DecIncrTypes::Dec, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
-void setLimitBootom() { // Процедура копирует значение энкодера в значение
-                        // нижнего лимита программмного концевика
+void setLimitBootom() { // Процедура копирует значение энкодера в значение нижнего лимита программмного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove < _data.limitTop) {
       lcdPrintString("ERROR", "BOOTOM < TOP", "", RED, WHITE, 5, 2, 2000, true, false);
@@ -278,14 +272,12 @@ void setLimitBootom() { // Процедура копирует значение 
   }
 }
 
-void increaseLimitBootom() { // Процедура увеличивает значение нижнего лимита
-                             // программмного концевика
+void increaseLimitBootom() { // Процедура увеличивает значение нижнего лимита программмного концевика
   changeParamMenu(DecIncrTypes::Inc, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
                   "BOOTOM < ", 5, 2);
 }
 
-void decreaseLimitBootom() { // Процедура уменьшает значение нижнего лимита
-                             // программмного концевика
+void decreaseLimitBootom() { // Процедура уменьшает значение нижнего лимита программмного концевика
   changeParamMenu(DecIncrTypes::Dec, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
                   "BOOTOM < ", 5, 2);
 }
@@ -324,8 +316,7 @@ void decreaseAngle() {
   changeParamMenu(DecIncrTypes::Dec, _data.cylinderAngle, maximumScrubbingAngle, minimalScrubbingAngle, _speeds, StartLevelSpeed::Speed_3, _previousMillisSped, _intervals, "Angle > ", "Angle < ", 5,
                   3);
 }
-///////////////////////////Процедуры меню
-/// end/////////////////////////////////////
+///////////////////////////Процедуры меню end/////////////////////////////////////
 
 void Menu() {
 
@@ -356,8 +347,7 @@ void Menu() {
 
   while (startMenu) {
 
-    if (stateTopSlider) { // Если ползун на концевике парковки. Концевик
-                          // парковки, ползун в верху исходного состояния
+    if (stateTopSlider) { // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
       _data.absoluteAngle = 0;
       _data.anglePrevious = angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64));
     }
@@ -479,8 +469,7 @@ void Menu() {
       }
 
     } else {
-      /////////////////////////////////////////////////////EEPROM
-      /// SAVE///////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
       second = 0;
       saveEeprom(_lcd, _dataBuffer, _data);
       lcdPrintString("Close Menu", "", "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
