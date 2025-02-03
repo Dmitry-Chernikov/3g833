@@ -1,5 +1,10 @@
 #include "SUSWE320.h"
 
+// Функция для получения мощности модели
+double getPower(Model model) {
+    return modelPowers[static_cast<int>(model)];
+}
+
 void ParameterGroup::addParametr(const Parameter& param){
   if(parameterCount < MAX_PARAMETERS){
     parameters[parameterCount++] = param; 
@@ -7,8 +12,9 @@ void ParameterGroup::addParametr(const Parameter& param){
 }
 
 // Конструктор ParametersSUSWE320
-ParametersSUSWE320::ParametersSUSWE320() 
-    : allParameters{
+ParametersSUSWE320::ParametersSUSWE320(Model model) 
+      : model(model), 
+      allParameters{
         ParameterGroup("F0 - Основные рабочие параметры"),
         ParameterGroup("F1 - Параметры управления V/F"),
         ParameterGroup("F2 - Параметры управления вектором"),
@@ -29,7 +35,7 @@ ParametersSUSWE320::ParametersSUSWE320()
     // Добавляем параметры в группу F0
     Parameter param1;
     param1.name = "F0.00";
-    param1.factoryDefault.floatValue = POWER_5_5KW; // Устанавливаем значение по умолчанию как 5.5 кВт
+    param1.factoryDefault.floatValue = getPower(model); // Устанавливаем значение по умолчанию как 5.5 кВт
     param1.unit = "кВт";
     param1.minSetting = 0.0;
     param1.maxSetting = 99.9;

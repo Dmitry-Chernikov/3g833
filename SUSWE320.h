@@ -2,14 +2,59 @@
 
 #include <Arduino.h>
 
-const float POWER_0_4KW = 0.4f;    // 0.4 кВт
-const float POWER_0_75KW = 0.75f;  // 0.75 кВт
-const float POWER_1_5KW = 1.5f;    // 1.5 кВт
-const float POWER_2_2KW = 2.2f;    // 2.2 кВт
-const float POWER_3_0KW = 3.0f;    // 3.0 кВт
-const float POWER_4_0KW = 4.0f;    // 4.0 кВт
-const float POWER_5_5KW = 5.5f;    // 5.5 кВт
-const float POWER_7_5KW = 7.5f;    // 7.5 кВт
+enum class Model {
+    MODEL_0_4S1_220V,
+    MODEL_0_75S1_220V,
+    MODEL_1_5S1_220V,
+    MODEL_2_2S1_220V,
+    MODEL_3_0S1_220V,
+    MODEL_4_0S1_220V,
+    MODEL_5_5S1_220V,
+    MODEL_0_4S3_220V,
+    MODEL_0_75S3_220V,
+    MODEL_1_5S3_220V,
+    MODEL_2_2S3_220V,
+    MODEL_3_0S3_220V,
+    MODEL_4_0S3_220V,
+    MODEL_5_5S3_220V,
+    MODEL_0_4G3_380V,
+    MODEL_0_75G3_380V,
+    MODEL_1_5G3_380V,
+    MODEL_2_2G3_380V,
+    MODEL_3_0G3_380V,
+    MODEL_4_0G3_380V,
+    MODEL_5_5G3_380V,
+    MODEL_7_5G3_380V,
+    MODEL_11_0G3_380V,
+    MODEL_COUNT // Используем для определения размера массива
+};
+
+// Массив мощностей для каждой модели
+const float modelPowers[] = {
+    0.4,   // MODEL_0_4S1_220V
+    0.75,  // MODEL_0_75S1_220V
+    1.5,   // MODEL_1_5S1_220V
+    2.2,   // MODEL_2_2S1_220V
+    3.0,   // MODEL_3_0S1_220V
+    4.0,   // MODEL_4_0S1_220V
+    5.5,   // MODEL_5_5S1_220V
+    0.4,   // MODEL_0_4S3_220V
+    0.75,  // MODEL_0_75S3_220V
+    1.5,   // MODEL_1_5S3_220V
+    2.2,   // MODEL_2_2S3_220V
+    3.0,   // MODEL_3_0S3_220V
+    4.0,   // MODEL_4_0S3_220V
+    5.5,   // MODEL_5_5S3_220V
+    0.4,   // MODEL_0_4G3_380V
+    0.75,  // MODEL_0_75G3_380V
+    1.5,   // MODEL_1_5G3_380V
+    2.2,   // MODEL_2_2G3_380V
+    3.0,   // MODEL_3_0G3_380V
+    4.0,   // MODEL_4_0G3_380V
+    5.5,   // MODEL_5_5G3_380V
+    7.5,   // MODEL_7_5G3_380V
+    11.0   // MODEL_11_0G3_380V
+};
 
 /**
  * @enum GroupsParameter
@@ -68,8 +113,10 @@ class ParameterGroup {
 
 class ParametersSUSWE320 {
   public:
-    ParametersSUSWE320();
+    ParametersSUSWE320(Model model);
 
   private:
-    ParameterGroup allParameters[15]; // Массив групп параметров
+    ParameterGroup allParameters[15]; // Массив групп параметров  
+    Model model; // Хранит значение модели
+    float getPower(Model model); // Функция для получения мощности модели
 };
