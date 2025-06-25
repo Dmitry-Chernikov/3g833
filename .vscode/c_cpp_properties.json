@@ -1,0 +1,68 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/include",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/src",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/AS5048A/src",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidCrystal@1.0.7/src",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidMenu/src",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/Adafruit RGB LCD Shield Library",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/Adafruit RGB LCD Shield Library/utility",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/variants/mega",
+                "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidCrystal",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/include",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/src",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/AS5048A/src",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidCrystal@1.0.7/src",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidMenu/src",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/Adafruit RGB LCD Shield Library",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/Adafruit RGB LCD Shield Library/utility",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/variants/mega",
+                    "/home/dmitry/Документы/PlatformIO/Projects/250403-154700-megaatmega2560/.pio/libdeps/megaatmega2560/LiquidCrystal",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60118",
+                "ARDUINO_AVR_MEGA2560",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "/home/dmitry/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
