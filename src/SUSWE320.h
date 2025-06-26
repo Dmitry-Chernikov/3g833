@@ -38,14 +38,14 @@ enum GroupsParameter {
   GROUP_F2,     // Параметры векторного управления V
   GROUP_F3,     // Вспомогательные эксплуатационные параметры 1
   GROUP_F4,     // Вспомогательные эксплуатационные параметры 2
-  GROUP_F5,     // Параметры цифровых фходов выходов
+  GROUP_F5,     // Параметры цифровых входов выходов
   GROUP_F6,     // Аналоговые входные и выходные функции
   GROUP_F7,     // Параметры запуска программы (ПЛК)
   GROUP_F8,     // Параметры PID регулятора
   GROUP_F9,     // Параметры мотора
   GROUP_FA,     // Параметры защиты
   GROUP_FB,     // Параметры дисплея и специальные
-  GROUP_FC,     // Парамтеры комуникации RS485
+  GROUP_FC,     // Параметры коммуникации RS485
   GROUP_FP,     // Заводские параметры
   GROUP_d,      // Параметры мониторинга
   GROUP_COUNT   // Количество групп
@@ -106,8 +106,8 @@ public:
   ParametersSUSWE320(Model model); 
   float getPower(Model model);      // Функция для получения мощности модели
   const FaultInfo* getFaultInfo(int code); // Функция возвращает указатель на информацию об ошибке по её коду
-  Parameter createParameter(const char* name, float defaultValue, const char* unit, float min, float max, const char* description);
-  Parameter createParameter(const char* name, int defaultValue, const char* unit, int min, int max, const char* description);
+  Parameter createParameter(const char* name, float defaultValue,       const char* unit, float min,       float max,       const char* description);
+  Parameter createParameter(const char* name, int defaultValue,         const char* unit, int min,         int max,         const char* description);
   Parameter createParameter(const char* name, const char* defaultValue, const char* unit, const char* min, const char* max, const char* description);
 
 private:

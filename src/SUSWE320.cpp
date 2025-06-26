@@ -116,7 +116,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   allParameters[GROUP_F1].addParameter(createParameter("F1.09", 75.0f, "%", getVoltageV2(model), 100.0f, "Напряжение V/F V3"));
   allParameters[GROUP_F1].addParameter(createParameter("F1.10", 0, "", 0, 2, "0: Недействительно; 1: Действительно на всем протяжении; 2: Недействительно во время замедления, действительно во время ускорения и на постоянной скорости"));
   allParameters[GROUP_F1].addParameter(createParameter("F1.11", 0.9f, "%", 0.0f, 100.0f, "Коэффициент торможения тормозного резистора"));
-  allParameters[GROUP_F1].addParameter(createParameter("F1.12", 0, "%", 0.0f, 150.0f, "Увеличение компенсации крутящего момента"));
+  allParameters[GROUP_F1].addParameter(createParameter("F1.12", 0.0f,    "%", 0.0f, 150.0f, "Увеличение компенсации крутящего момента"));
   allParameters[GROUP_F1].addParameter(createParameter("F1.13", 0.84f, "%", 0.0f, 200.0f, "Увеличение возбуждения V/F"));
   allParameters[GROUP_F1].addParameter(createParameter("F1.14", 5, "", 0, 6, "Режим подавления колебаний"));
 
@@ -127,7 +127,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   allParameters[GROUP_F2].addParameter(createParameter("F2.03", 1.00f, "", 1.0f, 10.0f, "Ki высокоскоростного контура скорости"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.04", 10.00f, "Гц", getLowerFrequency(model), getMaxFrequency(model), "Точка переключения расчета частоты низкоскоростного контура"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.05", 30.00f, "Гц", getLowerFrequency(model), getMaxFrequency(model), "Точка переключения расчета частоты высокоскоростного контура"));
-  allParameters[GROUP_F2].addParameter(createParameter("F2.06", 0, "%", 0.0f, 100.0f, "Компенсация электрического скольжения"));
+  allParameters[GROUP_F2].addParameter(createParameter("F2.06", 0.0f, "%", 0.0f, 100.0f, "Компенсация электрического скольжения"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.07", "", "", "", "", "Резерв"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.08", "", "", "", "", "Резерв"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.09", "", "", "", "", "Резерв"));
@@ -140,7 +140,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   allParameters[GROUP_F2].addParameter(createParameter("F2.16", "", "", "", "", "Резерв"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.17", "", "", "", "", "Резерв"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.18", "", "", "", "", "Резерв"));
-  allParameters[GROUP_F2].addParameter(createParameter("F2.19", 150.0f, "%", 0, 200.0f, "Цифровая установка предела крутящего момента в контроле скорости (привод)"));
+  allParameters[GROUP_F2].addParameter(createParameter("F2.19", 150.0f, "%", 0.0f, 200.0f, "Цифровая установка предела крутящего момента в контроле скорости (привод)"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.20", 1, "%", 50, 200, "Максимальный коэффициент крутящего момента зоны ослабления поля"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.21", 5, "", 5, 300, "М-осевой коэффициент масштаба контура тока"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.22", 0, "", 0, 65535, "М-осевой интегральный коэффициент контура тока"));
@@ -148,7 +148,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   allParameters[GROUP_F2].addParameter(createParameter("F2.24", 100, "", 0, 500, "Открытое векторное управление увеличения крутящего момента"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.25", 20.00f, "Гц", getLowerFrequency(model), getMaxFrequency(model), "Частота отсечения открытого векторного управления увеличения крутящего момента"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.26", 28, "", 0, 31, "Фильтр заданного крутящего момента"));
-  allParameters[GROUP_F2].addParameter(createParameter("F2.27", 1.05f, "%", 0, 110, "Максимальный коэффициент модуляции ослабления поля"));
+  allParameters[GROUP_F2].addParameter(createParameter("F2.27", 1.05f, "%", 0.0f, 110.0f, "Максимальный коэффициент модуляции ослабления поля"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.28", 1, "%", 0, 100, "Коэффициент компенсации наблюдения потока"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.29", 300, "", 0, 2000, "Коэффициент фильтрации наблюдения потока"));
   allParameters[GROUP_F2].addParameter(createParameter("F2.30", 0, "", 0, 500, "T-осевой коэффициент замкнутого контура тока"));
@@ -159,7 +159,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   // Группа F3 - Вспомогательные рабочие параметры
   allParameters[GROUP_F3].addParameter(createParameter("F3.00", 0, "", 0, 1, "0: Запуск по стартовой частоте\n1: Запуск по стартовой частоте после торможения постоянным током"));
   allParameters[GROUP_F3].addParameter(createParameter("F3.01", 0.50f, "Гц", 0.50f, 20.00f, "Начальная частота запуска переменного привода"));
-  allParameters[GROUP_F3].addParameter(createParameter("F3.02", 0, "с", 0.0f, 60.0f, "Время работы на стартовой частоте"));
+  allParameters[GROUP_F3].addParameter(createParameter("F3.02", 0.0f, "с", 0.0f, 60.0f, "Время работы на стартовой частоте"));
   allParameters[GROUP_F3].addParameter(createParameter("F3.03", 0.0f, "%", 0.0f, 100.0f, "Текущая величина для применения торможения постоянным током\nКогда номинальный ток двигателя меньше или равен 80% от номинального тока переменного привода, это процентная база относительно номинального тока двигателя;\nКогда номинальный ток двигателя больше 80% от номинального тока переменного привода, это процентная база относительно 80% от номинального тока переменного привода;"));
   allParameters[GROUP_F3].addParameter(createParameter("F3.04", 0.0f, "с", 0.0f, 60.0f, "Продолжительность применения торможения постоянным током"));
   allParameters[GROUP_F3].addParameter(createParameter("F3.05", 0, "", 0, 2, "0: Замедление до остановки\n1: Замедление до остановки + торможение постоянным током\n2: Свободная остановка"));
@@ -169,7 +169,7 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
 
     // Резервные параметры
     for (int i = 9; i <= 15; ++i) {
-        allParameters[GROUP_F3].addParameter(createParameter("F3." + std::to_string(i), "", "", "", "", "Резерв"));
+        allParameters[GROUP_F3].addParameter(createParameter("F3." + char(i), "", "", "", "", "Резерв"));
   
   // Группа F4 - Вспомогательные рабочие параметры 2
   allParameters[GROUP_F4].addParameter(createParameter("F4.00", 10.00f, "Гц", 0.00f, 50.00f, "Установка частоты джога FWD & REV"));
@@ -378,25 +378,25 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
   allParameters[GROUP_FP].addParameter(createParameter("FP.00", "", "", 1, 9999, "Специфический пароль для настройки системы"));
 
   // Группа d - Параметры мониторинга
-  allParameters[GROUP_D].addParameter(createParameter("d-00", 0.00f, "Гц", 0.00f, 400.00f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-01", 0.00f, "Гц", 0.00f, 400.00f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-02", 0, "В", 0, 999, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-03", 0, "В", 0, 999, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-04", 0.0f, "А", 0.0f, 999.9f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-05", 0, "Об/мин", 0, 60000, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-06", 0.00f, "В", 0.00f, 10.00f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-07", 0.00f, "мА", 0.00f, 20.00f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-08", 0.00f, "В", 0.00f, 10.00f, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-09", 0, "", 0, 0x3F, "Состояние входного терминала (Реле, X1-X5)"));
-  allParameters[GROUP_D].addParameter(createParameter("d-10", 0, "℃", 0, 9999, ""));
-  allParameters[GROUP_D].addParameter(createParameter("d-11", getLowerPIDValue(model), "", getLowerPIDValue(model), getUpperPIDValue(model), "Заданное значение PID"));
-  allParameters[GROUP_D].addParameter(createParameter("d-12", getLowerPIDValue(model), "", getLowerPIDValue(model), getUpperPIDValue(model), "Значение обратной связи PID"));
-  allParameters[GROUP_D].addParameter(createParameter("d-13", 0, "", 0, 9999, "Текущее значение счетчика"));
-  allParameters[GROUP_D].addParameter(createParameter("d-14", 0, "с", 0, 9999, "Текущее значение таймера (с)"));
-  allParameters[GROUP_D].addParameter(createParameter("d-15", 0, "ч", 0, 9999, "Накопительное время работы переменного привода (ч)"));
-  allParameters[GROUP_D].addParameter(createParameter("d-16", 0, "ч", 0, 9999, "Накопительное время включения переменного привода (ч)"));
-  allParameters[GROUP_D].addParameter(createParameter("d-17", 0, "", 0, 4095, "Смещение выборки тока фазы U"));
-  allParameters[GROUP_D].addParameter(createParameter("d-18", 0, "", 0, 4095, "Смещение выборки тока фазы V"));
-  allParameters[GROUP_D].addParameter(createParameter("d-19", 0, "", 0, 4095, "Смещение выборки тока фазы W"));
+  allParameters[GROUP_d].addParameter(createParameter("d-00", 0.00f, "Гц", 0.00f, 400.00f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-01", 0.00f, "Гц", 0.00f, 400.00f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-02", 0, "В", 0, 999, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-03", 0, "В", 0, 999, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-04", 0.0f, "А", 0.0f, 999.9f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-05", 0, "Об/мин", 0, 60000, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-06", 0.00f, "В", 0.00f, 10.00f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-07", 0.00f, "мА", 0.00f, 20.00f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-08", 0.00f, "В", 0.00f, 10.00f, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-09", 0, "", 0, 0x3F, "Состояние входного терминала (Реле, X1-X5)"));
+  allParameters[GROUP_d].addParameter(createParameter("d-10", 0, "℃", 0, 9999, ""));
+  allParameters[GROUP_d].addParameter(createParameter("d-11", getLowerPIDValue(model), "", getLowerPIDValue(model), getUpperPIDValue(model), "Заданное значение PID"));
+  allParameters[GROUP_d].addParameter(createParameter("d-12", getLowerPIDValue(model), "", getLowerPIDValue(model), getUpperPIDValue(model), "Значение обратной связи PID"));
+  allParameters[GROUP_d].addParameter(createParameter("d-13", 0, "", 0, 9999, "Текущее значение счетчика"));
+  allParameters[GROUP_d].addParameter(createParameter("d-14", 0, "с", 0, 9999, "Текущее значение таймера (с)"));
+  allParameters[GROUP_d].addParameter(createParameter("d-15", 0, "ч", 0, 9999, "Накопительное время работы переменного привода (ч)"));
+  allParameters[GROUP_d].addParameter(createParameter("d-16", 0, "ч", 0, 9999, "Накопительное время включения переменного привода (ч)"));
+  allParameters[GROUP_d].addParameter(createParameter("d-17", 0, "", 0, 4095, "Смещение выборки тока фазы U"));
+  allParameters[GROUP_d].addParameter(createParameter("d-18", 0, "", 0, 4095, "Смещение выборки тока фазы V"));
+  allParameters[GROUP_d].addParameter(createParameter("d-19", 0, "", 0, 4095, "Смещение выборки тока фазы W"));
   }
 }*/
