@@ -20,7 +20,7 @@
 // char string_saved[] = " *";
 // char string_notSaved[] = "  ";
 
-#ifdef ENABLE_KYPAD
+#ifdef ENABLE_KEYPAD
 void pciSetup(byte pin) {
   //*Pin Change Interrupt Прерывание по изменению вывода*//
   // PCICR Регистр управления PCINT прерываниями, имеются три группы PCI0..2 в
@@ -54,30 +54,30 @@ void readKeypad() {
 // #define TYPES_WRITE_CMD 6  //Запись параметров ведомого
 // #define TYPES_READ_CMD 10  //Непрерывная запись набора параметров
 
-// const int ADRES_DATA_PARAM = 0x000D;
-// const int ADRES_DATA_STATE = 0x0070;
-// const int ADRES_FAULTY_DESCRIPTION = 0x0080;
+// const int ADDRESS_DATA_PARAM = 0x000D;
+// const int ADDRESS_DATA_STATE = 0x0070;
+// const int ADDRESS_FAULTY_DESCRIPTION = 0x0080;
 /*****SERIAL*****/
 
 void setup() {
   cli();
 
-#ifdef ENABLE_KYPAD
+#ifdef ENABLE_KEYPAD
   pinMode(interruptRemote, INPUT_PULLUP); // Подтянем пины источники PCINT к питанию
   pciSetup(interruptRemote); // И разрешим на них прерывания T6
 #endif
 
   initSetupInputManipulation();
 
-  initSetupOutpuExecutiveMechanism();
+  initSetupOutputExecutiveMechanism();
 
   /*****SERIAL*****/
   Serial.begin(9600);
   // Serial1.begin(9600);  // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
-  // pinMode(rs485TransceivReceive, OUTPUT);
-  // digitalWrite(rs485TransceivReceive, false);
+  // pinMode(rs485TransceiverReceive, OUTPUT);
+  // digitalWrite(rs485TransceiverReceive, false);
 
-#ifdef ENABLE_KYPAD
+#ifdef ENABLE_KEYPAD
   readKeypad();
 #endif
 
@@ -107,12 +107,12 @@ void loop() {
 
   // if (stateMillisDelay(&previousMillisMenu, &intervalMenu)) {
   //   //SEND//
-  //   digitalWrite(rs485TransceivReceive, true);  // переводим модуль в режим
+  //   digitalWrite(rs485TransceiverReceive, true);  // переводим модуль в режим
   //   передачи данных delay(10); Serial1.write(" Data"); Serial1.write(0x0a);
 
-  //   // TO Recieved //
+  //   // TO Received //
   //   delay(10);
-  //   digitalWrite(rs485TransceivReceive, false);  // переводим модуль в режим
+  //   digitalWrite(rs485TransceiverReceive, false);  // переводим модуль в режим
   //   приёма данных
   // }
   /*****SERIAL*****/
@@ -140,7 +140,7 @@ void loop() {
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+      lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
 
@@ -150,7 +150,7 @@ void loop() {
     }
 
     if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+      lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
   }
@@ -181,7 +181,7 @@ void loop() {
     }
 
     if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+      lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
 
@@ -191,13 +191,13 @@ void loop() {
     }
 
     if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-      lcdPrintString(_lcd, "LIMIT BOOTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+      lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
     }
 #endif
   }
 }
 
-#if defined(ENABLE_KYPAD)
+#if defined(ENABLE_KEYPAD)
 ISR(PCINT0_vect) { // Обработчик запросов прерывания от пинов PCINT0..PCINT7
 
   cli();        // сбрасываем флаг прерывания (Запретить прерывания)

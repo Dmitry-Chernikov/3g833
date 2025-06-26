@@ -58,7 +58,7 @@ enum ParameterType {
     STRING
 };
 
-// Cтруктура задаёт каркас для хранения информации об ошибках 
+// Структура задаёт каркас для хранения информации об ошибках 
 struct FaultInfo {
     //int code;             // Код ошибки будет равен индексу массива
     const char* name;       // Название ошибки
@@ -73,7 +73,7 @@ union ParameterValue {
   const char *stringValue; // Для хранения строковых значений
 };
 
-// Cтруктура Parameter
+// Структура Parameter
 struct Parameter {
   const char *name;              // Название параметра
   ParameterValue factoryDefault; // Значение по умолчанию
@@ -92,7 +92,7 @@ public:
     delete[] parameters; // Освобождение памяти
   }
 
-  void addParametr(const Parameter &param);
+  void addParameter(const Parameter &param);
 
 private:
   const char *groupName; // Название группы параметров

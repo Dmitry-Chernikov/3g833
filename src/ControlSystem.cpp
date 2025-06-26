@@ -2,11 +2,11 @@
 
 // Определение функций
 void handleButtonStates() {
-  stateGeneralStop = trigerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                  // Общий стоп
-  stateStartFeed = trigerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                      // Подача-пуск
-  stateAutoCycleManual = trigerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual)); // Переключатель режимов: "Ввод хоны", "Ручной"
-  stateTopSlider = trigerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider)); // Концевик парковки ползуна в верху исходного состояния
-  stateEndCycle = trigerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                // Конец цикла
+  stateGeneralStop = triggerRS(stateGeneralStop, !digitalRead(buttonGeneralStop), !digitalRead(buttonStartFeed));                  // Общий стоп
+  stateStartFeed = triggerRS(stateStartFeed, !digitalRead(buttonStartFeed), !digitalRead(buttonGeneralStop));                      // Подача-пуск
+  stateAutoCycleManual = triggerRS(stateAutoCycleManual, digitalRead(switchAutoCycleManual), !digitalRead(switchAutoCycleManual)); // Переключатель режимов: "Ввод хоны", "Ручной"
+  stateTopSlider = triggerRS(stateTopSlider, digitalRead(switchTopSlider), !digitalRead(switchTopSlider)); // Концевик парковки ползуна в верху исходного состояния
+  stateEndCycle = triggerRS(stateEndCycle, !digitalRead(buttonEndCycle), stateGeneralStop);                // Конец цикла
 }
 
 void handleMotorStates() {
@@ -68,7 +68,7 @@ void handleAutoCycle() {
 
   if (stateTopSlider) { // Если ползун на концевике парковки
 
-    statePush = trigerRS(statePush, !digitalRead(buttonPush),
+    statePush = triggerRS(statePush, !digitalRead(buttonPush),
                          digitalRead(buttonPush) || stateGeneralStop); // Толчковый ввод хоны
 
     if (stateEndCycle) {
@@ -108,7 +108,7 @@ void handleAutoCycle() {
 
     if (stateEndCycle) { // Если кнопку Конец Цикла нажали
 
-      stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+      stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                               !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop); // Шпиндель Стоп или Старт
 
       digitalWrite(motorSpindle, !stateSpindle);     // выключаем мотор шпинделя
@@ -128,18 +128,18 @@ void handleAutoCycle() {
       }
 
 #ifdef ENABLE_PROGRAM_SWITCH
-      stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+      stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                               !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || _data.stateElectromagnetTop); // Шпиндель Стоп или Старт
 #endif
 
 #ifdef ENABLE_SWITCH
-      stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+      stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                               !digitalRead(buttonSpindleStop) || statePush || stateEndCycle || stateGeneralStop || digitalRead(endSwitchBottom)); // Шпиндель Стоп или Старт
 #endif
 
       if (!stateSpindle) { // Шпиндель выключен
 
-        statePush = trigerRS(statePush, !digitalRead(buttonPush),
+        statePush = triggerRS(statePush, !digitalRead(buttonPush),
                              digitalRead(buttonPush) || stateSpindle || stateEndCycle || stateGeneralStop); // Толчковый ввод хоны
 
 #ifdef ENABLE_PROGRAM_SWITCH
@@ -188,7 +188,7 @@ void handleManualMode() {
 
   if (!stateTopSlider) { // Если ползун сошёл с концевика парковки
 
-    stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+    stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                             !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop); // Шпиндель Стоп или Стоп
 
 #ifdef ENABLE_PROGRAM_SWITCH
@@ -219,7 +219,7 @@ void handleManualMode() {
 }
 
 void handleStop() {
-  stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+  stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                           !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop); // Шпиндель Стоп или Старт
 
   digitalWrite(motorSpindle, !stateSpindle);     // выключение мотора шпинделя
@@ -243,7 +243,7 @@ void handleCycle() {
 
     digitalWrite(electromagnetManual, true); // выключить электромагнит ручного управления если был на ручном
 
-    stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+    stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                             !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop); // Шпиндель Стоп или Старт
 
     if (stateEndCycle) { // Если кнопку Конец Цикла нажали
@@ -356,7 +356,7 @@ void handleCycle() {
 
   if (!stateAutoCycleManual) { // Переключатель включен в режим Ручной
 
-    stateSpindle = trigerRS(stateSpindle, !digitalRead(buttonSpindleStart),
+    stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
                             !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop); // Шпиндель Стоп или Старт
 
     digitalWrite(electromagnetTop, true);    // выключить электромагнит движения вверх

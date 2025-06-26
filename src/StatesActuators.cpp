@@ -10,7 +10,7 @@ volatile bool stateTopSlider = false;       // Состояние концеви
 volatile bool stateStartCycle = false;      // Состояние Цикла
 volatile bool stateGeneralStop = true;      // Состояние Общий Стоп
 
-bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset) { // Триггер с приоритетом сброса
+bool triggerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset) { // Триггер с приоритетом сброса
   if (TrigReset) {
     return false;
   }

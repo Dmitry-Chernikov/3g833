@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 /*INPUT*/ // Входные сигналы
-#ifdef ENABLE_KYPAD
+#ifdef ENABLE_KEYPAD
 /*1*/ #define interruptRemote 12 // Вывод прерывания PCINT6 пульта управления
 #endif
 /*2*/ #define buttonEndCycle 22 // Вывод кнопки Конец Цикла
@@ -28,10 +28,10 @@
 /*5*/ #define motorSpindle 36         // Вывод включения мотора вращения шпинделя
 /*6*/ #define motorStartFeed 37       // Вывод включения мотора возвратно поступательного движения ползун
 /*7*/ #define motorSelfCoolant 38     // Вывод включения смазочно охлаждающей жидкости
-/*8*/ #define rs485TransceivReceive 4 // Вывод разрешения работы предачи и приёмника
+/*8*/ #define rs485TransceiverReceive 4 // Вывод разрешения работы передачи и приёмника
 
 /////////////Инициализация входов и подтягивание входов к положительному потенциалу с помощью внутренних резисторов/////////////
 extern void initSetupInputManipulation();
 
 /////////////Инициализация выходов и устанавливаем высокое состояние на выходе/////////////
-extern void initSetupOutpuExecutiveMechanism();
+extern void initSetupOutputExecutiveMechanism();

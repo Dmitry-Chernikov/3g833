@@ -16,7 +16,7 @@ void initMemory() {
 
     _data.limitTop = 10;
     _data.limitBottom = 50;
-    _data.cylinderDiametr = 80;
+    _data.cylinderDiameter = 80;
     _data.cylinderAngle = 60;
 
     _data.stateElectromagnetTop = true;

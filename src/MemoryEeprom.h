@@ -9,14 +9,14 @@
 struct Data {
   char initData;
 
-  float linearMove;    // Длина линейного перемещения от концевика порковки от
+  float linearMove;    // Длина линейного перемещения от концевика парковки от
                        // энкодера
   float anglePrevious; // Угол предыдущий от экодера
   float absoluteAngle; // Обсалютный угол или инкрементн и декремент угла
 
   float limitTop;        // Верхняя позиция цикла
-  float limitBottom;     // Нижная позиция цикла
-  float cylinderDiametr; // Диаметр обрабатываемого цилиндра
+  float limitBottom;     // Нижняя позиция цикла
+  float cylinderDiameter; // Диаметр обрабатываемого цилиндра
   float cylinderAngle;   // Желаемый угол сетки в цилиндре
 
   bool stateElectromagnetTop;    // Сохранение состояния муфты движения вверх, если
@@ -26,16 +26,16 @@ struct Data {
   bool stateIntermediate;        // Сохранение состояния интервала в режиме цикла, если
                                  // электричество отключили
 
-  bool operator!=(const Data &otcher) const {
-    return initData != otcher.initData || abs(linearMove - otcher.linearMove) > 0.1 || 
-                                          abs(anglePrevious - otcher.anglePrevious) > 0.1 || 
-                                          abs(absoluteAngle - otcher.absoluteAngle) > 0.1 ||
-                                          abs(limitTop - otcher.limitTop) > 0.1 || 
-                                          abs(limitBottom - otcher.limitBottom) > 0.1 || 
-                                          abs(cylinderDiametr - otcher.cylinderDiametr) > 0.1 ||
-                                          abs(cylinderAngle - otcher.cylinderAngle) > 0.1 ||
+  bool operator!=(const Data &other) const {
+    return initData != other.initData || abs(linearMove - other.linearMove) > 0.1 || 
+                                          abs(anglePrevious - other.anglePrevious) > 0.1 || 
+                                          abs(absoluteAngle - other.absoluteAngle) > 0.1 ||
+                                          abs(limitTop - other.limitTop) > 0.1 || 
+                                          abs(limitBottom - other.limitBottom) > 0.1 || 
+                                          abs(cylinderDiameter - other.cylinderDiameter) > 0.1 ||
+                                          abs(cylinderAngle - other.cylinderAngle) > 0.1 ||
 
-           stateElectromagnetTop != otcher.stateElectromagnetTop || stateElectromagnetBottom != otcher.stateElectromagnetBottom || stateIntermediate != otcher.stateIntermediate;
+           stateElectromagnetTop != other.stateElectromagnetTop || stateElectromagnetBottom != other.stateElectromagnetBottom || stateIntermediate != other.stateIntermediate;
   }
 };
 

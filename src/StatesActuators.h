@@ -12,6 +12,6 @@ extern volatile bool stateTopSlider;       // Состояние концеви�
 extern volatile bool stateStartCycle;      // Состояние Цикла
 extern volatile bool stateGeneralStop;     // Состояние Общий Стоп
 
-bool trigerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset);
+bool triggerRS(bool currentState, uint8_t TrigSet, uint8_t TrigReset);
 
 bool stateMillisDelay(unsigned long *previousMillis, const unsigned long *Interval);

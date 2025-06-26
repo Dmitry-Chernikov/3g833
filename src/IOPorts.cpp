@@ -15,7 +15,7 @@ void initSetupInputManipulation() {
 }
 
 /////////////Инициализация выходов и устанавливаем высокое состояние на выходе/////////////
-void initSetupOutpuExecutiveMechanism() {
+void initSetupOutputExecutiveMechanism() {
   pinMode(electromagnetTop, OUTPUT);
   digitalWrite(electromagnetTop, true);
 

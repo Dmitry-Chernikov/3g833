@@ -43,10 +43,10 @@ extern LiquidMenu mainMenu;
 
 extern LiquidLine linearMoveLine;
 extern LiquidLine limitTopLine;
-extern LiquidLine limitBootomLine;
+extern LiquidLine limitBottomLine;
 
 extern LiquidScreen topScreen;
-extern LiquidScreen bootomScreen;
+extern LiquidScreen bottomScreen;
 
 extern LiquidLine oSaveLine;
 extern LiquidScreen oSecondaryScreen;
@@ -54,9 +54,9 @@ extern LiquidScreen oSecondaryScreen;
 // Это второе меню.
 extern LiquidMenu limitMenu;
 
-extern LiquidLine diametrTitleLine;
-extern LiquidLine diametrValueLine;
-extern LiquidScreen diametrScreen;
+extern LiquidLine diameterTitleLine;
+extern LiquidLine diameterValueLine;
+extern LiquidScreen diameterScreen;
 
 extern LiquidLine angleTitleLine;
 extern LiquidLine angleValueLine;
@@ -99,12 +99,12 @@ void gotoCylinderMenu();
 void setLimitTop();
 void increaseLimitTop();
 void decreaseLimitTop();
-void setLimitBootom();
-void increaseLimitBootom();
-void decreaseLimitBootom();
+void setLimitBottom();
+void increaseLimitBottom();
+void decreaseLimitBottom();
 void modeEditValue();
-void increaseDiametr();
-void decreaseDiametr();
+void increaseDiameter();
+void decreaseDiameter();
 void increaseAngle();
 void decreaseAngle();
 ///////////////////////////Процедуры меню end/////////////////////////////////////

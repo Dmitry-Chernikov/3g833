@@ -25,25 +25,25 @@ LiquidMenu mainMenu(_lcd, welcomeScreen, settingsScreen, 1);
 
 LiquidLine linearMoveLine(0, 0, "Current ", _data.linearMove, "mm");
 LiquidLine limitTopLine(1, 1, "Top:", _data.limitTop, "mm");
-LiquidLine limitBootomLine(1, 1, "Bottom:", _data.limitBottom, "mm");
+LiquidLine limitBottomLine(1, 1, "Bottom:", _data.limitBottom, "mm");
 
 LiquidScreen topScreen(linearMoveLine, limitTopLine);
-LiquidScreen bootomScreen(linearMoveLine, limitBootomLine);
+LiquidScreen bottomScreen(linearMoveLine, limitBottomLine);
 
 LiquidLine oSaveLine(0, 0, "Save");
 LiquidScreen oSecondaryScreen(oSaveLine, backLine);
 
-LiquidMenu limitMenu(_lcd, bootomScreen, topScreen, oSecondaryScreen, 1);
+LiquidMenu limitMenu(_lcd, bottomScreen, topScreen, oSecondaryScreen, 1);
 
-LiquidLine diametrTitleLine(0, 0, "Diameter");
-LiquidLine diametrValueLine(1, 1, "Set ", _data.cylinderDiametr, "mm");
-LiquidScreen diametrScreen(diametrTitleLine, diametrValueLine);
+LiquidLine diameterTitleLine(0, 0, "Diameter");
+LiquidLine diameterValueLine(1, 1, "Set ", _data.cylinderDiameter, "mm");
+LiquidScreen diameterScreen(diameterTitleLine, diameterValueLine);
 
 LiquidLine angleTitleLine(0, 0, "Grid Angle");
 LiquidLine angleValueLine(1, 1, "Set ", _data.cylinderAngle, _symbolDegree);
 LiquidScreen angleScreen(angleTitleLine, angleValueLine);
 
-LiquidMenu cylinderMenu(_lcd, diametrScreen, angleScreen, oSecondaryScreen);
+LiquidMenu cylinderMenu(_lcd, diameterScreen, angleScreen, oSecondaryScreen);
 
 LiquidSystem menuSystem(mainMenu, limitMenu, cylinderMenu, 1);
 
@@ -70,15 +70,15 @@ void settingTextMenu() {
   limitTopLine.attach_function(FunctionTypes::Decrease, decreaseLimitTop);
   limitTopLine.attach_function(FunctionTypes::Edit, setLimitTop);
 
-  limitBootomLine.set_focusPosition(Position::LEFT);
-  limitBootomLine.attach_function(FunctionTypes::Increase, increaseLimitBootom);
-  limitBootomLine.attach_function(FunctionTypes::Decrease, decreaseLimitBootom);
-  limitBootomLine.attach_function(FunctionTypes::Edit, setLimitBootom);
+  limitBottomLine.set_focusPosition(Position::LEFT);
+  limitBottomLine.attach_function(FunctionTypes::Increase, increaseLimitBottom);
+  limitBottomLine.attach_function(FunctionTypes::Decrease, decreaseLimitBottom);
+  limitBottomLine.attach_function(FunctionTypes::Edit, setLimitBottom);
 
-  diametrValueLine.set_focusPosition(Position::LEFT);
-  diametrValueLine.attach_function(FunctionTypes::Increase, increaseDiametr);
-  diametrValueLine.attach_function(FunctionTypes::Decrease, decreaseDiametr);
-  diametrValueLine.attach_function(FunctionTypes::Edit, modeEditValue);
+  diameterValueLine.set_focusPosition(Position::LEFT);
+  diameterValueLine.attach_function(FunctionTypes::Increase, increaseDiameter);
+  diameterValueLine.attach_function(FunctionTypes::Decrease, decreaseDiameter);
+  diameterValueLine.attach_function(FunctionTypes::Edit, modeEditValue);
 
   angleValueLine.set_focusPosition(Position::LEFT);
   angleValueLine.set_decimalPlaces(0); // Количество цифр после запятой в значении линии
@@ -186,7 +186,7 @@ void gotoLimitMenu() { // Процедура вызывает экран мен�
   menuSystem.change_menu(limitMenu);
 
   if (menuSystem.get_currentScreen() == &oSecondaryScreen) {
-    menuSystem.change_screen(&bootomScreen);
+    menuSystem.change_screen(&bottomScreen);
   }
 
   menuSystem.set_focusedLine(1);
@@ -196,16 +196,16 @@ void gotoCylinderMenu() { // Процедура вызывает экран ме
   menuSystem.change_menu(cylinderMenu);
 
   if (menuSystem.get_currentScreen() == &oSecondaryScreen) {
-    menuSystem.change_screen(&diametrScreen);
+    menuSystem.change_screen(&diameterScreen);
   }
 
   menuSystem.set_focusedLine(1);
 }
 
-void setLimitTop() { // Процедура копирует значение энкодера в значение верхнего лимита программмного концевика
+void setLimitTop() { // Процедура копирует значение энкодера в значение верхнего лимита программного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove > _data.limitBottom) {
-      lcdPrintString("ERROR", "TOP > BOOTOM", "", RED, WHITE, 5, 2, 2000, true, false);
+      lcdPrintString("ERROR", "TOP > BOTTOM", "", RED, WHITE, 5, 2, 2000, true, false);
       menuSystem.update();
     } else {
       _lcd.setBacklight(GREEN);
@@ -217,7 +217,7 @@ void setLimitTop() { // Процедура копирует значение э�
   }
 
   if (stateGeneralStop) {
-    IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
+    IncDecMode = triggerRS(IncDecMode, true, IncDecMode);
 
     if ((menuSystem.get_currentScreen() == &topScreen) && IncDecMode) {
 
@@ -232,20 +232,20 @@ void setLimitTop() { // Процедура копирует значение э�
   }
 }
 
-void increaseLimitTop() { // Процедура увеличевает значение верхнего лимита программмного концевика
+void increaseLimitTop() { // Процедура увеличивает значение верхнего лимита программного концевика
   changeParamMenu(DecIncrTypes::Inc, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
-void decreaseLimitTop() { // Процедура уменьшает значение верхнего лимита программмного концевика
+void decreaseLimitTop() { // Процедура уменьшает значение верхнего лимита программного концевика
   changeParamMenu(DecIncrTypes::Dec, _data.limitTop, _data.limitBottom - smallestLength, maxVerticalMovementSpindle - largestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals,
                   "TOP > ", "TOP < ", 5, 2);
 }
 
-void setLimitBootom() { // Процедура копирует значение энкодера в значение нижнего лимита программмного концевика
+void setLimitBottom() { // Процедура копирует значение энкодера в значение нижнего лимита программного концевика
   if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
     if (_data.linearMove < _data.limitTop) {
-      lcdPrintString("ERROR", "BOOTOM < TOP", "", RED, WHITE, 5, 2, 2000, true, false);
+      lcdPrintString("ERROR", "BOTTOM < TOP", "", RED, WHITE, 5, 2, 2000, true, false);
       menuSystem.update();
     } else {
       _lcd.setBacklight(GREEN);
@@ -257,9 +257,9 @@ void setLimitBootom() { // Процедура копирует значение 
   }
 
   if (stateGeneralStop) {
-    IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
+    IncDecMode = triggerRS(IncDecMode, true, IncDecMode);
 
-    if ((menuSystem.get_currentScreen() == &bootomScreen) && IncDecMode) {
+    if ((menuSystem.get_currentScreen() == &bottomScreen) && IncDecMode) {
 
       _lcd.setBacklight(GREEN);
       menuSystem.set_focusPosition(Position::RIGHT);
@@ -272,20 +272,20 @@ void setLimitBootom() { // Процедура копирует значение 
   }
 }
 
-void increaseLimitBootom() { // Процедура увеличивает значение нижнего лимита программмного концевика
+void increaseLimitBottom() { // Процедура увеличивает значение нижнего лимита программного концевика
   changeParamMenu(DecIncrTypes::Inc, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
-                  "BOOTOM < ", 5, 2);
+                  "BOTTOM < ", 5, 2);
 }
 
-void decreaseLimitBootom() { // Процедура уменьшает значение нижнего лимита программмного концевика
+void decreaseLimitBottom() { // Процедура уменьшает значение нижнего лимита программного концевика
   changeParamMenu(DecIncrTypes::Dec, _data.limitBottom, maxVerticalMovementSpindle, _data.limitTop + smallestLength, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "BOOTOM > ",
-                  "BOOTOM < ", 5, 2);
+                  "BOTTOM < ", 5, 2);
 }
 
 void modeEditValue() {
-  IncDecMode = trigerRS(IncDecMode, true, IncDecMode);
+  IncDecMode = triggerRS(IncDecMode, true, IncDecMode);
 
-  if ((menuSystem.get_currentScreen() == &diametrScreen) && IncDecMode || (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
+  if ((menuSystem.get_currentScreen() == &diameterScreen) && IncDecMode || (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
 
     _lcd.setBacklight(GREEN);
     menuSystem.set_focusPosition(Position::RIGHT);
@@ -297,13 +297,13 @@ void modeEditValue() {
   }
 }
 
-void increaseDiametr() {
-  changeParamMenu(DecIncrTypes::Inc, _data.cylinderDiametr, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
+void increaseDiameter() {
+  changeParamMenu(DecIncrTypes::Inc, _data.cylinderDiameter, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
                   2);
 }
 
-void decreaseDiametr() {
-  changeParamMenu(DecIncrTypes::Dec, _data.cylinderDiametr, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
+void decreaseDiameter() {
+  changeParamMenu(DecIncrTypes::Dec, _data.cylinderDiameter, permissibleDiameter, smallestDiameter, _speeds, StartLevelSpeed::Speed_1, _previousMillisSped, _intervals, "Diametr > ", "Diametr < ", 5,
                   2);
 }
 
@@ -331,7 +331,7 @@ void Menu() {
 
     if (!stateAutoCycleManual && stateStartFeed && !stateTopSlider) {
       menuSystem.change_menu(limitMenu);
-      menuSystem.change_screen(&bootomScreen);
+      menuSystem.change_screen(&bottomScreen);
       menuSystem.set_focusedLine(1);
     }
     if (stateGeneralStop) {
@@ -362,7 +362,7 @@ void Menu() {
           menuSystem.call_function(FunctionTypes::Increase);
         } else {
           delay(500);
-          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bottomScreen || menuSystem.get_currentScreen() == &diameterScreen ||
               menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
@@ -377,7 +377,7 @@ void Menu() {
           menuSystem.call_function(FunctionTypes::Decrease);
         } else {
           delay(500);
-          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bottomScreen || menuSystem.get_currentScreen() == &diameterScreen ||
               menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
             ///
           } else {
@@ -393,7 +393,7 @@ void Menu() {
         } else {
           menuSystem.previous_screen();
 
-          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bottomScreen || menuSystem.get_currentScreen() == &diameterScreen ||
               menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
             menuSystem.set_focusedLine(1);
@@ -414,7 +414,7 @@ void Menu() {
         } else {
           menuSystem.next_screen();
 
-          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+          if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bottomScreen || menuSystem.get_currentScreen() == &diameterScreen ||
               menuSystem.get_currentScreen() == &angleScreen || menuSystem.get_currentScreen() == &oSecondaryScreen) {
 
             menuSystem.set_focusedLine(1);
@@ -458,7 +458,7 @@ void Menu() {
       }
 
       if (stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-        if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bootomScreen || menuSystem.get_currentScreen() == &diametrScreen ||
+        if (menuSystem.get_currentScreen() == &topScreen || menuSystem.get_currentScreen() == &bottomScreen || menuSystem.get_currentScreen() == &diameterScreen ||
             menuSystem.get_currentScreen() == &angleScreen) {
 
           // menuSystem.softUpdate();
