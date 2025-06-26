@@ -10,11 +10,12 @@ float getAngle(bool EnableMedianValue, byte NumberFunctionValues) {
   //delay(200);
   //angleSensor.printState();
   //Serial.println(angleSensor.RotationRawToAngle(angleSensor.getRawRotation(true, 64)));
-  return angleSensor.RotationRawToAngle(angleSensor.getRawRotation(EnableMedianValue, NumberFunctionValues)); 
+  return angleSensor.rotationRawToAngle(angleSensor.getRawRotation(NumberFunctionValues, EnableMedianValue, false)); 
+  ;
 }
 
 float getLinearMotion() {
-  return angleSensor.LinearDisplacementRack(angleSensor.AbsoluteAngleRotation(&_data.absoluteAngle, getAngle(), &_data.anglePrevious), _NormalModule, _NumberGearTeeth);
+  return angleSensor.linearDisplacementRack(angleSensor.absoluteAngleRotation(&_data.absoluteAngle, getAngle(), &_data.anglePrevious), _NormalModule, _NumberGearTeeth);
 
   // _lcd.clear();
   // _lcd.setCursor(0, 0);
