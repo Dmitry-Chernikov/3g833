@@ -107,13 +107,14 @@ void loop() {
 
   // if (stateMillisDelay(&previousMillisMenu, &intervalMenu)) {
   //   //SEND//
-  //   digitalWrite(rs485TransceiverReceive, true);  // переводим модуль в режим
-  //   передачи данных delay(10); Serial1.write(" Data"); Serial1.write(0x0a);
+  //   digitalWrite(rs485TransceiverReceive, true);  // переводим модуль в режим передачи данных 
+  //   delay(10); 
+  //   Serial1.write(" Data"); 
+  //   Serial1.write(0x0a);
 
   //   // TO Received //
   //   delay(10);
-  //   digitalWrite(rs485TransceiverReceive, false);  // переводим модуль в режим
-  //   приёма данных
+  //   digitalWrite(rs485TransceiverReceive, false);  // переводим модуль в режим приёма данных
   // }
   /*****SERIAL*****/
 
