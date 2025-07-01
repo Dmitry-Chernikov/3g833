@@ -1,8 +1,8 @@
 #include "SUSWE320.h"
 
 
-SUSWE320::SUSWE320(HardwareSerial* serialPort): _serialPort(serialPort) {
-
+SUSWE320::SUSWE320(HardwareSerial* serialPort, uint8_t transmitterModeContact): _serialPort(serialPort), 
+                                                                                _transmitterModeContact(transmitterModeContact) {
 }
 
 SUSWE320::~SUSWE320(){
@@ -92,22 +92,47 @@ unsigned int SUSWE320::crc_chk_value(unsigned char *data_value, unsigned char le
 
 // Реализация функций для отправки
 void SUSWE320::sendData(const uint8_t* data, size_t length) {
+    // Переводим устройство в режим передатчика
+    digitalWrite(_transmitterModeContact, RS485Transmit); 
+
     // Реализуйте отправку данных через последовательный порт
     _serialPort->write(data, length);
 }
 
 // Реализация функций для получения данных
-void SUSWE320::receiveData(uint8_t* buffer, size_t length) {
-    // Реализуйте получение данных через последовательный порт
+bool SUSWE320::receiveData(uint8_t* buffer, size_t length) {
+    // Переводим устройство в режим приёмника
+    digitalWrite(_transmitterModeContact, RS485Receive);
+    unsigned long startMillis = millis(); // Начало времени ожидания
+    while (_serialPort->available() < length) {
+        // Проверка на время ожидания
+        if (millis() - startMillis > 1000) { // Тайм-аут 1 секунда
+            return false; // Время ожидания истекло
+        }
+    }
+
+    // Чтение данных полученных через последовательный порт
     _serialPort->readBytes(buffer, length);
+
+    // Проверка CRC (предполагается, что CRC находится в последних 2 байтах)
+    unsigned int crcReceived = (buffer[length - 1] << 8) | buffer[length - 2]; // Получаем CRC из последних двух байтов
+    unsigned int crcCalculated = crc_chk_value(buffer, length - 2); // Вычисляем CRC для полученных данных
+    
+    // Проверка соответствия полученного и вычисленного CRC
+    if (crcReceived == crcCalculated) {
+        return true; // Данные успешно получены и проверены
+    }
+    return false; // Ошибка в полученных данных (неверный CRC)
 }
 
 
-// Реализация функции отправки данных
+
+/* // Реализация функции отправки данных
 void SUSWE320::sendData(const uint8_t* data, size_t length) {
     _serialPort->write(data, length);
     _serialPort->flush(); // Дождаться завершения передачи
 }
+
 // Реализация функции получения данных
 bool SUSWE320::receiveData(uint8_t* buffer, size_t length) {
     unsigned long startMillis = millis(); // Начало времени ожидания
@@ -144,4 +169,4 @@ void SUSWE320::sendData(const uint8_t* data, size_t length) {
     _serialPort->write(data, length);
     _serialPort->flush(); // Дождаться завершения передачи
     sendingData = false; // Сбрасываем флаг
-}
+} */

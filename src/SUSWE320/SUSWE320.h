@@ -2,6 +2,9 @@
 
 #include <Arduino.h>
 
+#define RS485Transmit HIGH
+#define RS485Receive LOW
+
 // Перечисление моделей
 enum class Model {
     MODEL_0_4,
@@ -88,7 +91,7 @@ struct Parameter {
 class SUSWE320 {
 public:
     // Конструктор принимает ссылку на объект HardwareSerial
-    SUSWE320(HardwareSerial* serialPort);
+    SUSWE320(HardwareSerial* serialPort, uint8_t transmitterModeContact);
     ~SUSWE320();
 
     bool readParameter(uint8_t slaveAddress, uint16_t parameterAddress, uint16_t* value);
@@ -97,7 +100,7 @@ public:
     unsigned int crc_chk_value(unsigned char *data_value, unsigned char length);
 
     void sendData(const uint8_t* data, size_t length);
-    void receiveData(uint8_t* buffer, size_t length);
+    bool receiveData(uint8_t* buffer, size_t length);
 
     // Дополнительные функции для работы с параметрами
     bool readFaultDescription(uint8_t slaveAddress, uint16_t* faultCode);
@@ -106,5 +109,5 @@ public:
 
 private:
     HardwareSerial* _serialPort; // Указатель на объект HardwareSerial
-
+    uint8_t _transmitterModeContact; // Номер контакта для режима работы приёмник/передатчик
 };
