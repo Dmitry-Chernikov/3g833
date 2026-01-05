@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 enum FunctionTypes : uint8_t {
-  Increase = 1, // Режим увелечения переменой
+  Increase = 1, // Режим увеличения переменой
   Decrease = 2, // Режим уменьшения переменной
   Edit = 3      // Режим редактирования переменной
 };

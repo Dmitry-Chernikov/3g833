@@ -8,6 +8,7 @@
 #include "MemoryEeprom.h"
 #include "StatesActuators.h"
 #include "TechnicalSpecifications3G833.h"
+using namespace TechnicalSpecifications3G833;
 #include "VariablesProject.h"
 #include "config.h"
 

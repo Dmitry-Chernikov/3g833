@@ -8,14 +8,14 @@ public:
     ~ParametersSUSWE320();
     float getPower(Model model);      // Функция для получения мощности модели
     const FaultInfo* getFaultInfo(int code); // Функция возвращает указатель на информацию об ошибке по её коду
-    Parameter createParameter(const char* name, float defaultValue,       const char* unit, float min,       float max,       const char* description);
-    Parameter createParameter(const char* name, int defaultValue,         const char* unit, int min,         int max,         const char* description);
-    Parameter createParameter(const char* name, const char* defaultValue, const char* unit, const char* min, const char* max, const char* description);
+    static Parameter createParameter(const char* name, float defaultValue,       const char* unit, float min,       float max,       const char* description);
+    static Parameter createParameter(const char* name, int defaultValue,         const char* unit, int min,         int max,         const char* description);
+    static Parameter createParameter(const char* name, const char* defaultValue, const char* unit, const char* min, const char* max, const char* description);
 
 private:
     ParameterGroup _allParameters[GroupsParameter::GROUP_COUNT]; // Массив групп параметров
-    Model _model; // Хранит значение модели  
-    static const int _faultCount = 27; // Общее количество кодов ошибок
+    Model _model; // Хранит значение модели
+    static constexpr int _faultCount = 27; // Общее количество кодов ошибок
 
     FaultInfo _faultTable[_faultCount] = {
         { "OU1 (1)", "Перенапряжение во время разгона , Ненормальное входное напряжение", "Проверьте входное питание" },

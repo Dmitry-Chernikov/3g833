@@ -143,7 +143,7 @@ void handleAutoCycle() {
                              digitalRead(buttonPush) || stateSpindle || stateEndCycle || stateGeneralStop); // Толчковый ввод хоны
 
 #ifdef ENABLE_PROGRAM_SWITCH
-        if (statePush && !_data.stateElectromagnetTop || statePush && !_data.stateElectromagnetBottom) { // Если кнопка Толковая нажата и переключатель путевой включён вверх или вниз
+        if ( (statePush && !_data.stateElectromagnetTop) || (statePush && !_data.stateElectromagnetBottom) ) { // Если кнопка Толковая нажата и переключатель путевой включён вверх или вниз
 
           digitalWrite(electromagnetBrake, false);                           // включаем электромагнит растормаживания
           digitalWrite(electromagnetTop, _data.stateElectromagnetTop);       // выключаем электромагнит движения вверх

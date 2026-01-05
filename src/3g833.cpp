@@ -1,16 +1,20 @@
 #include <Arduino.h>
 
 #include "TechnicalSpecifications3G833.h"
-#include "config.h" //Определены define для вкл/выкл кода в компеляцию
+using namespace TechnicalSpecifications3G833;
+#include "config.h" //Определены define для вкл/выкл кода в компиляцию
 
-#include "ControlSystem.h" // Основной алгоритм работы станка содержит процедуры используемые в loop
-#include "Display.h"       // Работа с дисплеем Adafruit RGB LCD Shield
-#include "Encoder.h"       // Обявление обекта типа AS5048A для работы с энкодером AS5048A
-#include "IOPorts.h"       //Описаны все порты ввода/вывода процедуры их настройки
-#include "MemoryEeprom.h"  // Описывает структуру данных которая сохранияеться в память и процедуры для работы с памятью
-#include "StatesActuators.h" //Описаны пременные которые хранят состояния режимов работы станка и исполнительных механизмов
-#include "TextMenu.h"        // Создёться текстовое меню на базе LiquidMenu которая ипользует дисплей Adafruit RGB LCD Shield
-#include "VariablesProject.h" //Описаны все пречисления используемые в прокте
+#include "ControlSystem.h"    // Основной алгоритм работы станка содержит процедуры используемые в loop
+#include "Display.h"          // Работа с дисплеем Adafruit RGB LCD Shield
+#include "Encoder.h"          // Объявление объекта типа AS5048A для работы с энкодером AS5048A
+#include "IOPorts.h"          // Описаны все порты ввода/вывода процедуры их настройки
+#include "MemoryEeprom.h"     // Описывает структуру данных которая сохраняется в память и процедуры для работы с памятью
+#include "StatesActuators.h"  // Описаны переменные которые хранят состояния режимов работы станка и исполнительных механизмов
+#include "TextMenu.h"         // Создаётся текстовое меню на базе LiquidMenu которая использует дисплей Adafruit RGB LCD Shield
+#include "VariablesProject.h" // Описаны все причисления используемые в проекте
+
+#include "SUSWE320/SUSWE320.h"
+//#include <ModbusMaster.h>
 
 // #include <avr/pgmspace.h>
 // #include <util/delay.h>
@@ -59,6 +63,12 @@ void readKeypad() {
 // const int ADDRESS_FAULTY_DESCRIPTION = 0x0080;
 /*****SERIAL*****/
 
+/*****SUSWE320*****/
+SUSWE320 suswe320 (&Serial1, rs485TransceiverReceive);
+uint16_t responseData;
+/*****SUSWE320*****/
+
+
 void setup() {
   cli();
 
@@ -73,9 +83,10 @@ void setup() {
 
   /*****SERIAL*****/
   Serial.begin(9600);
-  // Serial1.begin(9600);  // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
-  // pinMode(rs485TransceiverReceive, OUTPUT);
-  // digitalWrite(rs485TransceiverReceive, false);
+
+  Serial1.begin(9600, SERIAL_8N1);  // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
+  pinMode(rs485TransceiverReceive, OUTPUT);
+  digitalWrite(rs485TransceiverReceive, RS485Receive); // переводим модуль в режим приёма данных
 
 #ifdef ENABLE_KEYPAD
   readKeypad();
@@ -98,8 +109,73 @@ void setup() {
   sei();
 }
 
-void loop() {
+void testConnection() {
+    Serial.println("\n=== CONNECTION TEST ===");
+    
+    // Тест 1: Простой пинг
+    Serial.println("1. Sending test command...");
+    uint16_t value;
+    
+    // Добавляем больше задержек
+    if (suswe320.readParameter(0x01, 0x7001, &value)) {
+        Serial.println("*** SUCCESS: Device responded! ***");
+        Serial.print("Value: 0x");
+        Serial.println(value, HEX);
+    } else {
+        Serial.println("*** FAILED: No response from device ***");
+        
+        // Проверка напряжения на линиях
+        Serial.println("Check:");
+        Serial.println("- RS485 A/B lines connection");
+        Serial.println("- Common GND");
+        Serial.println("- Device power");
+        Serial.println("- MAX485 power (5V)");
+        Serial.println("- DE/RE pin connection");
+    }
+    
+    Serial.println("=== TEST COMPLETE ===\n");
+}
 
+void testRS485() {
+    Serial.println("=== Testing RS485 Connection ===");
+    
+    // Тест 1: Проверка передачи
+    Serial.println("1. Testing transmission...");
+    uint8_t testData[] = {0x01, 0x03, 0x70, 0x01, 0x00, 0x01, 0x81, 0xF7};
+    suswe320.sendData(testData, sizeof(testData));
+    Serial.println("Data sent");
+    
+    // Тест 2: Проверка приема (должен быть пустой)
+    Serial.println("2. Checking receive buffer...");
+    delay(100);
+    Serial.print("Bytes in buffer: ");
+    Serial.println(Serial1.available());
+    
+    // Тест 3: Попробуйте отправить простую команду
+    Serial.println("3. Trying simple command...");
+    uint16_t value;
+    bool result = suswe320.readParameter(0x01, 0x7001, &value);
+    Serial.print("Result: ");
+    Serial.println(result);
+    
+    Serial.println("=== Test Complete ===");
+    Serial.println();
+}
+
+void loop() {
+  Serial.println(GroupsParameter::GROUP_FP);
+  /*****SUSWE320*****/
+  // Чтение описания неисправностей)
+  //responseData = 0x0007;
+  //if ( Serial.println(suswe320.readFaultDescription(0x0001, &responseData) ) ){
+  if ( Serial.println(suswe320.readSoftwareVersion(0x0001, &responseData) ) ){
+      Serial.println(String(responseData));
+      lcdPrintString(_lcd, "Frequency", String(responseData), "Hz", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+  }
+  
+  //Serial.println(suswe320.readFaultDescription(0x0001, &responseData)); // Чтение описания неисправностей
+  delay(1000);
+  /*****SUSWE320*****/
   /*****SERIAL*****/
   // if (Serial1.available()) {
   //   Serial.write(Serial1.read());
@@ -122,7 +198,7 @@ void loop() {
   handleMotorStates();
 
   /////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
-  if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно поступательного движения
+  if (stateStartFeed) { // Кнопку подача-пуск нажали. Запускаем мотор возвратно-поступательного движения
 
     handleStartFeed();
     handleProgramSwitch();

@@ -285,7 +285,7 @@ void decreaseLimitBottom() { // Процедура уменьшает значе
 void modeEditValue() {
   IncDecMode = triggerRS(IncDecMode, true, IncDecMode);
 
-  if ((menuSystem.get_currentScreen() == &diameterScreen) && IncDecMode || (menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) {
+  if ( ((menuSystem.get_currentScreen() == &diameterScreen) && IncDecMode) || ((menuSystem.get_currentScreen() == &angleScreen) && IncDecMode) ) {
 
     _lcd.setBacklight(GREEN);
     menuSystem.set_focusPosition(Position::RIGHT);
@@ -354,7 +354,7 @@ void Menu() {
 
     _data.linearMove = getLinearMotion();
 
-    if (buttons = _lcd.readButtons()) {
+    if (buttons == _lcd.readButtons()) {
 
       if (buttons & BUTTON_UP) {
         if (IncDecMode) {

@@ -17,7 +17,7 @@ const FaultInfo* ParametersSUSWE320::getFaultInfo(int code ) {
     }    
 }
 
-Parameter ParametersSUSWE320::createParameter(const char* name, float defaultValue, const char* unit, float min, float max, const char* description) {
+Parameter ParametersSUSWE320::createParameter(const char* name, const float defaultValue, const char* unit, const float min, const float max, const char* description) {
     Parameter param;
     param.name = name;
     param.factoryDefault.floatValue = defaultValue; // Инициализация floatValue
@@ -54,26 +54,26 @@ Parameter ParametersSUSWE320::createParameter(const char* name, const char* defa
 }
 
 ParametersSUSWE320::~ParametersSUSWE320(){
-    delete[] _allParameters;
+    //delete[] _allParameters;
 }
 
 // Конструктор ParametersSUSWE320
-ParametersSUSWE320::ParametersSUSWE320(Model model)
-    : _model(model), _allParameters{ParameterGroup("F0 - Основные рабочие параметры", 21),
-                                  ParameterGroup("F1 - Параметры управления V/F", 15),
-                                  ParameterGroup("F2 - Параметры управления вектором", 34),
-                                  ParameterGroup("F3 - Вспомогательные рабочие параметры", 9),
-                                  ParameterGroup("F4 - Вспомогательные рабочие параметры 2", 9),
-                                  ParameterGroup("F5 - Параметры цифрового ввода/вывода", 21),
-                                  ParameterGroup("F6 - Функции аналогового входа и выхода", 15),
-                                  ParameterGroup("F7 - Параметры выполнения программы (ПЛК)", 26),
-                                  ParameterGroup("F8 - Параметры ПИД", 56),
-                                  ParameterGroup("F9 - Параметры двигателя", 12),
-                                  ParameterGroup("FA - Параметры защиты", 27),
-                                  ParameterGroup("Fb - Отображение и специальные параметры", 23),
-                                  ParameterGroup("FC - Параметры связи", 6),
-                                  ParameterGroup("FP - Заводские параметры", 1),
-                                  ParameterGroup("d - Параметры мониторинга", 20)} {
+ParametersSUSWE320::ParametersSUSWE320(const Model model): _allParameters{ParameterGroup("F0 - Основные рабочие параметры", 21),
+                                                               ParameterGroup("F1 - Параметры управления V/F", 15),
+                                                               ParameterGroup("F2 - Параметры управления вектором", 34),
+                                                               ParameterGroup("F3 - Вспомогательные рабочие параметры", 9),
+                                                               ParameterGroup("F4 - Вспомогательные рабочие параметры 2", 9),
+                                                               ParameterGroup("F5 - Параметры цифрового ввода/вывода", 21),
+                                                               ParameterGroup("F6 - Функции аналогового входа и выхода", 15),
+                                                               ParameterGroup("F7 - Параметры выполнения программы (ПЛК)", 26),
+                                                               ParameterGroup("F8 - Параметры ПИД", 56),
+                                                               ParameterGroup("F9 - Параметры двигателя", 12),
+                                                               ParameterGroup("FA - Параметры защиты", 27),
+                                                               ParameterGroup("Fb - Отображение и специальные параметры", 23),
+                                                               ParameterGroup("FC - Параметры связи", 6),
+                                                               ParameterGroup("FP - Заводские параметры", 1),
+                                                               ParameterGroup("d - Параметры мониторинга", 20)},
+                   _model(model) {
 
   // Группа F0 - Основные рабочие параметры
   _allParameters[GROUP_F0].addParameter(createParameter("F0.00", getPower(model), "кВт", 0.0f, 99.9f, "Текущая мощность переменного привода"));
@@ -164,7 +164,7 @@ ParametersSUSWE320::ParametersSUSWE320(Model model)
 
     // Резервные параметры
     for (int i = 9; i <= 15; ++i) {
-        _allParameters[GROUP_F3].addParameter(createParameter("F3." + char(i), "", "", "", "", "Резерв"));
+        _allParameters[GROUP_F3].addParameter(createParameter("F3." + static_cast<char>(i), "", "", "", "", "Резерв"));
   
   // Группа F4 - Вспомогательные рабочие параметры 2
   _allParameters[GROUP_F4].addParameter(createParameter("F4.00", 10.00f, "Гц", 0.00f, 50.00f, "Установка частоты джога FWD & REV"));
@@ -355,7 +355,7 @@ ParametersSUSWE320::ParametersSUSWE320(Model model)
   _allParameters[GROUP_FB].addParameter(createParameter("Fb.13", 0, "с", 0, 9999, "Установить время таймирования"));
     // Резерв
     for (int i = 14; i <= 19; i++) {
-        _allParameters[GROUP_FB].addParameter(createParameter("Fb." + char(i), "", "", "", "", "Резерв"));
+        _allParameters[GROUP_FB].addParameter(createParameter("Fb." + static_cast<char>(i), "", "", "", "", "Резерв"));
     }
   _allParameters[GROUP_FB].addParameter(createParameter("Fb.20", "", "", "", "", "Дата обновления программного обеспечения (год)"));
   _allParameters[GROUP_FB].addParameter(createParameter("Fb.21", "", "", "", "", "Дата обновления программного обеспечения (месяц день)"));
@@ -373,25 +373,25 @@ ParametersSUSWE320::ParametersSUSWE320(Model model)
   _allParameters[GROUP_FP].addParameter(createParameter("FP.00", "", "", "1", "9999", "Специфический пароль для настройки системы"));
 
   // Группа d - Параметры мониторинга
-  _allParameters[GROUP_d].addParameter(createParameter("d-00", 0.00f, "Гц", 0.00f, 400.00f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-01", 0.00f, "Гц", 0.00f, 400.00f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-02", 0, "В", 0, 999, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-03", 0, "В", 0, 999, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-04", 0.0f, "А", 0.0f, 999.9f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-05", 0, "Об/мин", 0, 60000, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-06", 0.00f, "В", 0.00f, 10.00f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-07", 0.00f, "мА", 0.00f, 20.00f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-08", 0.00f, "В", 0.00f, 10.00f, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-09", 0, "", 0, 0x3F, "Состояние входного терминала (Реле, X1-X5)"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-10", 0, "℃", 0, 9999, ""));
-  _allParameters[GROUP_d].addParameter(createParameter("d-11", 0.0, "", 0.0f, 9999.0f, "Заданное значение PID"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-12", 0.0, "", 0.0f, 9999.0f, "Значение обратной связи PID"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-13", 0, "", 0, 9999, "Текущее значение счетчика"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-14", 0, "с", 0, 9999, "Текущее значение таймера (с)"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-15", 0, "ч", 0, 9999, "Накопительное время работы переменного привода (ч)"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-16", 0, "ч", 0, 9999, "Накопительное время включения переменного привода (ч)"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-17", 0, "", 0, 4095, "Смещение выборки тока фазы U"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-18", 0, "", 0, 4095, "Смещение выборки тока фазы V"));
-  _allParameters[GROUP_d].addParameter(createParameter("d-19", 0, "", 0, 4095, "Смещение выборки тока фазы W"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-00", 0.00f, "Гц", 0.00f, 400.00f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-01", 0.00f, "Гц", 0.00f, 400.00f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-02", 0, "В", 0, 999, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-03", 0, "В", 0, 999, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-04", 0.0f, "А", 0.0f, 999.9f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-05", 0, "Об/мин", 0, 60000, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-06", 0.00f, "В", 0.00f, 10.00f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-07", 0.00f, "мА", 0.00f, 20.00f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-08", 0.00f, "В", 0.00f, 10.00f, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-09", 0, "", 0, 0x3F, "Состояние входного терминала (Реле, X1-X5)"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-10", 0, "℃", 0, 9999, ""));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-11", 0.0, "", 0.0f, 9999.0f, "Заданное значение PID"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-12", 0.0, "", 0.0f, 9999.0f, "Значение обратной связи PID"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-13", 0, "", 0, 9999, "Текущее значение счетчика"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-14", 0, "с", 0, 9999, "Текущее значение таймера (с)"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-15", 0, "ч", 0, 9999, "Накопительное время работы переменного привода (ч)"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-16", 0, "ч", 0, 9999, "Накопительное время включения переменного привода (ч)"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-17", 0, "", 0, 4095, "Смещение выборки тока фазы U"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-18", 0, "", 0, 4095, "Смещение выборки тока фазы V"));
+  _allParameters[GROUP_COUNT-1].addParameter(createParameter("d-19", 0, "", 0, 4095, "Смещение выборки тока фазы W"));
   }
 }
