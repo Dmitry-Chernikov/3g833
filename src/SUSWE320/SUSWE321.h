@@ -5,6 +5,7 @@
 #define RS485Transmit HIGH
 #define RS485Receive LOW
 
+// Таблица CRC16 для расчета CRC
 static const uint16_t crc16_table[256] = {
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
     0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
@@ -74,6 +75,17 @@ enum GroupsParameter : uint16_t{
     GROUP_COUNT = GROUP_d - 97  // Количество групп
 };
 
+// Команды управления двигателем для частотника
+enum ControlCommand : uint16_t {
+    FORWARD_RUN_COMMAND,
+    REVERSE_RUN_COMMAND,
+    FORWARD_RUN_JOG_COMMAND,
+    REVERSE_RUN_JOG_COMMAND,
+    FREE_STOP_COMMAND,
+    DECELERATE_STOP_COMMAND,
+    FAULT_RESET_COMMAND
+};
+
 // Структура задаёт каркас для хранения информации об ошибках 
 struct FaultInfo {
     //int code;             // Код ошибки будет равен индексу массива
@@ -107,34 +119,50 @@ struct Parameter {
     ParameterType type;            // Тип значения
 };
 
-class SUSWE320 {
+class SUSWE321 {
 public:
     // Конструктор принимает ссылку на объект HardwareSerial
-    SUSWE320(HardwareSerial* serialPort, uint8_t transmitterModeContact);
-    ~SUSWE320() = default;
-
-    bool readParameter(uint8_t slaveAddress, uint16_t parameterAddress, uint16_t* value) const;
-    bool writeParameter(uint8_t slaveAddress, uint16_t parameterAddress, uint16_t value) const;
-
-    static uint16_t calculateCRC(const uint8_t *data, uint8_t length);
-
-    static void generate_crc16_table();
-
-    void sendData(const uint8_t* data, size_t length) const;
-    bool receiveData(uint8_t* buffer, size_t length) const;
+    SUSWE321(uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, uint8_t transmitterModeContact);
+    ~SUSWE321() = default;
 
     // Дополнительные функции для работы с параметрами
-    bool readFaultDescription(uint8_t slaveAddress, uint16_t* faultCode) const;
-    bool readRunningState(uint8_t slaveAddress, uint16_t* state) const;
-    bool readSoftwareVersion(uint8_t slaveAddress, uint16_t* state) const;
-    bool writeControlCommand(uint8_t slaveAddress, uint16_t command) const;
+    bool readFaultDescription(uint16_t* faultCode) const;
+    bool readRunningState(uint16_t* state) const;
+    bool writeControlCommand(ControlCommand command) const;
+    bool readParameterInGroups(GroupsParameter group, uint8_t number, uint16_t* valueRead) const;
+    bool writeParameterInGroups(GroupsParameter group, uint8_t numberGroup, const uint16_t* arrayData, size_t dataCount) const;
 
-    bool checkCommunicationSettings(uint8_t slaveAddress) const;
-
-    // Реализация функций для чтения и записи параметров
-    static uint16_t buildParameterAddress(GroupsParameter group, uint8_t subAddress);
+    bool checkCommunicationSettings() const;
 
 private:
+    enum CodeFunction : uint8_t {
+        READ = 0x0003,
+        WRITE_ONE = 0x0006,
+        WRITE_RANGE = 0x10
+    };
+    uint8_t _slaveAddress; // Адрес ведомого устройства
     HardwareSerial* _serialPort; // Указатель на объект HardwareSerial
+    HardwareSerial* _serialDebug; // Указатель на объект HardwareSerial для отладки
     uint8_t _transmitterModeContact; // Номер контакта для режима работы приёмник/передатчик
+
+    // Функция для построения адреса параметра
+    static uint16_t buildParameterAddress(GroupsParameter group, uint8_t subAddress);
+
+    bool validateModbusResponse(const uint8_t *response, size_t responseSize, uint8_t expectedAddress,
+                                uint8_t expectedFunction) const;
+
+    // Функция для чтения параметра
+    bool readParameters(uint8_t slaveAddress, uint16_t* arrayValues, uint16_t startAddress, size_t numberRegisters = 1) const;
+    // Функция для записи параметра
+    bool writeParameters(uint8_t slaveAddress, uint16_t startAddress, const void* arrayValues, size_t numberRegisters) const;
+
+    // Функция для вычисления CRC
+    uint16_t calculateCRC(const uint8_t *data, uint8_t length) const;
+    // Функция для генерации таблицы CRC16
+    static void generate_crc16_table();
+
+    // Функция для отправки данных
+    void sendData(const uint8_t* data, size_t length) const;
+    // Функция для приёма данных
+    bool receiveData(uint8_t* buffer, size_t length) const;
 };

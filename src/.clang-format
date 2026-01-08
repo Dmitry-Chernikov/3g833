@@ -274,7 +274,7 @@
   IndentRequiresClause: true
 
   # Ширина отступа (количество пробелов)
-  IndentWidth:     2
+  IndentWidth:     4
 
   # Отступ для перенесенных имен функций
   IndentWrappedFunctionNames: false

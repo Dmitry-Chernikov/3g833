@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SUSWE320.h"
+#include "SUSWE321.h"
 
 class ParameterGroup {
 public:
