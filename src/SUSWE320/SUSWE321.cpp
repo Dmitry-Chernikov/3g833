@@ -390,7 +390,7 @@ bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
 
     size_t bytesRead = 0;
     unsigned long lastByteTime = millis(); // Начало времени ожидания
-    const unsigned long charTimeout = INTER_CHAR_TIMEOUT * length * 1000; // Время ожидания между символами в мс
+    const unsigned long charTimeout = static_cast<unsigned long>(ceil(INTER_CHAR_TIMEOUT * length / 1000)); // Время ожидания между символами в мс
 
 #ifdef DEBUG
     _serialDebug->print("Waiting for ");
