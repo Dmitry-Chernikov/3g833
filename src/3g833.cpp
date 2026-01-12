@@ -67,7 +67,7 @@ void readKeypad() {
 /*****SERIAL*****/
 
 /*****SUSWE321*****/
-SUSWE321 suswe321(0x0001, &Serial1, &Serial, rs485TransceiverReceive);
+SUSWE321 suswe321(0x0001, &Serial1, &Serial, 9600, rs485TransceiverReceive);
 uint16_t responseData;
 /*****SUSWE321*****/
 
@@ -84,10 +84,7 @@ void setup() {
 
     initSetupOutputExecutiveMechanism();
 
-    /*****SERIAL*****/
-    Serial.begin(9600);
-
-    Serial1.begin(9600, SERIAL_8N1); // Использовать Serial1 (TX1 >> D18 , RX1 >> D19)
+    suswe321.begin();
     pinMode(rs485TransceiverReceive, OUTPUT);
     digitalWrite(rs485TransceiverReceive, RS485Receive); // переводим модуль в режим приёма данных
 
@@ -120,7 +117,7 @@ void testConnection() {
     uint16_t value;
 
     // Добавляем больше задержек
-    if (suswe321.readParameterInGroups(GROUP_d, 1, &value)) {
+    if (suswe321.readSingleParameter(GROUP_d, &value)) {
         Serial.println("*** SUCCESS: Device responded! ***");
         Serial.print("Value: 0x");
         Serial.println(value, HEX);
@@ -149,7 +146,7 @@ void loop() {
     }
 
     //Serial.println(suswe321.readFaultDescription(0x0001, &responseData)); // Чтение описания неисправностей
-    delay(1000);
+    //delay(1000);
     /*****SUSWE321*****/
 
 

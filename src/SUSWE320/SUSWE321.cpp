@@ -1,48 +1,63 @@
 #include "SUSWE321.h"
 
 //#define DEBUG
+//#define DEBUG_DETAILED
+//#define  DEBUG_sendData
 
-SUSWE321::SUSWE321(const uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, const uint8_t transmitterModeContact):
+SUSWE321::SUSWE321(const uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, const unsigned long baud, const uint8_t transmitterModeContact):
                                                                 _slaveAddress(slaveAddress),
                                                                 _serialPort(serialPort),
                                                                 _serialDebug(serialDebug),
+                                                                _baud(baud),
                                                                 _transmitterModeContact(transmitterModeContact) {
+    TOTAL_TIMEOUT = static_cast<unsigned long>(2000);
+    // Тайм-аут между байтами кадра MODBUS 3.5 символов
+    // (1.0 / baud) это скорость передачи данных
+    // 10 это количество бит в символе в кадре MODBUS
+    // 1000000 это перевод в микросекунды
+    INTER_CHAR_TIMEOUT = static_cast<unsigned long>(3.5 * 10 * 1000000 / _baud);
+}
+
+void SUSWE321::begin() const {
+    _serialPort->begin(_baud);
+    _serialDebug->begin(_baud, SERIAL_8N1);
 }
 
 // Функция чтения параметров
-bool SUSWE321::readParameters(const uint8_t slaveAddress, uint16_t* arrayValues, const uint16_t startAddress, const size_t numberRegisters) const {
-
+bool SUSWE321::readParameters(const uint8_t slaveAddress,
+                            const uint16_t startAddress,
+                            uint16_t* arrayValues,
+                            const size_t numberRegisters) const {
+#ifdef DEBUG
+    _serialDebug->println("START readParameters !!!");
+#endif
+    // Проверки входных данных и корректности указателя на массив
     if (arrayValues == nullptr || numberRegisters == 0 ) {
         return false;
     }
 
+    // Проверка на максимальное количество регистров (Modbus ограничение)
+    if (numberRegisters > 125) {
+        return false; // Modbus протокол ограничивает чтение 125 регистрами
+    }
+
     uint8_t request[8];
-    request[0] = slaveAddress;              // Адрес устройства
-    request[1] = READ;                      // Код функции для чтения
-    request[2] = startAddress >> 8;         // Высокий байт адреса
-    request[3] = startAddress & 0xFF;       // Низкий байт адреса
-    request[4] = numberRegisters >> 8;       // Число параметров читаемых (по умолчанию 1)
-    request[5] = numberRegisters & 0xFF;     // Число параметров читаемых (по умолчанию 1)
+    request[0] = slaveAddress;                                  // Адрес устройства
+    request[1] = READ;                                          // Код функции для чтения
+    request[2] = static_cast<uint8_t>(startAddress >> 8);       // Высокий байт адреса
+    request[3] = static_cast<uint8_t>(startAddress & 0xFF);     // Низкий байт адреса
+    request[4] = static_cast<uint8_t>(numberRegisters >> 8);    // Число параметров читаемых (по умолчанию 1)
+    request[5] = static_cast<uint8_t>(numberRegisters & 0xFF);  // Число параметров читаемых (по умолчанию 1)
 
     // Вычисление и добавление CRC
     const uint16_t crc = calculateCRC(request, 6);
+    request[6] = static_cast<uint8_t>(crc & 0xFF);          // Низкий байт CRC
+    request[7] = static_cast<uint8_t>((crc >> 8) & 0xFF);   // Высокий байт CRC
 
 #ifdef DEBUG
-    _serialDebug->print("Calculated CRC: 0x");
-    _serialDebug->println(crc, HEX);
-    _serialDebug->print("Low byte: 0x");
-    _serialDebug->print(crc & 0xFF, HEX);
-    _serialDebug->print(", High byte: 0x");
-    _serialDebug->println((crc >> 8) & 0xFF, HEX);
-#endif
-
-    request[6] = crc & 0xFF; // Низкий байт CRC
-    request[7] = (crc >> 8) & 0xFF; // Высокий байт CRC
-
-#ifdef DEBUG
-    _serialDebug->print("Запрос: ");
-    //_serialDebug->write(request, sizeof(request));
+    _serialDebug->print("READ Request \"Запрос\": ");
     for (byte i = 0; i < sizeof(request); i++) {
+        if (request[i] < 0x10) _serialDebug->print("0");
         _serialDebug->print(request[i], HEX);
         _serialDebug->print(" ");
     }
@@ -52,44 +67,93 @@ bool SUSWE321::readParameters(const uint8_t slaveAddress, uint16_t* arrayValues,
     // Отправка запроса
     sendData(request, sizeof(request));
 
+    // Расчет размера ответа
+    // Ответ: [адрес][функция][байт данных][данные...][CRC]
+    // байт данных = количество байт данных = numberRegisters * 2
+    const size_t responseSize = 5 + (numberRegisters * 2); // 3 заголовка + данные + 2 CRC
+    uint8_t response[responseSize]; // AVR поддерживает VLA (Variable Length Arrays)
+
     // Получение ответа
-    uint8_t response[5 + (numberRegisters * 2)]; // Ожидаем 7 байт ответа если читаем один регистр, если несколько 6 + numberRegisters
-    receiveData(response, sizeof(response));
-
-
-    // Проверка CRC ответа
-    if (response[0] != slaveAddress || response[1] != 0x03) {
+    if (!receiveData(response, responseSize)) {
 #ifdef DEBUG
-        if (response[0] == 0x00) {
-            _serialDebug->println("Ошибка CRC");
-        } else {
-            _serialDebug->print("Ошибка в ответе: ");
-            for (byte i = 0; i < sizeof(response); i++) {
-                _serialDebug->print(response[i], HEX);
-                _serialDebug->print(" ");
-            }
-        }
-        
-        _serialDebug->println("");
+        _serialDebug->println("Ошибка приёма данных");
+        _serialDebug->println("END readParameters !!!");
+        _serialDebug->println();
 #endif
-        return false; // Ошибка в ответе
-    }
-
-    // Извлечение значения
-    if (numberRegisters == 1) {
-        *arrayValues = (response[3] << 8) | response[4];
-    } else if (numberRegisters > 1) {
-        for (size_t i = 0; i < numberRegisters; i++) {
-            arrayValues[i] = (response[3] << 8) | response[4]; // Объединение двух байтов в одно значение
-        }
+        return false;
     }
 
 #ifdef DEBUG
-    _serialDebug->print("Ответ: ");
-    for (byte i = 0; i < sizeof(response); i++) {
+    _serialDebug->print("READ Response \"Ответ\": ");
+    for (byte i = 0; i < responseSize; i++) {
+        if (response[i] < 0x10) _serialDebug->print("0");
         _serialDebug->print(response[i], HEX);
         _serialDebug->print(" ");
     }
+    _serialDebug->println();
+#endif
+
+    // Базовые проверки ответа
+    if (response[0] != slaveAddress || response[1] != READ) {
+#ifdef DEBUG
+        _serialDebug->print("Неверный адрес или функция. Ожидалось: ");
+        _serialDebug->print(slaveAddress, HEX);
+        _serialDebug->print(" ");
+        _serialDebug->print(READ, HEX);
+        _serialDebug->print(", получено: ");
+        _serialDebug->print(response[0], HEX);
+        _serialDebug->print(" ");
+        _serialDebug->println(response[1], HEX);
+#endif
+        return false;
+    }
+
+    // Проверка количества байт данных
+    const uint8_t byteCount = response[2];
+    if (byteCount != numberRegisters * 2) {
+#ifdef DEBUG
+        _serialDebug->print("Неверное количество байт данных. Ожидалось: ");
+        _serialDebug->print(numberRegisters * 2);
+        _serialDebug->print(", получено: ");
+        _serialDebug->println(byteCount);
+#endif
+        return false;
+    }
+
+    // Проверка CRC ответа (исключая CRC байты)
+    const uint16_t receivedCRC = (response[responseSize - 1] << 8) | response[responseSize - 2];
+    const uint16_t calculatedCRC = calculateCRC(response, responseSize - 2);
+
+    if (receivedCRC != calculatedCRC) {
+#ifdef DEBUG
+        _serialDebug->print("Ошибка CRC. Получено: 0x");
+        _serialDebug->print(receivedCRC, HEX);
+        _serialDebug->print(", рассчитано: 0x");
+        _serialDebug->println(calculatedCRC, HEX);
+#endif
+        return false;
+    }
+
+    // Извлечение значений из ответа
+    if (numberRegisters == 1) {
+        // Для одного регистра
+        arrayValues[0] = (static_cast<uint16_t>(response[3]) << 8) | response[4];
+    } else {
+        // Для нескольких регистров
+        for (size_t i = 0; i < numberRegisters; i++) {
+            const size_t dataIndex = 3 + (i * 2); // 3 - начало данных
+            arrayValues[i] = (static_cast<uint16_t>(response[dataIndex]) << 8) | response[dataIndex + 1];
+        }
+    }
+
+#ifdef DEBUG
+    _serialDebug->print("Прочитано значений: ");
+    for (size_t i = 0; i < numberRegisters; i++) {
+        _serialDebug->print(arrayValues[i]);
+        if (i < numberRegisters - 1) _serialDebug->print(", ");
+    }
+    _serialDebug->println();
+    _serialDebug->println("END readParameters !!!");
     _serialDebug->println();
 #endif
 
@@ -101,6 +165,9 @@ bool SUSWE321::writeParameters(const uint8_t slaveAddress,
                             const uint16_t startAddress,
                             const void* arrayValues,
                             const size_t numberRegisters) const {
+#ifdef DEBUG
+    _serialDebug->println("START writeParameters !!!");
+#endif
     // Проверка входных данных
     if (arrayValues == nullptr || numberRegisters == 0 ) {
 #ifdef DEBUG
@@ -149,7 +216,7 @@ bool SUSWE321::writeParameters(const uint8_t slaveAddress,
         request[4] = static_cast<uint8_t>(numberRegisters >> 8);    // Количество регистров старший байт
         request[5] = static_cast<uint8_t>(numberRegisters & 0xFF);  // Количество регистров младший байт
         request[6] = static_cast<uint8_t>(numberRegisters * 2); // Количество байт данных
-        // Копируем данные с преобразованием порядка байт
+        // Копируем, данные с преобразованием порядка байт
         for (size_t i = 0; i < numberRegisters; i++) {
             request[7 + (i * 2)] = static_cast<uint8_t>(arrayRegisterValues[i] >> 8);
             request[8 + (i * 2)] = static_cast<uint8_t>(arrayRegisterValues[i] & 0xFF);
@@ -187,35 +254,60 @@ bool SUSWE321::writeParameters(const uint8_t slaveAddress,
     if (!receiveData(response, responseSize)) {
 #ifdef DEBUG
         _serialDebug->println("Ошибка приема ответа");
+        _serialDebug->println("END writeParameters !!!");
+        _serialDebug->println();
+        _serialDebug->println();
 #endif
         return false;
     }
-
+#ifdef DEBUG
+    _serialDebug->println("END writeParameters !!!");
+    _serialDebug->println();
+    _serialDebug->println();
+#endif
     // Проверка ответа
     return validateModbusResponse(response, responseSize, slaveAddress, request[1]);
 }
 
 // Чтения кода неисправности частотного преобразователя
 bool SUSWE321::readFaultDescription(uint16_t* faultCode) const {
-    return readParameters(_slaveAddress, faultCode, 0x8000, 1);
+    return readSingleParameter(0x8000, faultCode);
 }
+
 // Чтения состояния частотного преобразователя в каком состоянии находится двигатель
 bool SUSWE321::readRunningState(uint16_t* state) const {
-    return readParameters(_slaveAddress, state, 0x3000, 1);
+    return readParameters(_slaveAddress, 0x3000, state, 1);
 }
 
-// Записи команды управления двигателем: вперёд, назад, толчок вперёд, толчок назад, свободная остановка, замедление остановки, сброс неисправности.
+// Записи команды управления двигателем: вперёд, назад, толчок вперёд, толчок назад,
+// свободная остановка, замедление остановки, сброс неисправности.
 bool SUSWE321::writeControlCommand(const ControlCommand command) const {
-    const uint16_t singleData = static_cast<uint16_t>(command);
-    return writeParameters(_slaveAddress ,0x2000, &singleData, sizeof(singleData));
+    return writeSingleParameter(0x2000, command);
 }
 
-bool SUSWE321::readParameterInGroups(const GroupsParameter group, const uint8_t number, uint16_t* valueRead) const {
-    return readParameters(_slaveAddress, valueRead, buildParameterAddress(group, number), 1);
+bool SUSWE321::readSingleParameter(const uint16_t address, uint16_t* value) const {
+    return readParameters(_slaveAddress, address, value, 1);
+}
+
+bool SUSWE321::readParameterInGroups(const GroupsParameter group, const uint8_t numberGroup, uint16_t* arrayValues, const size_t count) const {
+    return readParameters(_slaveAddress,buildParameterAddress(group, numberGroup), arrayValues, count);
+}
+
+bool SUSWE321::readSingleGroupParameter(const GroupsParameter group, const uint8_t numberGroup, uint16_t* value) const {
+    return readSingleParameter(buildParameterAddress(group, numberGroup), value);
+
+}
+
+bool SUSWE321::writeSingleParameter(const uint16_t address, const uint16_t value) const {
+    return writeParameters(_slaveAddress, address, &value, 1);
 }
 
 bool SUSWE321::writeParameterInGroups(const GroupsParameter group, const uint8_t numberGroup, const uint16_t* arrayData, const size_t dataCount) const {
     return writeParameters(_slaveAddress, buildParameterAddress(group, numberGroup), arrayData, dataCount );
+}
+
+bool SUSWE321::writeSingleGroupParameter(const GroupsParameter group, const uint8_t numberGroup, const uint16_t value) const {
+    return writeSingleParameter(buildParameterAddress(group, numberGroup), value);
 }
 
 // Реализация функции CRC
@@ -242,7 +334,7 @@ uint16_t SUSWE321::calculateCRC(const uint8_t *data, const uint8_t length) const
 
 #ifdef DEBUG
     _serialDebug->print("CRC as uint16_t: 0x");
-    _serialDebug->println(crc, DEC);
+    _serialDebug->println(crc, HEX);
 #endif
 
     return crc;
@@ -261,28 +353,44 @@ void SUSWE321::generate_crc16_table() {
 
 // Реализация функций для отправки
 void SUSWE321::sendData(const uint8_t* data, const size_t length) const {
+#ifdef DEBUG_sendData
+    _serialDebug->println("\t START sendData !!!");
+#endif
+
     // Переводим устройство в режим передатчика
     digitalWrite(_transmitterModeContact, RS485Transmit); 
-    delay(1);  // Короткая задержка для стабилизации
+    //delay(1);  // Короткая задержка для стабилизации
 
-    // Реализуйте отправку данных через последовательный порт
-    _serialPort->write(data, length);
-    _serialPort->flush();  // Ожидаем завершения передачи
+        // Реализуйте отправку данных через последовательный порт
+        _serialPort->write(data, length);
+        _serialPort->flush();  // Ожидаем завершения передачи
+
     // Немедленно возвращаемся в режим приема
     digitalWrite(_transmitterModeContact, RS485Receive);
-    delay(1);  // Важно! Дать линии стабилизироваться перед приёмом
+    //delay(1);  // Важно! Дать линии стабилизироваться перед приёмом
+
+#ifdef DEBUG_sendData
+    _serialDebug->println("\t END sendData !!!");
+#endif
 }
 
 // Реализация функций для получения данных
 bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
+#ifdef DEBUG
+    _serialDebug->println("\t START receiveData !!!");
+#endif
+
     if (buffer == nullptr || length == 0) {
+#ifdef DEBUG
+        _serialDebug->println("Ошибка: неверные входные данные");
+        _serialDebug->println("\t END receiveData !!!");
+#endif
         return false;
     }
 
     size_t bytesRead = 0;
-    unsigned long startTime = millis(); // Начало времени ожидания
-    constexpr unsigned long TOTAL_TIMEOUT = 1000; // Общий тайм-аут 2 сек
-    constexpr unsigned long INTER_CHAR_TIMEOUT = 50; // Тайм-аут между символами 50 мс
+    unsigned long lastByteTime = millis(); // Начало времени ожидания
+    const unsigned long charTimeout = INTER_CHAR_TIMEOUT * length * 1000; // Время ожидания между символами в мс
 
 #ifdef DEBUG
     _serialDebug->print("Waiting for ");
@@ -293,7 +401,7 @@ bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
     // Ждем данные с тайм-аутом
     while (bytesRead < length) {
         // Общий тайм-аут
-        if (millis() - startTime > TOTAL_TIMEOUT) {
+        if (millis() - lastByteTime > TOTAL_TIMEOUT) {
 #ifdef DEBUG
             _serialDebug->print("TOTAL TIMEOUT! Received ");
             _serialDebug->print(bytesRead);
@@ -304,22 +412,32 @@ bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
         }
 
         // Чтение доступных данных
-        while (_serialPort->available() > 0 && bytesRead < length) {
+        while(_serialPort->available() > 0 && bytesRead < length) {
             buffer[bytesRead] = _serialPort->read();
             bytesRead++;
-            startTime = millis(); // Сброс таймера при получении данных
+            lastByteTime = millis(); // Сброс таймера при получении данных
+#ifdef DEBUG_DETAILED
+            _serialDebug->print("Got byte ");
+            _serialDebug->print(bytesRead);
+            _serialDebug->print(": 0x");
+            if (buffer[bytesRead-1] < 0x10) _serialDebug->print("0");
+            _serialDebug->print(buffer[bytesRead-1], HEX);
+            _serialDebug->println();
+#endif
         }
 
+
+        // Проверка тайм-аута между символами только если нет доступных данных
         if (bytesRead < length) {
-            // Проверка тайм-аута между символами
             if (_serialPort->available() == 0) {
-                if (millis() - startTime > INTER_CHAR_TIMEOUT) {
+                if (millis() - lastByteTime > charTimeout) {
 #ifdef DEBUG
                     _serialDebug->print("INTER-CHAR TIMEOUT! Received ");
                     _serialDebug->print(bytesRead);
                     _serialDebug->print("/");
                     _serialDebug->println(length);
 #endif
+                    _serialDebug->println("ЛОХ ПИДОР");
                     break;
                 }
             }
@@ -328,7 +446,7 @@ bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
 
 #ifdef DEBUG
     if (bytesRead > 0) {
-        _serialDebug->print("SUCCESS: Received ");
+        _serialDebug->print("Received ");
         _serialDebug->print(bytesRead);
         _serialDebug->print("/");
         _serialDebug->print(length);
@@ -343,48 +461,39 @@ bool SUSWE321::receiveData(uint8_t* buffer, const size_t length) const {
         _serialDebug->print("NO DATA RECEIVED");
         _serialDebug->println("");
     }
+
+    _serialDebug->println("\t END receiveData !!!");
 #endif
+
     return (bytesRead == length);
 }
 
 bool SUSWE321::checkCommunicationSettings() const {
-    uint16_t value = 0;
-    bool result = false;
-
-    // Проверка FC.00 - скорость (должен быть 3 = 9600)
-
-    if ( (result = readParameterInGroups(GROUP_FC, 0, &value)) ) {
+    constexpr size_t requestSize = 5;
+    uint16_t arrayValues[requestSize];
+    if ( readParameterInGroups(GROUP_FC, 0,  arrayValues, requestSize) ) {
+        // Проверка FC.00 - скорость (должен быть 3 = 9600)
         _serialDebug->print("FC.00 (Baud rate): ");
-        _serialDebug->println(value);
-    }
-    
-    // Проверка FC.01 - формат данных (должен быть 0 = 8N1)
-    if ( (result = readParameterInGroups(GROUP_FC, 1, &value)) ) {
+        _serialDebug->println(arrayValues [0]);
+
+        // Проверка FC.01 - формат данных (должен быть 0 = 8N1)
         _serialDebug->print("FC.01 (Data format): ");
-        _serialDebug->println(value);
-    }
-    
-    // Проверка FC.02 - адрес (должен быть 1 или 2)
-    if ( (result = readParameterInGroups(GROUP_FC, 2, &value)) ) {
+        _serialDebug->println(arrayValues [1]);
+
+        // Проверка FC.02 - адрес (должен быть 1 или 2)
         _serialDebug->print("FC.02 (Address): ");
-        _serialDebug->println(value);
-    }
+        _serialDebug->println(arrayValues[2]);
 
-    // Проверка FC.03 - тайм-аут связи (должен быть 10 с)
-    if ( (result = readParameterInGroups(GROUP_FC, 3, &value)) ) {
+        // Проверка FC.03 - тайм-аут связи (должен быть 10 с)
         _serialDebug->print("FC.03 (Timeout Communication): ");
-        _serialDebug->println(value);
-    }
+        _serialDebug->println(arrayValues[3]);
 
-    // Проверка FC.05 - тип обработчика ошибки связи (должен быть 1 "бездействие")
-    if ( (result = readParameterInGroups(GROUP_FC, 4, &value)) ) {
+        // Проверка FC.05 - тип обработчика ошибки связи (должен быть 1 "бездействие")
         _serialDebug->print("FC.05 (Error Communication): ");
-        _serialDebug->println(value);
+        _serialDebug->println(arrayValues[4]);
+        return true;
     }
-
-    _serialDebug->println();
-
-    return result;
+    return false;
 }
 
 // Реализация функций для чтения и записи параметров

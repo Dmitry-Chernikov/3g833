@@ -122,19 +122,34 @@ struct Parameter {
 class SUSWE321 {
 public:
     // Конструктор принимает ссылку на объект HardwareSerial
-    SUSWE321(uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, uint8_t transmitterModeContact);
+    SUSWE321(uint8_t slaveAddress, HardwareSerial* serialPort,  HardwareSerial* serialDebug, unsigned long baud, uint8_t transmitterModeContact);
+    void begin() const;
     ~SUSWE321() = default;
 
     // Дополнительные функции для работы с параметрами
     bool readFaultDescription(uint16_t* faultCode) const;
     bool readRunningState(uint16_t* state) const;
     bool writeControlCommand(ControlCommand command) const;
-    bool readParameterInGroups(GroupsParameter group, uint8_t number, uint16_t* valueRead) const;
+
+    // Чтение одного регистра
+    bool readSingleParameter(uint16_t address, uint16_t* value) const;
+    // Чтение с использованием групповой адресации
+    bool readParameterInGroups(GroupsParameter group, uint8_t numberGroup, uint16_t *arrayValues, size_t count) const;
+    // Чтение одного параметра по группе
+    bool readSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t* value) const;
+
+    // Запись одного регистра
+    bool writeSingleParameter(uint16_t address, uint16_t value) const;
+    // Запись в группы параметров
     bool writeParameterInGroups(GroupsParameter group, uint8_t numberGroup, const uint16_t* arrayData, size_t dataCount) const;
+    // Запись одного параметра в группу
+    bool writeSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t value) const;
 
     bool checkCommunicationSettings() const;
 
 private:
+    unsigned long TOTAL_TIMEOUT; // Общий тайм-аут 2 сек
+    unsigned long INTER_CHAR_TIMEOUT; // Тайм-аут между символами
     enum CodeFunction : uint8_t {
         READ = 0x0003,
         WRITE_ONE = 0x0006,
@@ -143,6 +158,7 @@ private:
     uint8_t _slaveAddress; // Адрес ведомого устройства
     HardwareSerial* _serialPort; // Указатель на объект HardwareSerial
     HardwareSerial* _serialDebug; // Указатель на объект HardwareSerial для отладки
+    unsigned long _baud;  // Скорость передачи данных
     uint8_t _transmitterModeContact; // Номер контакта для режима работы приёмник/передатчик
 
     // Функция для построения адреса параметра
@@ -151,9 +167,9 @@ private:
     bool validateModbusResponse(const uint8_t *response, size_t responseSize, uint8_t expectedAddress,
                                 uint8_t expectedFunction) const;
 
-    // Функция для чтения параметра
-    bool readParameters(uint8_t slaveAddress, uint16_t* arrayValues, uint16_t startAddress, size_t numberRegisters = 1) const;
-    // Функция для записи параметра
+    // Основной метод чтения регистров
+    bool readParameters(uint8_t slaveAddress, uint16_t startAddress, uint16_t* arrayValues, size_t numberRegisters = 1) const;
+    // Основной метод записи регистров
     bool writeParameters(uint8_t slaveAddress, uint16_t startAddress, const void* arrayValues, size_t numberRegisters) const;
 
     // Функция для вычисления CRC
