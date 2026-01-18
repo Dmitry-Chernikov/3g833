@@ -1,0 +1,1832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Файл src/TextMenu.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle"><div class="title">Файл TextMenu.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="TextMenu_8h_source.html">TextMenu.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для TextMenu.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="TextMenu_8cpp__incl.png" border="0" usemap="#asrc_2TextMenu_8cpp" alt=""/></div>
+<map name="asrc_2TextMenu_8cpp" id="asrc_2TextMenu_8cpp">
+<area shape="rect" title=" " alt="" coords="383,5,510,31"/>
+<area shape="rect" href="TextMenu_8h.html" title=" " alt="" coords="401,79,492,104"/>
+<area shape="poly" title=" " alt="" coords="449,31,449,65,444,65,444,31"/>
+<area shape="rect" title=" " alt="" coords="324,387,401,412"/>
+<area shape="poly" title=" " alt="" coords="401,95,317,98,219,107,129,125,96,138,73,154,56,168,36,177,19,184,10,194,10,209,26,236,62,277,121,337,153,354,202,369,310,389,309,394,201,374,151,359,118,341,58,281,22,239,5,210,5,192,16,180,34,172,53,163,70,150,93,133,127,120,218,102,317,93,401,90"/>
+<area shape="rect" title=" " alt="" coords="84,152,182,177"/>
+<area shape="poly" title=" " alt="" coords="402,106,197,152,196,147,400,100"/>
+<area shape="rect" href="Display_8h.html" title=" " alt="" coords="132,313,208,339"/>
+<area shape="poly" title=" " alt="" coords="410,107,361,126,312,154,271,190,236,230,186,303,182,300,232,227,268,186,309,150,359,121,408,102"/>
+<area shape="rect" href="Encoder_8h.html" title=" " alt="" coords="323,152,404,177"/>
+<area shape="poly" title=" " alt="" coords="435,106,390,145,386,141,431,102"/>
+<area shape="rect" href="MemoryEeprom_8h.html" title=" " alt="" coords="383,233,510,258"/>
+<area shape="poly" title=" " alt="" coords="449,104,449,219,444,219,444,104"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="514,313,582,339"/>
+<area shape="poly" title=" " alt="" coords="457,103,488,154,524,224,537,263,546,299,540,300,532,265,519,226,484,157,452,106"/>
+<area shape="rect" href="StatesActuators_8h.html" title=" " alt="" coords="585,233,713,258"/>
+<area shape="poly" title=" " alt="" coords="478,102,522,122,568,150,606,185,635,220,631,223,602,188,565,154,520,126,476,107"/>
+<area shape="rect" href="TechnicalSpecifications3G833_8h.html" title=" " alt="" coords="738,225,904,265"/>
+<area shape="poly" title=" " alt="" coords="478,102,601,150,765,217,763,222,599,154,476,107"/>
+<area shape="rect" href="VariablesProject_8h.html" title=" " alt="" coords="832,152,959,177"/>
+<area shape="poly" title=" " alt="" coords="492,97,819,149,818,154,492,102"/>
+<area shape="poly" title=" " alt="" coords="202,336,319,379,317,384,200,341"/>
+<area shape="rect" title=" " alt="" coords="83,387,258,412"/>
+<area shape="poly" title=" " alt="" coords="173,339,173,373,168,373,168,339"/>
+<area shape="poly" title=" " alt="" coords="325,180,289,198,273,211,261,227,253,247,254,268,260,289,272,309,303,347,337,376,333,380,299,351,267,312,255,291,248,269,248,246,256,224,269,207,286,194,322,175"/>
+<area shape="poly" title=" " alt="" coords="378,176,426,221,423,225,374,179"/>
+<area shape="rect" title=" " alt="" coords="270,233,358,258"/>
+<area shape="poly" title=" " alt="" coords="359,179,331,222,327,220,354,176"/>
+<area shape="poly" title=" " alt="" coords="435,260,412,284,390,315,377,344,370,374,364,372,372,343,385,312,408,281,432,256"/>
+<area shape="poly" title=" " alt="" coords="407,261,223,313,221,308,406,255"/>
+<area shape="poly" title=" " alt="" coords="463,256,523,303,520,307,460,260"/>
+<area shape="rect" title=" " alt="" coords="400,313,490,339"/>
+<area shape="poly" title=" " alt="" coords="449,258,448,300,443,299,444,258"/>
+<area shape="poly" title=" " alt="" coords="648,259,630,299,614,322,595,341,551,366,504,383,457,393,415,398,414,393,456,388,502,377,549,361,592,337,610,318,625,297,643,257"/>
+<area shape="poly" title=" " alt="" coords="788,268,715,305,626,341,514,372,415,392,414,387,513,367,624,336,713,300,786,263"/>
+<area shape="poly" title=" " alt="" coords="906,176,916,195,924,218,927,244,918,267,903,282,884,296,831,320,765,341,690,358,538,383,415,396,414,391,537,378,689,353,763,336,829,315,881,291,900,278,914,264,921,243,919,220,911,197,901,179"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:aa58c45dda17948e83f4d881b1ca7cab2" id="r_aa58c45dda17948e83f4d881b1ca7cab2"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aa58c45dda17948e83f4d881b1ca7cab2">backLine</a> (11, 1, &quot;/BACK&quot;)</td></tr>
+<tr class="separator:aa58c45dda17948e83f4d881b1ca7cab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a089d6fe0b6dd200e755f6c77d7be92f4" id="r_a089d6fe0b6dd200e755f6c77d7be92f4"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a089d6fe0b6dd200e755f6c77d7be92f4">welcomeLine1</a> (0, 0, &quot;Properties Menu&quot;)</td></tr>
+<tr class="separator:a089d6fe0b6dd200e755f6c77d7be92f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4de06ab1b36ace1b0164ad4e0719f5ca" id="r_a4de06ab1b36ace1b0164ad4e0719f5ca"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a4de06ab1b36ace1b0164ad4e0719f5ca">welcomeLine2</a> (1, 1, &quot;Machine 3G833&quot;)</td></tr>
+<tr class="separator:a4de06ab1b36ace1b0164ad4e0719f5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee39e9bd5e6d0fff7cf730414544f8ba" id="r_aee39e9bd5e6d0fff7cf730414544f8ba"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aee39e9bd5e6d0fff7cf730414544f8ba">welcomeScreen</a> (<a class="el" href="TextMenu_8h.html#a77a51b7f0204f5db65efe348d12f6820">welcomeLine1</a>, <a class="el" href="TextMenu_8h.html#ab27953ca8fe26868cca58a1e0d4b6fd5">welcomeLine2</a>)</td></tr>
+<tr class="separator:aee39e9bd5e6d0fff7cf730414544f8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fddf9cd60ea18461258cadf52af8b14" id="r_a8fddf9cd60ea18461258cadf52af8b14"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a8fddf9cd60ea18461258cadf52af8b14">limitsLine</a> (1, 0, &quot;Limits position&quot;)</td></tr>
+<tr class="separator:a8fddf9cd60ea18461258cadf52af8b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f3cd5badb0c8d8cbd07b0fdb58a90ad" id="r_a6f3cd5badb0c8d8cbd07b0fdb58a90ad"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a6f3cd5badb0c8d8cbd07b0fdb58a90ad">cylinderLine</a> (1, 1, &quot;Cylinder size&quot;)</td></tr>
+<tr class="separator:a6f3cd5badb0c8d8cbd07b0fdb58a90ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c7ff005a83c5d4bda29c8cd1b239059" id="r_a1c7ff005a83c5d4bda29c8cd1b239059"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a1c7ff005a83c5d4bda29c8cd1b239059">settingsScreen</a> (<a class="el" href="TextMenu_8h.html#a8d6b2ebc142a8c90d7da5294cd068662">limitsLine</a>, <a class="el" href="TextMenu_8h.html#ac5b6ea32f8f76119976fac22c367fe3f">cylinderLine</a>)</td></tr>
+<tr class="separator:a1c7ff005a83c5d4bda29c8cd1b239059"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acffca9c873bb668f14ce9bb1e29e9275" id="r_acffca9c873bb668f14ce9bb1e29e9275"><td class="memItemLeft" align="right" valign="top">LiquidMenu&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#acffca9c873bb668f14ce9bb1e29e9275">mainMenu</a> (<a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>, <a class="el" href="TextMenu_8h.html#a2153c0f1f12cdebf17c7f8d7fe16ac52">welcomeScreen</a>, <a class="el" href="TextMenu_8h.html#a317df6a620c5a4bcaa8fe2910c60751a">settingsScreen</a>, 1)</td></tr>
+<tr class="separator:acffca9c873bb668f14ce9bb1e29e9275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f554d81ad2a99469caedd9fb5003114" id="r_a5f554d81ad2a99469caedd9fb5003114"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a5f554d81ad2a99469caedd9fb5003114">linearMoveLine</a> (0, 0, &quot;Current &quot;, _data.linearMove, &quot;mm&quot;)</td></tr>
+<tr class="separator:a5f554d81ad2a99469caedd9fb5003114"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbe5c7d42ac1d14487c89d02cf937820" id="r_afbe5c7d42ac1d14487c89d02cf937820"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#afbe5c7d42ac1d14487c89d02cf937820">limitTopLine</a> (1, 1, &quot;Top:&quot;, _data.limitTop, &quot;mm&quot;)</td></tr>
+<tr class="separator:afbe5c7d42ac1d14487c89d02cf937820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada45f3dc74fa31acc9598a8b6632ccc7" id="r_ada45f3dc74fa31acc9598a8b6632ccc7"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ada45f3dc74fa31acc9598a8b6632ccc7">limitBottomLine</a> (1, 1, &quot;Bottom:&quot;, _data.limitBottom, &quot;mm&quot;)</td></tr>
+<tr class="separator:ada45f3dc74fa31acc9598a8b6632ccc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3b6d4035faceba32dff8e41c0b3550" id="r_a2d3b6d4035faceba32dff8e41c0b3550"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a2d3b6d4035faceba32dff8e41c0b3550">topScreen</a> (<a class="el" href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a>, <a class="el" href="TextMenu_8h.html#a7bb8bc3c39ba35fa77fe72b535f712e6">limitTopLine</a>)</td></tr>
+<tr class="separator:a2d3b6d4035faceba32dff8e41c0b3550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd461e5ce4c2c59981d75f0a12baeec2" id="r_abd461e5ce4c2c59981d75f0a12baeec2"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#abd461e5ce4c2c59981d75f0a12baeec2">bottomScreen</a> (<a class="el" href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a>, <a class="el" href="TextMenu_8h.html#abe6a70198fcb15b95d8c96de2c8e6510">limitBottomLine</a>)</td></tr>
+<tr class="separator:abd461e5ce4c2c59981d75f0a12baeec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5238ab40ee315278b6d6f383cb014285" id="r_a5238ab40ee315278b6d6f383cb014285"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a5238ab40ee315278b6d6f383cb014285">oSaveLine</a> (0, 0, &quot;Save&quot;)</td></tr>
+<tr class="separator:a5238ab40ee315278b6d6f383cb014285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e1f2b862b35a03a2c6e21c636a393f8" id="r_a5e1f2b862b35a03a2c6e21c636a393f8"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a5e1f2b862b35a03a2c6e21c636a393f8">oSecondaryScreen</a> (<a class="el" href="TextMenu_8h.html#a19bb8c3818a5cffc8eac74c0f6c49ba1">oSaveLine</a>, <a class="el" href="TextMenu_8h.html#aaaf918e66e068bc02facebb75d6a9f7b">backLine</a>)</td></tr>
+<tr class="separator:a5e1f2b862b35a03a2c6e21c636a393f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d31c2f64b150d72b80d32e334a2f66a" id="r_a4d31c2f64b150d72b80d32e334a2f66a"><td class="memItemLeft" align="right" valign="top">LiquidMenu&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a4d31c2f64b150d72b80d32e334a2f66a">limitMenu</a> (<a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>, <a class="el" href="TextMenu_8h.html#a8d816654e9912157a2f73023241a59d4">bottomScreen</a>, <a class="el" href="TextMenu_8h.html#a5b50ba60ed2c12c4c3923cd79e75ddf3">topScreen</a>, <a class="el" href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a>, 1)</td></tr>
+<tr class="separator:a4d31c2f64b150d72b80d32e334a2f66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a343e52529fe7b5a2965f859093d860dc" id="r_a343e52529fe7b5a2965f859093d860dc"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a343e52529fe7b5a2965f859093d860dc">diameterTitleLine</a> (0, 0, &quot;Diameter&quot;)</td></tr>
+<tr class="separator:a343e52529fe7b5a2965f859093d860dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f2fc9f190c2d2aea8bfa1aa8600c338" id="r_a4f2fc9f190c2d2aea8bfa1aa8600c338"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a4f2fc9f190c2d2aea8bfa1aa8600c338">diameterValueLine</a> (1, 1, &quot;Set &quot;, _data.cylinderDiameter, &quot;mm&quot;)</td></tr>
+<tr class="separator:a4f2fc9f190c2d2aea8bfa1aa8600c338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a26f82d3fb04b5f80b6262c20520f7c" id="r_a8a26f82d3fb04b5f80b6262c20520f7c"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a8a26f82d3fb04b5f80b6262c20520f7c">diameterScreen</a> (<a class="el" href="TextMenu_8h.html#ae46f98e42a9a7b0a8a2bb65342a74884">diameterTitleLine</a>, <a class="el" href="TextMenu_8h.html#a2f5dc6b56c842c4f3946bf2208c480d3">diameterValueLine</a>)</td></tr>
+<tr class="separator:a8a26f82d3fb04b5f80b6262c20520f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d7dd613e24ee9981e7af196fe5a5215" id="r_a4d7dd613e24ee9981e7af196fe5a5215"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a4d7dd613e24ee9981e7af196fe5a5215">angleTitleLine</a> (0, 0, &quot;Grid Angle&quot;)</td></tr>
+<tr class="separator:a4d7dd613e24ee9981e7af196fe5a5215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5788f505d47d1ae5b821fddf7a10187c" id="r_a5788f505d47d1ae5b821fddf7a10187c"><td class="memItemLeft" align="right" valign="top">LiquidLine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a5788f505d47d1ae5b821fddf7a10187c">angleValueLine</a> (1, 1, &quot;Set &quot;, _data.cylinderAngle, <a class="el" href="TextMenu_8h.html#a97b64cb9db0cc00950c495a634e6d2ad">_symbolDegree</a>)</td></tr>
+<tr class="separator:a5788f505d47d1ae5b821fddf7a10187c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7067fb7e3d199112d660217c062ecc3b" id="r_a7067fb7e3d199112d660217c062ecc3b"><td class="memItemLeft" align="right" valign="top">LiquidScreen&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a7067fb7e3d199112d660217c062ecc3b">angleScreen</a> (<a class="el" href="TextMenu_8h.html#aa1e8269373ddf8a32125e2daad1cdca8">angleTitleLine</a>, <a class="el" href="TextMenu_8h.html#a03044d0383fc674591c08a9a78a8e92f">angleValueLine</a>)</td></tr>
+<tr class="separator:a7067fb7e3d199112d660217c062ecc3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4ea1e0c9446bc560ef5bee0d2bcf49" id="r_aea4ea1e0c9446bc560ef5bee0d2bcf49"><td class="memItemLeft" align="right" valign="top">LiquidMenu&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aea4ea1e0c9446bc560ef5bee0d2bcf49">cylinderMenu</a> (<a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>, <a class="el" href="TextMenu_8h.html#a9906f0e9118adb5a4535b657e6545ebe">diameterScreen</a>, <a class="el" href="TextMenu_8h.html#af4b29aa09a0c8d5cbebc9a03efdcc91f">angleScreen</a>, <a class="el" href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a>)</td></tr>
+<tr class="separator:aea4ea1e0c9446bc560ef5bee0d2bcf49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0004c552923e35eae39bfaa3354019e8" id="r_a0004c552923e35eae39bfaa3354019e8"><td class="memItemLeft" align="right" valign="top">LiquidSystem&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a0004c552923e35eae39bfaa3354019e8">menuSystem</a> (<a class="el" href="TextMenu_8h.html#acc5d1111326be774aeea3e4a1897f812">mainMenu</a>, <a class="el" href="TextMenu_8h.html#ae756d7b16784f83f19c1d7bfe12ed9c1">limitMenu</a>, <a class="el" href="TextMenu_8h.html#a8794c4facf429ba1000902ba19097340">cylinderMenu</a>, 1)</td></tr>
+<tr class="separator:a0004c552923e35eae39bfaa3354019e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b09d99e8ffceb2d686b7f79377beec2" id="r_a6b09d99e8ffceb2d686b7f79377beec2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a6b09d99e8ffceb2d686b7f79377beec2">settingTextMenu</a> ()</td></tr>
+<tr class="separator:a6b09d99e8ffceb2d686b7f79377beec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9744482bf77934a5029d69dc509598" id="r_aac9744482bf77934a5029d69dc509598"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aac9744482bf77934a5029d69dc509598">isOutOfBounds</a> (float paramManipulation, float maxParam, float minParam)</td></tr>
+<tr class="separator:aac9744482bf77934a5029d69dc509598"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee7711d68c6add5a7363003e3b1405c1" id="r_aee7711d68c6add5a7363003e3b1405c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aee7711d68c6add5a7363003e3b1405c1">updateErrorMessage</a> (Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne, uint8_t posLineTwo, <a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation, float &amp;paramManipulation, float maxParam, float minParam, String messInc, String messDec)</td></tr>
+<tr class="separator:aee7711d68c6add5a7363003e3b1405c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c3e387815b2c7dd20b7512308c88a0" id="r_a08c3e387815b2c7dd20b7512308c88a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a08c3e387815b2c7dd20b7512308c88a0">hasReachedThreshold</a> (float paramManipulation, float maxParam, float minParam, float threshold, <a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation)</td></tr>
+<tr class="separator:a08c3e387815b2c7dd20b7512308c88a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9fa764d4175e368e6c2a66de0dfe98c" id="r_ae9fa764d4175e368e6c2a66de0dfe98c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ae9fa764d4175e368e6c2a66de0dfe98c">manageSpeed</a> (bool currentSpeed, bool &amp;nextSpeed, unsigned long &amp;previousMillisSped, unsigned long interval)</td></tr>
+<tr class="separator:ae9fa764d4175e368e6c2a66de0dfe98c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02f4d31795a3e2b64f2b44fef09f44a" id="r_ab02f4d31795a3e2b64f2b44fef09f44a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ab02f4d31795a3e2b64f2b44fef09f44a">allSpeedsInactive</a> (bool *speeds, int size)</td></tr>
+<tr class="separator:ab02f4d31795a3e2b64f2b44fef09f44a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a7dad2ec067ecc32970cfe94577c497" id="r_a4a7dad2ec067ecc32970cfe94577c497"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a4a7dad2ec067ecc32970cfe94577c497">changeParamMenu</a> (<a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation, float &amp;paramManipulation, float maxParam, float minParam, bool *speeds, <a class="el" href="VariablesProject_8h.html#a49a4ea971d769a2797333fa86d0540a3">StartLevelSpeed</a> startSpeed, unsigned long &amp;previousMillisSped, const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo)</td></tr>
+<tr class="separator:a4a7dad2ec067ecc32970cfe94577c497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad4d2945b332e1b57dd22cec832941dd" id="r_aad4d2945b332e1b57dd22cec832941dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aad4d2945b332e1b57dd22cec832941dd">goBack</a> ()</td></tr>
+<tr class="separator:aad4d2945b332e1b57dd22cec832941dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a238aff6506f3a38cec389684f74abf5f" id="r_a238aff6506f3a38cec389684f74abf5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a238aff6506f3a38cec389684f74abf5f">gotoLimitMenu</a> ()</td></tr>
+<tr class="separator:a238aff6506f3a38cec389684f74abf5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac360b566da86bdb310b43e141556bb4b" id="r_ac360b566da86bdb310b43e141556bb4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ac360b566da86bdb310b43e141556bb4b">gotoCylinderMenu</a> ()</td></tr>
+<tr class="separator:ac360b566da86bdb310b43e141556bb4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e501ef8cd6b5fe23025a5a1c1485e4b" id="r_a1e501ef8cd6b5fe23025a5a1c1485e4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a1e501ef8cd6b5fe23025a5a1c1485e4b">setLimitTop</a> ()</td></tr>
+<tr class="separator:a1e501ef8cd6b5fe23025a5a1c1485e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacbf7140a5fcaedcbb3f1cfd4df9303f" id="r_aacbf7140a5fcaedcbb3f1cfd4df9303f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aacbf7140a5fcaedcbb3f1cfd4df9303f">increaseLimitTop</a> ()</td></tr>
+<tr class="separator:aacbf7140a5fcaedcbb3f1cfd4df9303f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6e1064235f77ac26b0c944524fc8f94" id="r_ab6e1064235f77ac26b0c944524fc8f94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ab6e1064235f77ac26b0c944524fc8f94">decreaseLimitTop</a> ()</td></tr>
+<tr class="separator:ab6e1064235f77ac26b0c944524fc8f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6d5418252b8724e5943cf00a9fe4af6" id="r_af6d5418252b8724e5943cf00a9fe4af6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#af6d5418252b8724e5943cf00a9fe4af6">setLimitBottom</a> ()</td></tr>
+<tr class="separator:af6d5418252b8724e5943cf00a9fe4af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf68341dfb835b3decb17a4b1a3a6d41" id="r_abf68341dfb835b3decb17a4b1a3a6d41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#abf68341dfb835b3decb17a4b1a3a6d41">increaseLimitBottom</a> ()</td></tr>
+<tr class="separator:abf68341dfb835b3decb17a4b1a3a6d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedf097fe215e0a11425d5fe2687121d8" id="r_aedf097fe215e0a11425d5fe2687121d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aedf097fe215e0a11425d5fe2687121d8">decreaseLimitBottom</a> ()</td></tr>
+<tr class="separator:aedf097fe215e0a11425d5fe2687121d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30b013121672bd95ebdcf189d34ad69c" id="r_a30b013121672bd95ebdcf189d34ad69c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a30b013121672bd95ebdcf189d34ad69c">modeEditValue</a> ()</td></tr>
+<tr class="separator:a30b013121672bd95ebdcf189d34ad69c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaddba12d430904a46c21eb7789173632" id="r_aaddba12d430904a46c21eb7789173632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aaddba12d430904a46c21eb7789173632">increaseDiameter</a> ()</td></tr>
+<tr class="separator:aaddba12d430904a46c21eb7789173632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2af41e496cf15ca99ab9be56f87770c9" id="r_a2af41e496cf15ca99ab9be56f87770c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a2af41e496cf15ca99ab9be56f87770c9">decreaseDiameter</a> ()</td></tr>
+<tr class="separator:a2af41e496cf15ca99ab9be56f87770c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa278e81af3a97423eaa922f68546de9a" id="r_aa278e81af3a97423eaa922f68546de9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#aa278e81af3a97423eaa922f68546de9a">increaseAngle</a> ()</td></tr>
+<tr class="separator:aa278e81af3a97423eaa922f68546de9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60885e8d3732c025894cec25c73814ce" id="r_a60885e8d3732c025894cec25c73814ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a60885e8d3732c025894cec25c73814ce">decreaseAngle</a> ()</td></tr>
+<tr class="separator:a60885e8d3732c025894cec25c73814ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf1ca9e7afc3e7ec41b47fea4b3d80d" id="r_afdf1ca9e7afc3e7ec41b47fea4b3d80d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#afdf1ca9e7afc3e7ec41b47fea4b3d80d">Menu</a> ()</td></tr>
+<tr class="separator:afdf1ca9e7afc3e7ec41b47fea4b3d80d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:a2269060d4e74fb611d0568d4b94b133b" id="r_a2269060d4e74fb611d0568d4b94b133b"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a2269060d4e74fb611d0568d4b94b133b">previousMillisMenu</a> = 0</td></tr>
+<tr class="separator:a2269060d4e74fb611d0568d4b94b133b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3083bdb019c335f367f83dc7f7a648b3" id="r_a3083bdb019c335f367f83dc7f7a648b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a3083bdb019c335f367f83dc7f7a648b3">startMenu</a> = false</td></tr>
+<tr class="separator:a3083bdb019c335f367f83dc7f7a648b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0468868cd09a3706809ecd53319fcb1" id="r_ad0468868cd09a3706809ecd53319fcb1"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ad0468868cd09a3706809ecd53319fcb1">intervalMenu</a> = 2000</td></tr>
+<tr class="separator:ad0468868cd09a3706809ecd53319fcb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf29f5a2008694e12d199f3a20614572" id="r_acf29f5a2008694e12d199f3a20614572"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#acf29f5a2008694e12d199f3a20614572">updateMenu</a> = 500</td></tr>
+<tr class="separator:acf29f5a2008694e12d199f3a20614572"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a541032c0356b6d1e2f340fbb7a98699a" id="r_a541032c0356b6d1e2f340fbb7a98699a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a541032c0356b6d1e2f340fbb7a98699a">buttons</a></td></tr>
+<tr class="separator:a541032c0356b6d1e2f340fbb7a98699a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8459fc4e94de7eefc74991e41779c8fc" id="r_a8459fc4e94de7eefc74991e41779c8fc"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a8459fc4e94de7eefc74991e41779c8fc">second</a> = 0</td></tr>
+<tr class="separator:a8459fc4e94de7eefc74991e41779c8fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cfb382396014f3a405f086229203c46" id="r_a8cfb382396014f3a405f086229203c46"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#a8cfb382396014f3a405f086229203c46">_previousMillisSped</a> = 0</td></tr>
+<tr class="separator:a8cfb382396014f3a405f086229203c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe099f73d026cd80d9dab97311e82aa9" id="r_abe099f73d026cd80d9dab97311e82aa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#abe099f73d026cd80d9dab97311e82aa9">_speeds</a> [] = {false, false, false}</td></tr>
+<tr class="separator:abe099f73d026cd80d9dab97311e82aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab49caee1e3265de99228ea8cffe680c7" id="r_ab49caee1e3265de99228ea8cffe680c7"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TextMenu_8cpp.html#ab49caee1e3265de99228ea8cffe680c7">IncDecMode</a> = false</td></tr>
+<tr class="separator:ab49caee1e3265de99228ea8cffe680c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Функции</h2>
+<a id="ab02f4d31795a3e2b64f2b44fef09f44a" name="ab02f4d31795a3e2b64f2b44fef09f44a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab02f4d31795a3e2b64f2b44fef09f44a">&#9670;&#160;</a></span>allSpeedsInactive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool allSpeedsInactive </td>
+          <td>(</td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>speeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7067fb7e3d199112d660217c062ecc3b" name="a7067fb7e3d199112d660217c062ecc3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7067fb7e3d199112d660217c062ecc3b">&#9670;&#160;</a></span>angleScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen angleScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#aa1e8269373ddf8a32125e2daad1cdca8">angleTitleLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a03044d0383fc674591c08a9a78a8e92f">angleValueLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d7dd613e24ee9981e7af196fe5a5215" name="a4d7dd613e24ee9981e7af196fe5a5215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d7dd613e24ee9981e7af196fe5a5215">&#9670;&#160;</a></span>angleTitleLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine angleTitleLine </td>
+          <td>(</td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Grid Angle&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5788f505d47d1ae5b821fddf7a10187c" name="a5788f505d47d1ae5b821fddf7a10187c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5788f505d47d1ae5b821fddf7a10187c">&#9670;&#160;</a></span>angleValueLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine angleValueLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Set &quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_data.&#160;</td>
+          <td class="paramname"><em>cylinderAngle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a97b64cb9db0cc00950c495a634e6d2ad">_symbolDegree</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa58c45dda17948e83f4d881b1ca7cab2" name="aa58c45dda17948e83f4d881b1ca7cab2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa58c45dda17948e83f4d881b1ca7cab2">&#9670;&#160;</a></span>backLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine backLine </td>
+          <td>(</td>
+          <td class="paramtype">11&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;/BACK&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd461e5ce4c2c59981d75f0a12baeec2" name="abd461e5ce4c2c59981d75f0a12baeec2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd461e5ce4c2c59981d75f0a12baeec2">&#9670;&#160;</a></span>bottomScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen bottomScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#abe6a70198fcb15b95d8c96de2c8e6510">limitBottomLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4a7dad2ec067ecc32970cfe94577c497" name="a4a7dad2ec067ecc32970cfe94577c497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a7dad2ec067ecc32970cfe94577c497">&#9670;&#160;</a></span>changeParamMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void changeParamMenu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a>&#160;</td>
+          <td class="paramname"><em>typeOperation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>paramManipulation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>maxParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>minParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>speeds</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="VariablesProject_8h.html#a49a4ea971d769a2797333fa86d0540a3">StartLevelSpeed</a>&#160;</td>
+          <td class="paramname"><em>startSpeed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>previousMillisSped</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned long *&#160;</td>
+          <td class="paramname"><em>intervals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>messInc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>messDec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>posLineOne</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>posLineTwo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6f3cd5badb0c8d8cbd07b0fdb58a90ad" name="a6f3cd5badb0c8d8cbd07b0fdb58a90ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f3cd5badb0c8d8cbd07b0fdb58a90ad">&#9670;&#160;</a></span>cylinderLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine cylinderLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Cylinder size&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea4ea1e0c9446bc560ef5bee0d2bcf49" name="aea4ea1e0c9446bc560ef5bee0d2bcf49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea4ea1e0c9446bc560ef5bee0d2bcf49">&#9670;&#160;</a></span>cylinderMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidMenu cylinderMenu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a9906f0e9118adb5a4535b657e6545ebe">diameterScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#af4b29aa09a0c8d5cbebc9a03efdcc91f">angleScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60885e8d3732c025894cec25c73814ce" name="a60885e8d3732c025894cec25c73814ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60885e8d3732c025894cec25c73814ce">&#9670;&#160;</a></span>decreaseAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void decreaseAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2af41e496cf15ca99ab9be56f87770c9" name="a2af41e496cf15ca99ab9be56f87770c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2af41e496cf15ca99ab9be56f87770c9">&#9670;&#160;</a></span>decreaseDiameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void decreaseDiameter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aedf097fe215e0a11425d5fe2687121d8" name="aedf097fe215e0a11425d5fe2687121d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedf097fe215e0a11425d5fe2687121d8">&#9670;&#160;</a></span>decreaseLimitBottom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void decreaseLimitBottom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6e1064235f77ac26b0c944524fc8f94" name="ab6e1064235f77ac26b0c944524fc8f94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6e1064235f77ac26b0c944524fc8f94">&#9670;&#160;</a></span>decreaseLimitTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void decreaseLimitTop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8a26f82d3fb04b5f80b6262c20520f7c" name="a8a26f82d3fb04b5f80b6262c20520f7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a26f82d3fb04b5f80b6262c20520f7c">&#9670;&#160;</a></span>diameterScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen diameterScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#ae46f98e42a9a7b0a8a2bb65342a74884">diameterTitleLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a2f5dc6b56c842c4f3946bf2208c480d3">diameterValueLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a343e52529fe7b5a2965f859093d860dc" name="a343e52529fe7b5a2965f859093d860dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a343e52529fe7b5a2965f859093d860dc">&#9670;&#160;</a></span>diameterTitleLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine diameterTitleLine </td>
+          <td>(</td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Diameter&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f2fc9f190c2d2aea8bfa1aa8600c338" name="a4f2fc9f190c2d2aea8bfa1aa8600c338"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f2fc9f190c2d2aea8bfa1aa8600c338">&#9670;&#160;</a></span>diameterValueLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine diameterValueLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Set &quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_data.&#160;</td>
+          <td class="paramname"><em>cylinderDiameter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;mm&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad4d2945b332e1b57dd22cec832941dd" name="aad4d2945b332e1b57dd22cec832941dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad4d2945b332e1b57dd22cec832941dd">&#9670;&#160;</a></span>goBack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void goBack </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac360b566da86bdb310b43e141556bb4b" name="ac360b566da86bdb310b43e141556bb4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac360b566da86bdb310b43e141556bb4b">&#9670;&#160;</a></span>gotoCylinderMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gotoCylinderMenu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a238aff6506f3a38cec389684f74abf5f" name="a238aff6506f3a38cec389684f74abf5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a238aff6506f3a38cec389684f74abf5f">&#9670;&#160;</a></span>gotoLimitMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gotoLimitMenu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a08c3e387815b2c7dd20b7512308c88a0" name="a08c3e387815b2c7dd20b7512308c88a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08c3e387815b2c7dd20b7512308c88a0">&#9670;&#160;</a></span>hasReachedThreshold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hasReachedThreshold </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>paramManipulation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>maxParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>minParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>threshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a>&#160;</td>
+          <td class="paramname"><em>typeOperation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa278e81af3a97423eaa922f68546de9a" name="aa278e81af3a97423eaa922f68546de9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa278e81af3a97423eaa922f68546de9a">&#9670;&#160;</a></span>increaseAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void increaseAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaddba12d430904a46c21eb7789173632" name="aaddba12d430904a46c21eb7789173632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaddba12d430904a46c21eb7789173632">&#9670;&#160;</a></span>increaseDiameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void increaseDiameter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf68341dfb835b3decb17a4b1a3a6d41" name="abf68341dfb835b3decb17a4b1a3a6d41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf68341dfb835b3decb17a4b1a3a6d41">&#9670;&#160;</a></span>increaseLimitBottom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void increaseLimitBottom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aacbf7140a5fcaedcbb3f1cfd4df9303f" name="aacbf7140a5fcaedcbb3f1cfd4df9303f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacbf7140a5fcaedcbb3f1cfd4df9303f">&#9670;&#160;</a></span>increaseLimitTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void increaseLimitTop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac9744482bf77934a5029d69dc509598" name="aac9744482bf77934a5029d69dc509598"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9744482bf77934a5029d69dc509598">&#9670;&#160;</a></span>isOutOfBounds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isOutOfBounds </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>paramManipulation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>maxParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>minParam</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada45f3dc74fa31acc9598a8b6632ccc7" name="ada45f3dc74fa31acc9598a8b6632ccc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada45f3dc74fa31acc9598a8b6632ccc7">&#9670;&#160;</a></span>limitBottomLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine limitBottomLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Bottom:&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_data.&#160;</td>
+          <td class="paramname"><em>limitBottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;mm&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d31c2f64b150d72b80d32e334a2f66a" name="a4d31c2f64b150d72b80d32e334a2f66a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d31c2f64b150d72b80d32e334a2f66a">&#9670;&#160;</a></span>limitMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidMenu limitMenu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a8d816654e9912157a2f73023241a59d4">bottomScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a5b50ba60ed2c12c4c3923cd79e75ddf3">topScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8fddf9cd60ea18461258cadf52af8b14" name="a8fddf9cd60ea18461258cadf52af8b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fddf9cd60ea18461258cadf52af8b14">&#9670;&#160;</a></span>limitsLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine limitsLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Limits position&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afbe5c7d42ac1d14487c89d02cf937820" name="afbe5c7d42ac1d14487c89d02cf937820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbe5c7d42ac1d14487c89d02cf937820">&#9670;&#160;</a></span>limitTopLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine limitTopLine </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Top:&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_data.&#160;</td>
+          <td class="paramname"><em>limitTop</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;mm&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5f554d81ad2a99469caedd9fb5003114" name="a5f554d81ad2a99469caedd9fb5003114"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f554d81ad2a99469caedd9fb5003114">&#9670;&#160;</a></span>linearMoveLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine linearMoveLine </td>
+          <td>(</td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Current &quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">_data.&#160;</td>
+          <td class="paramname"><em>linearMove</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;mm&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acffca9c873bb668f14ce9bb1e29e9275" name="acffca9c873bb668f14ce9bb1e29e9275"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acffca9c873bb668f14ce9bb1e29e9275">&#9670;&#160;</a></span>mainMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidMenu mainMenu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="Display_8cpp.html#a0d903609b07c68387cb5e63e2c237e9d">_lcd</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a2153c0f1f12cdebf17c7f8d7fe16ac52">welcomeScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a317df6a620c5a4bcaa8fe2910c60751a">settingsScreen</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9fa764d4175e368e6c2a66de0dfe98c" name="ae9fa764d4175e368e6c2a66de0dfe98c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9fa764d4175e368e6c2a66de0dfe98c">&#9670;&#160;</a></span>manageSpeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void manageSpeed </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>currentSpeed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>nextSpeed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long &amp;&#160;</td>
+          <td class="paramname"><em>previousMillisSped</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>interval</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afdf1ca9e7afc3e7ec41b47fea4b3d80d" name="afdf1ca9e7afc3e7ec41b47fea4b3d80d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdf1ca9e7afc3e7ec41b47fea4b3d80d">&#9670;&#160;</a></span>Menu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Menu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0004c552923e35eae39bfaa3354019e8" name="a0004c552923e35eae39bfaa3354019e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0004c552923e35eae39bfaa3354019e8">&#9670;&#160;</a></span>menuSystem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidSystem menuSystem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#acc5d1111326be774aeea3e4a1897f812">mainMenu</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#ae756d7b16784f83f19c1d7bfe12ed9c1">limitMenu</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a8794c4facf429ba1000902ba19097340">cylinderMenu</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a30b013121672bd95ebdcf189d34ad69c" name="a30b013121672bd95ebdcf189d34ad69c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30b013121672bd95ebdcf189d34ad69c">&#9670;&#160;</a></span>modeEditValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void modeEditValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5238ab40ee315278b6d6f383cb014285" name="a5238ab40ee315278b6d6f383cb014285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5238ab40ee315278b6d6f383cb014285">&#9670;&#160;</a></span>oSaveLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine oSaveLine </td>
+          <td>(</td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Save&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e1f2b862b35a03a2c6e21c636a393f8" name="a5e1f2b862b35a03a2c6e21c636a393f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1f2b862b35a03a2c6e21c636a393f8">&#9670;&#160;</a></span>oSecondaryScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen oSecondaryScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a19bb8c3818a5cffc8eac74c0f6c49ba1">oSaveLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#aaaf918e66e068bc02facebb75d6a9f7b">backLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6d5418252b8724e5943cf00a9fe4af6" name="af6d5418252b8724e5943cf00a9fe4af6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6d5418252b8724e5943cf00a9fe4af6">&#9670;&#160;</a></span>setLimitBottom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setLimitBottom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e501ef8cd6b5fe23025a5a1c1485e4b" name="a1e501ef8cd6b5fe23025a5a1c1485e4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e501ef8cd6b5fe23025a5a1c1485e4b">&#9670;&#160;</a></span>setLimitTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setLimitTop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c7ff005a83c5d4bda29c8cd1b239059" name="a1c7ff005a83c5d4bda29c8cd1b239059"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c7ff005a83c5d4bda29c8cd1b239059">&#9670;&#160;</a></span>settingsScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen settingsScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a8d6b2ebc142a8c90d7da5294cd068662">limitsLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#ac5b6ea32f8f76119976fac22c367fe3f">cylinderLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b09d99e8ffceb2d686b7f79377beec2" name="a6b09d99e8ffceb2d686b7f79377beec2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b09d99e8ffceb2d686b7f79377beec2">&#9670;&#160;</a></span>settingTextMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void settingTextMenu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d3b6d4035faceba32dff8e41c0b3550" name="a2d3b6d4035faceba32dff8e41c0b3550"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d3b6d4035faceba32dff8e41c0b3550">&#9670;&#160;</a></span>topScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen topScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a7bb8bc3c39ba35fa77fe72b535f712e6">limitTopLine</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee7711d68c6add5a7363003e3b1405c1" name="aee7711d68c6add5a7363003e3b1405c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee7711d68c6add5a7363003e3b1405c1">&#9670;&#160;</a></span>updateErrorMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void updateErrorMessage </td>
+          <td>(</td>
+          <td class="paramtype">Adafruit_RGBLCDShield&#160;</td>
+          <td class="paramname"><em>lcd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>mesLineOne</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>mesLineTwo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>posLineOne</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>posLineTwo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a>&#160;</td>
+          <td class="paramname"><em>typeOperation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>paramManipulation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>maxParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>minParam</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>messInc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>messDec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a089d6fe0b6dd200e755f6c77d7be92f4" name="a089d6fe0b6dd200e755f6c77d7be92f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a089d6fe0b6dd200e755f6c77d7be92f4">&#9670;&#160;</a></span>welcomeLine1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine welcomeLine1 </td>
+          <td>(</td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">0&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Properties Menu&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4de06ab1b36ace1b0164ad4e0719f5ca" name="a4de06ab1b36ace1b0164ad4e0719f5ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4de06ab1b36ace1b0164ad4e0719f5ca">&#9670;&#160;</a></span>welcomeLine2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidLine welcomeLine2 </td>
+          <td>(</td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">1&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;Machine 3G833&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee39e9bd5e6d0fff7cf730414544f8ba" name="aee39e9bd5e6d0fff7cf730414544f8ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee39e9bd5e6d0fff7cf730414544f8ba">&#9670;&#160;</a></span>welcomeScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LiquidScreen welcomeScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#a77a51b7f0204f5db65efe348d12f6820">welcomeLine1</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="TextMenu_8h.html#ab27953ca8fe26868cca58a1e0d4b6fd5">welcomeLine2</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Переменные</h2>
+<a id="a8cfb382396014f3a405f086229203c46" name="a8cfb382396014f3a405f086229203c46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cfb382396014f3a405f086229203c46">&#9670;&#160;</a></span>_previousMillisSped</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long _previousMillisSped = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe099f73d026cd80d9dab97311e82aa9" name="abe099f73d026cd80d9dab97311e82aa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe099f73d026cd80d9dab97311e82aa9">&#9670;&#160;</a></span>_speeds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool _speeds[] = {false, false, false}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a541032c0356b6d1e2f340fbb7a98699a" name="a541032c0356b6d1e2f340fbb7a98699a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a541032c0356b6d1e2f340fbb7a98699a">&#9670;&#160;</a></span>buttons</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t buttons</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab49caee1e3265de99228ea8cffe680c7" name="ab49caee1e3265de99228ea8cffe680c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab49caee1e3265de99228ea8cffe680c7">&#9670;&#160;</a></span>IncDecMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool IncDecMode = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0468868cd09a3706809ecd53319fcb1" name="ad0468868cd09a3706809ecd53319fcb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0468868cd09a3706809ecd53319fcb1">&#9670;&#160;</a></span>intervalMenu</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long intervalMenu = 2000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2269060d4e74fb611d0568d4b94b133b" name="a2269060d4e74fb611d0568d4b94b133b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2269060d4e74fb611d0568d4b94b133b">&#9670;&#160;</a></span>previousMillisMenu</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long previousMillisMenu = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8459fc4e94de7eefc74991e41779c8fc" name="a8459fc4e94de7eefc74991e41779c8fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8459fc4e94de7eefc74991e41779c8fc">&#9670;&#160;</a></span>second</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t second = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3083bdb019c335f367f83dc7f7a648b3" name="a3083bdb019c335f367f83dc7f7a648b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3083bdb019c335f367f83dc7f7a648b3">&#9670;&#160;</a></span>startMenu</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool startMenu = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf29f5a2008694e12d199f3a20614572" name="acf29f5a2008694e12d199f3a20614572"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf29f5a2008694e12d199f3a20614572">&#9670;&#160;</a></span>updateMenu</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long updateMenu = 500</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

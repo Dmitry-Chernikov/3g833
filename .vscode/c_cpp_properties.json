@@ -22,6 +22,7 @@
                 "/home/dmitry/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "/home/dmitry/.platformio/packages/framework-arduino-avr/variants/mega",
                 "/home/dmitry/Документы/PlatformIO/Projects/3g833/.pio/libdeps/megaatmega2560/LiquidCrystal",
+                "/home/dmitry/Документы/PlatformIO/Projects/3g833/.pio/libdeps/megaatmega2560/Unity/src",
                 "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                 "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
                 ""
@@ -43,6 +44,7 @@
                     "/home/dmitry/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "/home/dmitry/.platformio/packages/framework-arduino-avr/variants/mega",
                     "/home/dmitry/Документы/PlatformIO/Projects/3g833/.pio/libdeps/megaatmega2560/LiquidCrystal",
+                    "/home/dmitry/Документы/PlatformIO/Projects/3g833/.pio/libdeps/megaatmega2560/Unity/src",
                     "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                     "/home/dmitry/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
                     ""

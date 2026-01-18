@@ -9,7 +9,7 @@ uint8_t buttons, second = 0;
 unsigned long _previousMillisSped = 0;
 bool _speeds[] = {false, false, false};
 
-volatile bool IncDecMode = false;
+volatile bool IncDecMode = false; // Режим инкремента/декремента
 
 LiquidLine backLine(11, 1, "/BACK");
 
@@ -353,8 +353,9 @@ void Menu() {
     }
 
     _data.linearMove = getLinearMotion();
+    buttons = _lcd.readButtons();
 
-    if (buttons == _lcd.readButtons()) {
+    if (buttons) {
 
       if (buttons & BUTTON_UP) {
         if (IncDecMode) {

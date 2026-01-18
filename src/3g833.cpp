@@ -85,8 +85,7 @@ void setup() {
     initSetupOutputExecutiveMechanism();
 
     suswe321.begin();
-    pinMode(rs485TransceiverReceive, OUTPUT);
-    digitalWrite(rs485TransceiverReceive, RS485Receive); // переводим модуль в режим приёма данных
+
 
 #ifdef ENABLE_KEYPAD
     readKeypad();
@@ -117,7 +116,7 @@ void testConnection() {
     uint16_t value;
 
     // Добавляем больше задержек
-    if (suswe321.readSingleParameter(GROUP_d, &value)) {
+    if (suswe321.readSingleGroupParameter(GROUP_d, 0, &value)) {
         Serial.println("*** SUCCESS: Device responded! ***");
         Serial.print("Value: 0x");
         Serial.println(value, HEX);
@@ -137,16 +136,13 @@ void testConnection() {
 }
 
 void loop() {
-
+    constexpr uint16_t value[2] = {1, 2};
     /*****SUSWE321*****/
-    if (suswe321.checkCommunicationSettings()) {
-        //Serial.println(String(responseData));
+     if (suswe321.writeParametersInGroups(GROUP_F0, 1, value, 2)) {
+         //Serial.println(String(responseData));
 
-        lcdPrintString(_lcd, "Frequency", "OK", "", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
-    }
-
-    //Serial.println(suswe321.readFaultDescription(0x0001, &responseData)); // Чтение описания неисправностей
-    //delay(1000);
+         lcdPrintString(_lcd, "Frequency", "OK", "", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+     }
     /*****SUSWE321*****/
 
 

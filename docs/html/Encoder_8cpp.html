@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Файл src/Encoder.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл Encoder.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="Encoder_8h_source.html">Encoder.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для Encoder.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="Encoder_8cpp__incl.png" border="0" usemap="#asrc_2Encoder_8cpp" alt=""/></div>
+<map name="asrc_2Encoder_8cpp" id="asrc_2Encoder_8cpp">
+<area shape="rect" title=" " alt="" coords="405,5,522,31"/>
+<area shape="rect" href="Encoder_8h.html" title=" " alt="" coords="423,79,504,104"/>
+<area shape="poly" title=" " alt="" coords="466,31,466,65,461,65,461,31"/>
+<area shape="rect" href="MemoryEeprom_8h.html" title=" " alt="" coords="215,152,341,177"/>
+<area shape="poly" title=" " alt="" coords="435,107,322,149,320,145,433,102"/>
+<area shape="rect" title=" " alt="" coords="205,299,282,324"/>
+<area shape="poly" title=" " alt="" coords="468,104,471,133,470,173,461,215,452,235,440,252,409,278,371,296,333,306,296,311,296,306,332,301,370,291,406,274,436,249,448,232,456,213,464,172,465,133,463,105"/>
+<area shape="rect" title=" " alt="" coords="501,152,589,177"/>
+<area shape="poly" title=" " alt="" coords="478,102,523,141,519,145,475,106"/>
+<area shape="rect" href="Display_8h.html" title=" " alt="" coords="92,225,168,251"/>
+<area shape="poly" title=" " alt="" coords="255,180,168,222,165,217,253,175"/>
+<area shape="poly" title=" " alt="" coords="267,179,249,200,235,226,232,256,237,285,232,286,227,256,230,225,245,197,263,176"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="244,225,312,251"/>
+<area shape="poly" title=" " alt="" coords="281,178,281,212,275,212,275,178"/>
+<area shape="rect" title=" " alt="" coords="336,225,425,251"/>
+<area shape="poly" title=" " alt="" coords="296,175,354,215,351,219,293,180"/>
+<area shape="rect" title=" " alt="" coords="5,299,180,324"/>
+<area shape="poly" title=" " alt="" coords="126,252,107,288,103,285,121,250"/>
+<area shape="poly" title=" " alt="" coords="150,248,215,289,212,294,147,253"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:af3c52025a948accd226b8760b3dacb11" id="r_af3c52025a948accd226b8760b3dacb11"><td class="memItemLeft" align="right" valign="top">AS5048A&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Encoder_8cpp.html#af3c52025a948accd226b8760b3dacb11">angleSensor</a> (SS)</td></tr>
+<tr class="separator:af3c52025a948accd226b8760b3dacb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a816b22a073a30b233d6afdf983c27e8d" id="r_a816b22a073a30b233d6afdf983c27e8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Encoder_8cpp.html#a816b22a073a30b233d6afdf983c27e8d">initEncoder</a> ()</td></tr>
+<tr class="separator:a816b22a073a30b233d6afdf983c27e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1616f827c5bdba5dfd61171dbfe1502f" id="r_a1616f827c5bdba5dfd61171dbfe1502f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Encoder_8cpp.html#a1616f827c5bdba5dfd61171dbfe1502f">getAngle</a> (bool EnableMedianValue, byte NumberFunctionValues)</td></tr>
+<tr class="separator:a1616f827c5bdba5dfd61171dbfe1502f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7bfede20298f15b72e37a5181c5e19" id="r_a6b7bfede20298f15b72e37a5181c5e19"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Encoder_8cpp.html#a6b7bfede20298f15b72e37a5181c5e19">getLinearMotion</a> ()</td></tr>
+<tr class="separator:a6b7bfede20298f15b72e37a5181c5e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Функции</h2>
+<a id="af3c52025a948accd226b8760b3dacb11" name="af3c52025a948accd226b8760b3dacb11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3c52025a948accd226b8760b3dacb11">&#9670;&#160;</a></span>angleSensor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AS5048A angleSensor </td>
+          <td>(</td>
+          <td class="paramtype">SS&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1616f827c5bdba5dfd61171dbfe1502f" name="a1616f827c5bdba5dfd61171dbfe1502f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1616f827c5bdba5dfd61171dbfe1502f">&#9670;&#160;</a></span>getAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float getAngle </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>EnableMedianValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">byte&#160;</td>
+          <td class="paramname"><em>NumberFunctionValues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b7bfede20298f15b72e37a5181c5e19" name="a6b7bfede20298f15b72e37a5181c5e19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b7bfede20298f15b72e37a5181c5e19">&#9670;&#160;</a></span>getLinearMotion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float getLinearMotion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a816b22a073a30b233d6afdf983c27e8d" name="a816b22a073a30b233d6afdf983c27e8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a816b22a073a30b233d6afdf983c27e8d">&#9670;&#160;</a></span>initEncoder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initEncoder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

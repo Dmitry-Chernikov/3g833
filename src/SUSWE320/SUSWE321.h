@@ -1,184 +1,357 @@
 #pragma once
 
+/** @file SUSWE321.h
+ * @brief Заголовочный файл для библиотеки (API) управления частотным преобразователем SUSWE321.
+ *
+ * @author Dmitry Chernikov
+ */
+
 #include <Arduino.h>
 
+/**
+ * @def RS485Transmit
+ * @brief Уровень сигнала для режима передачи данных по RS485 (высокий уровень).
+ */
 #define RS485Transmit HIGH
+
+/**
+ * @def RS485Receive
+ * @brief Уровень сигнала для режима приёма данных по RS485 (низкий уровень).
+ */
 #define RS485Receive LOW
 
-// Таблица CRC16 для расчета CRC
-static const uint16_t crc16_table[256] = {
-    0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
-    0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
-    0x0200, 0x1221, 0x2242, 0x3263, 0x4284, 0x52A5, 0x62C6, 0x72E7,
-    0x8308, 0x9329, 0xA34A, 0xB36B, 0xC38C, 0xD3AD, 0xE3CE, 0xF3EF,
-    0x0400, 0x1421, 0x2442, 0x3463, 0x4484, 0x54A5, 0x64C6, 0x74E7,
-    0x8508, 0x9529, 0xA54A, 0xB56B, 0xC58C, 0xD5AD, 0xE5CE, 0xF5EF,
-    0x0600, 0x1621, 0x2642, 0x3663, 0x4684, 0x56A5, 0x66C6, 0x76E7,
-    0x8708, 0x9729, 0xA74A, 0xB76B, 0xC78C, 0xD7AD, 0xE7CE, 0xF7EF,
-    0x0800, 0x1821, 0x2842, 0x3863, 0x4884, 0x58A5, 0x68C6, 0x78E7,
-    0x8908, 0x9929, 0xA94A, 0xB96B, 0xC98C, 0xD9AD, 0xE9CE, 0xF9EF,
-    0x0A00, 0x1A21, 0x2A42, 0x3A63, 0x4A84, 0x5AA5, 0x6AC6, 0x7AE7,
-    0x8B08, 0x9B29, 0xAB4A, 0xBB6B, 0xCB8C, 0xDBAD, 0xEBCE, 0xFBFF,
-    0x0C00, 0x1C21, 0x2C42, 0x3C63, 0x4C84, 0x5CA5, 0x6CC6, 0x7CE7,
-    0x8D08, 0x9D29, 0xAD4A, 0xBD6B, 0xCD8C, 0xDDAD, 0xEDCE, 0xFDFF,
-    0x0E00, 0x1E21, 0x2E42, 0x3E63, 0x4E84, 0x5EA5, 0x6EC6, 0x7EE7,
-    0x8F08, 0x9F29, 0xAF4A, 0xBF6B, 0xCF8C, 0xDFAD, 0xEFC0, 0xFFE1,
-};
-
-// Перечисление моделей
+/**
+ * @enum Model
+ * @brief Перечисление доступных моделей частотного преобразователя.
+ *
+ * Каждый элемент соответствует определённой модели по мощности.
+ * MODEL_COUNT — служебный элемент для определения количества моделей.
+ */
 enum class Model {
-    MODEL_0_4,
-    MODEL_0_75,
-    MODEL_1_5,
-    MODEL_2_2,
-    MODEL_3_0,
-    MODEL_4_0,
-    MODEL_5_5,
-    MODEL_7_5,
-    MODEL_11_0,
-    MODEL_COUNT // Используем для определения размера массива
+    MODEL_0_4,     ///< Модель 0.4 кВт
+    MODEL_0_75,    ///< Модель 0.75 кВт
+    MODEL_1_5,     ///< Модель 1.5 кВт
+    MODEL_2_2,     ///< Модель 2.2 кВт
+    MODEL_3_0,     ///< Модель 3.0 кВт
+    MODEL_4_0,     ///< Модель 4.0 кВт
+    MODEL_5_5,     ///< Модель 5.5 кВт
+    MODEL_7_5,     ///< Модель 7.5 кВт
+    MODEL_11_0,    ///< Модель 11.0 кВт
+    MODEL_COUNT    ///< Количество моделей (используется для размера массива)
 };
 
-// Массив мощностей для каждой модели
-constexpr float modelPowers[] = {
-    0.4,  // MODEL_0_4
-    0.75, // MODEL_0_75
-    1.5,  // MODEL_1_5
-    2.2,  // MODEL_2_2
-    3.0,  // MODEL_3_0
-    4.0,  // MODEL_4_0
-    5.5,  // MODEL_5_5
-    7.5,  // MODEL_7_5
-    11.0  // MODEL_11_0
+/**
+ * @var modelPowers[]
+ * @brief Массив мощностей в ваттах, соответствующих каждой модели.
+ *
+ * Порядок значений соответствует порядку в enum Model.
+ * Используется для получения мощности модели по её индексу.
+ */
+constexpr int modelPowers[] = {
+    400,   ///< MODEL_0_4
+    750,   ///< MODEL_0_75
+    1500,  ///< MODEL_1_5
+    2200,  ///< MODEL_2_2
+    3000,  ///< MODEL_3_0
+    4000,  ///< MODEL_4_0
+    5500,  ///< MODEL_5_5
+    7500,  ///< MODEL_7_5
+    11000  ///< MODEL_11_0
 };
 
 /**
  * @enum GroupsParameter
- * @brief Данные параметров содержат важные параметры привода переменного тока.
+ * @brief Группы параметров частотного преобразователя SUSWE321.
+ *
+ * Каждая группа объединяет параметры по функциональному назначению.
+ * Адресация параметров производится по формуле: (GROUP << 8) | subAddress.
  */
-enum GroupsParameter : uint16_t{
-    GROUP_F0 = 0,     // Основные рабочие параметры
-    GROUP_F1,     // Параметры управления V/F
-    GROUP_F2,     // Параметры векторного управления V
-    GROUP_F3,     // Вспомогательные эксплуатационные параметры 1
-    GROUP_F4,     // Вспомогательные эксплуатационные параметры 2
-    GROUP_F5,     // Параметры цифровых входов выходов
-    GROUP_F6,     // Аналоговые входные и выходные функции
-    GROUP_F7,     // Параметры запуска программы (ПЛК)
-    GROUP_F8,     // Параметры PID регулятора
-    GROUP_F9,     // Параметры мотора
-    GROUP_FA,     // Параметры защиты
-    GROUP_FB,     // Параметры дисплея и специальные
-    GROUP_FC,     // Параметры коммуникации RS485
-    GROUP_FP,     // Заводские параметры
-    GROUP_d = 112,      // Параметры мониторинга
-    GROUP_COUNT = GROUP_d - 97  // Количество групп
+enum GroupsParameter : uint16_t {
+    GROUP_F0 = 0,     ///< Основные рабочие параметры
+    GROUP_F1,         ///< Параметры управления V/F
+    GROUP_F2,         ///< Параметры векторного управления V
+    GROUP_F3,         ///< Вспомогательные эксплуатационные параметры 1
+    GROUP_F4,         ///< Вспомогательные эксплуатационные параметры 2
+    GROUP_F5,         ///< Параметры цифровых входов/выходов
+    GROUP_F6,         ///< Аналоговые входные и выходные функции
+    GROUP_F7,         ///< Параметры запуска программы (ПЛК)
+    GROUP_F8,         ///< Параметры PID-регулятора
+    GROUP_F9,         ///< Параметры электродвигателя
+    GROUP_FA,         ///< Параметры защиты
+    GROUP_FB,         ///< Параметры дисплея и специальные функции
+    GROUP_FC,         ///< Параметры связи по RS485
+    GROUP_FP,         ///< Заводские параметры
+    GROUP_d = 112,    ///< Параметры мониторинга (данные в реальном времени)
+    GROUP_COUNT = GROUP_d - 97  ///< Общее количество групп параметров
 };
 
-// Команды управления двигателем для частотника
+/**
+ * @enum ControlCommand
+ * @brief Команды управления работой двигателя.
+ *
+ * Используются для отправки управляющих команд частотнику.
+ */
 enum ControlCommand : uint16_t {
-    FORWARD_RUN_COMMAND,
-    REVERSE_RUN_COMMAND,
-    FORWARD_RUN_JOG_COMMAND,
-    REVERSE_RUN_JOG_COMMAND,
-    FREE_STOP_COMMAND,
-    DECELERATE_STOP_COMMAND,
-    FAULT_RESET_COMMAND
+    FORWARD_RUN_COMMAND,           ///< Запуск двигателя вперёд
+    REVERSE_RUN_COMMAND,           ///< Запуск двигателя назад
+    FORWARD_RUN_JOG_COMMAND,       ///< Импульсный запуск вперёд
+    REVERSE_RUN_JOG_COMMAND,       ///< Импульсный запуск назад
+    FREE_STOP_COMMAND,             ///< Свободная остановка
+    DECELERATE_STOP_COMMAND,       ///< Остановка с торможением
+    FAULT_RESET_COMMAND            ///< Сброс аварии
 };
 
-// Структура задаёт каркас для хранения информации об ошибках 
+/**
+ * @struct FaultInfo
+ * @brief Структура для хранения информации об ошибках частотного преобразователя.
+ *
+ * Содержит описание, причины и рекомендуемые действия для устранения ошибки.
+ */
 struct FaultInfo {
-    //int code;             // Код ошибки будет равен индексу массива
-    const char* name;       // Название ошибки
-    const char* causes;     // Возможные причины
-    const char* solution;   // Решение
+    const char* name;       ///< Название ошибки (например, "Перегрузка по току")
+    const char* causes;     ///< Возможные причины возникновения ошибки
+    const char* solution;   ///< Рекомендованные действия по устранению
 };
 
-// Определение перечисления для типов значений
+/**
+ * @enum ParameterType
+ * @brief Тип данных параметра.
+ *
+ * Используется для определения типа значения в структуре Parameter.
+ */
 enum ParameterType {
-    FLOAT,
-    INT,
-    STRING
+    FLOAT,   ///< Значение типа float
+    INT,     ///< Значение типа int
+    STRING   ///< Значение типа строка (const char*)
 };
 
-// Определение union для хранения различных типов значений
+/**
+ * @union ParameterValue
+ * @brief Объединение для хранения значений разных типов.
+ *
+ * Позволяет хранить значения параметров разного типа в единой структуре.
+ * Активный тип должен отслеживаться отдельно.
+ */
 union ParameterValue {
-    float floatValue;        // Для хранения значений с плавающей точкой
-    int intValue;            // Для хранения целых значений
-    const char* stringValue; // Для хранения строковых значений
+    float floatValue;        ///< Хранение значения с плавающей точкой
+    int intValue;            ///< Хранение целочисленного значения
+    const char* stringValue; ///< Хранение строкового значения
 };
 
-// Структура Parameter
+/**
+ * @struct Parameter
+ * @brief Описание параметра частотного преобразователя.
+ *
+ * Содержит полную метаинформацию о параметре: название, диапазон, единицы измерения и т.д.
+ */
 struct Parameter {
-    const char* name;              // Название параметра
-    ParameterValue factoryDefault; // Значение по умолчанию
-    const char* unit;              // Единица измерения
-    ParameterValue minSetting;     // Минимальное значение диапазона
-    ParameterValue maxSetting;     // Максимальное значение диапазона
-    const char* description;       // Описание параметра
-    ParameterType type;            // Тип значения
+    const char* name;              ///< Название параметра (например, "Частота задания")
+    ParameterValue factoryDefault; ///< Значение по умолчанию
+    const char* unit;              ///< Единица измерения (например, "Гц", "В", "%")
+    ParameterValue minSetting;     ///< Минимально допустимое значение
+    ParameterValue maxSetting;     ///< Максимально допустимое значение
+    const char* description;       ///< Подробное описание параметра
+    ParameterType type;            ///< Тип данных значения
 };
 
+/**
+ * @class SUSWE321
+ * @brief Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.
+ *
+ * Реализует взаимодействие с частотником через интерфейс RS485.
+ * Поддерживает чтение/запись параметров, отправку команд управления и диагностику.
+ */
 class SUSWE321 {
 public:
-    // Конструктор принимает ссылку на объект HardwareSerial
-    SUSWE321(uint8_t slaveAddress, HardwareSerial* serialPort,  HardwareSerial* serialDebug, unsigned long baud, uint8_t transmitterModeContact);
-    void begin() const;
+    /**
+     * @brief Конструктор класса.
+     * @param slaveAddress Адрес ведомого устройства (частотника) в сети Modbus.
+     * @param serialPort Указатель на объект HardwareSerial для связи с частотником.
+     * @param serialDebug Указатель на объект HardwareSerial для вывода отладочной информации.
+     * @param baud Скорость передачи данных (обычно 9600, 19200, 115200).
+     * @param transmitterModeContact Номер цифрового пина для управления направлением RS485 (DE/RE).
+     */
+    SUSWE321(uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, unsigned long baud, uint8_t transmitterModeContact);
+
+    /**
+     * @brief Инициализация класса и настройка аппаратных параметров.
+     *
+     * Настройка последовательного порта, пина управления RS485 и таймаутов.
+     */
+    void begin();
+
+    /**
+     * @brief Деструктор по умолчанию.
+     */
     ~SUSWE321() = default;
 
-    // Дополнительные функции для работы с параметрами
+    /**
+     * @brief Проверяет, была ли успешная инициализация класса.
+     * @return true, если инициализация прошла успешно, иначе false.
+     */
+    bool isInitialized() const { return _initialized; }
+
+    /**
+     * @brief Чтение кода текущей ошибки.
+     * @param faultCode Указатель на переменную для записи кода ошибки.
+     * @return true в случае успеха, иначе false.
+     */
     bool readFaultDescription(uint16_t* faultCode) const;
+
+    /**
+     * @brief Чтение текущего состояния двигателя (работает/остановлен).
+     * @param state Указатель на переменную для записи состояния.
+     * @return true в случае успеха, иначе false.
+     */
     bool readRunningState(uint16_t* state) const;
+
+    /**
+     * @brief Отправка команды управления двигателем.
+     * @param command Команда из перечисления ControlCommand.
+     * @return true в случае успеха, иначе false.
+     */
     bool writeControlCommand(ControlCommand command) const;
 
-    // Чтение одного регистра
-    bool readSingleParameter(uint16_t address, uint16_t* value) const;
-    // Чтение с использованием групповой адресации
-    bool readParameterInGroups(GroupsParameter group, uint8_t numberGroup, uint16_t *arrayValues, size_t count) const;
-    // Чтение одного параметра по группе
+    /**
+     * @brief Чтение одного параметра из указанной группы.
+     * @param group Группа параметра.
+     * @param numberGroup Номер параметра в группе.
+     * @param value Указатель на переменную для записи значения.
+     * @return true в случае успеха, иначе false.
+     */
     bool readSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t* value) const;
 
-    // Запись одного регистра
-    bool writeSingleParameter(uint16_t address, uint16_t value) const;
-    // Запись в группы параметров
-    bool writeParameterInGroups(GroupsParameter group, uint8_t numberGroup, const uint16_t* arrayData, size_t dataCount) const;
-    // Запись одного параметра в группу
+    /**
+     * @brief Чтение нескольких параметров из одной группы.
+     * @param group Группа параметров.
+     * @param numberGroup Начальный номер параметра.
+     * @param arrayValues Массив для записи значений.
+     * @param count Количество параметров для чтения.
+     * @return true в случае успеха, иначе false.
+     */
+    bool readParametersInGroups(GroupsParameter group, uint8_t numberGroup, uint16_t* arrayValues, size_t count) const;
+
+    /**
+     * @brief Запись значения в один параметр указанной группы.
+     * @param group Группа параметра.
+     * @param numberGroup Номер параметра в группе.
+     * @param value Значение для записи.
+     * @return true в случае успеха, иначе false.
+     */
     bool writeSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t value) const;
 
+    /**
+     * @brief Запись нескольких значений в параметры одной группы.
+     * @param group Группа параметров.
+     * @param numberGroup Начальный номер параметра.
+     * @param arrayData Массив значений для записи.
+     * @param dataCount Количество записываемых значений.
+     * @return true в случае успеха, иначе false.
+     */
+    bool writeParametersInGroups(GroupsParameter group, uint8_t numberGroup, const uint16_t* arrayData, size_t dataCount) const;
+
+    /**
+     * @brief Проверка корректности настроек связи.
+     * @return true, если связь работает, иначе false.
+     */
     bool checkCommunicationSettings() const;
 
 private:
-    unsigned long TOTAL_TIMEOUT; // Общий тайм-аут 2 сек
-    unsigned long INTER_CHAR_TIMEOUT; // Тайм-аут между символами
+    bool _initialized = false;               ///< Флаг успешной инициализации
+    uint8_t _slaveAddress;                   ///< Адрес Modbus-устройства
+    HardwareSerial* _serialPort;             ///< Порт для связи с частотником
+    HardwareSerial* _serialDebug;            ///< Порт для отладочного вывода
+    unsigned long _baud;                     ///< Скорость передачи данных
+    uint8_t _transmitterModeContact;         ///< Пин управления направлением RS485
+    unsigned long _totalTimeout;             ///< Общий таймаут ожидания ответа (мс)
+    unsigned long _interCharTimeout;         ///< Таймаут между символами (мс)
+
+    /**
+     * @enum CodeFunction
+     * @brief Коды функций Modbus, используемые в классе.
+     */
     enum CodeFunction : uint8_t {
-        READ = 0x0003,
-        WRITE_ONE = 0x0006,
-        WRITE_RANGE = 0x10
+        READ = 0x03,       ///< Функция Modbus 0x03 — чтение регистров
+        WRITE_ONE = 0x06,  ///< Функция Modbus 0x06 — запись одного регистра
+        WRITE_RANGE = 0x10 ///< Функция Modbus 0x10 — запись нескольких регистров
     };
-    uint8_t _slaveAddress; // Адрес ведомого устройства
-    HardwareSerial* _serialPort; // Указатель на объект HardwareSerial
-    HardwareSerial* _serialDebug; // Указатель на объект HardwareSerial для отладки
-    unsigned long _baud;  // Скорость передачи данных
-    uint8_t _transmitterModeContact; // Номер контакта для режима работы приёмник/передатчик
 
-    // Функция для построения адреса параметра
-    static uint16_t buildParameterAddress(GroupsParameter group, uint8_t subAddress);
+    /**
+     * @brief Построение полного адреса параметра.
+     * @param group Группа параметра.
+     * @param subAddress Порядковый номер параметра в группе.
+     * @return Полный 16-битный адрес регистра Modbus.
+     */
+    static constexpr uint16_t buildParameterAddress(const GroupsParameter group, const uint8_t subAddress) {
+        return ((static_cast<uint16_t>(group) << 8) | subAddress);
+    }
 
-    bool validateModbusResponse(const uint8_t *response, size_t responseSize, uint8_t expectedAddress,
-                                uint8_t expectedFunction) const;
+    /**
+     * @brief Чтение одного регистра Modbus.
+     * @param address Адрес регистра.
+     * @param value Указатель на переменную для записи значения.
+     * @return true при успехе, иначе false.
+     */
+    bool readSingleParameter(uint16_t address, uint16_t* value) const;
 
-    // Основной метод чтения регистров
+    /**
+     * @brief Запись одного регистра Modbus.
+     * @param address Адрес регистра.
+     * @param value Значение для записи.
+     * @return true при успехе, иначе false.
+     */
+    bool writeSingleParameter(uint16_t address, uint16_t value) const;
+
+    /**
+     * @brief Чтение нескольких регистров Modbus.
+     * @param slaveAddress Адрес ведомого.
+     * @param startAddress Адрес первого регистра.
+     * @param arrayValues Массив для хранения прочитанных значений.
+     * @param numberRegisters Количество регистров.
+     * @return true при успехе, иначе false.
+     */
     bool readParameters(uint8_t slaveAddress, uint16_t startAddress, uint16_t* arrayValues, size_t numberRegisters = 1) const;
-    // Основной метод записи регистров
-    bool writeParameters(uint8_t slaveAddress, uint16_t startAddress, const void* arrayValues, size_t numberRegisters) const;
 
-    // Функция для вычисления CRC
-    uint16_t calculateCRC(const uint8_t *data, uint8_t length) const;
-    // Функция для генерации таблицы CRC16
-    static void generate_crc16_table();
+    /**
+     * @brief Запись нескольких регистров Modbus.
+     * @param slaveAddress Адрес ведомого.
+     * @param startAddress Адрес первого регистра.
+     * @param arrayValues Массив значений для записи.
+     * @param numberRegisters Количество регистров.
+     * @return true при успехе, иначе false.
+     */
+    bool writeParameters(uint8_t slaveAddress, uint16_t startAddress, const uint16_t* arrayValues, size_t numberRegisters) const;
 
-    // Функция для отправки данных
+    /**
+     * @brief Проверка корректности ответа Modbus.
+     * @param response Указатель на буфер с ответом.
+     * @param responseSize Размер ответа.
+     * @param expectedAddress Ожидаемый адрес устройства.
+     * @param expectedFunction Ожидаемая функция.
+     * @return true, если ответ корректен, иначе false.
+     */
+    bool validateModbusResponse(const uint8_t* response, size_t responseSize, uint8_t expectedAddress, uint8_t expectedFunction) const;
+
+    /**
+     * @brief Вычисление CRC16 для пакета Modbus.
+     * @param data Указатель на данные.
+     * @param length Длина данных.
+     * @return Рассчитанное значение CRC16.
+     */
+    uint16_t calculateCRC(const uint8_t* data, uint8_t length) const;
+
+    /**
+     * @brief Отправка данных через последовательный порт.
+     * @param data Указатель на массив данных.
+     * @param length Количество байт для отправки.
+     */
     void sendData(const uint8_t* data, size_t length) const;
-    // Функция для приёма данных
+
+    /**
+     * @brief Приём данных с ожиданием.
+     * @param buffer Буфер для записи принятых данных.
+     * @param length Ожидаемое количество байт.
+     * @return true при успешном приёме, иначе false.
+     */
     bool receiveData(uint8_t* buffer, size_t length) const;
 };

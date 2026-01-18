@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Файл src/IOPorts.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Макросы</a> &#124;
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл IOPorts.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">config.h</a>&quot;</code><br />
+<code>#include &lt;Arduino.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для IOPorts.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="IOPorts_8h__incl.png" border="0" usemap="#asrc_2IOPorts_8h" alt=""/></div>
+<map name="asrc_2IOPorts_8h" id="asrc_2IOPorts_8h">
+<area shape="rect" title=" " alt="" coords="37,5,138,31"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,79,73,104"/>
+<area shape="poly" title=" " alt="" coords="82,33,57,69,52,66,77,30"/>
+<area shape="rect" title=" " alt="" coords="98,79,175,104"/>
+<area shape="poly" title=" " alt="" coords="98,29,123,66,119,69,93,33"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Граф файлов, в которые включается этот файл:</div>
+<div class="dyncontent">
+<div class="center"><img src="IOPorts_8h__dep__incl.png" border="0" usemap="#asrc_2IOPorts_8hdep" alt=""/></div>
+<map name="asrc_2IOPorts_8hdep" id="asrc_2IOPorts_8hdep">
+<area shape="rect" title=" " alt="" coords="115,5,216,31"/>
+<area shape="rect" href="3g833_8cpp.html" title=" " alt="" coords="5,152,109,177"/>
+<area shape="poly" title=" " alt="" coords="131,40,106,58,85,80,75,98,68,118,61,152,56,151,63,117,70,96,81,77,103,54,128,36"/>
+<area shape="rect" href="ControlSystem_8h.html" title=" " alt="" coords="95,79,236,104"/>
+<area shape="poly" title=" " alt="" coords="168,44,168,79,163,79,163,44"/>
+<area shape="rect" href="IOPorts_8cpp.html" title=" " alt="" coords="260,79,375,104"/>
+<area shape="poly" title=" " alt="" coords="203,34,294,76,291,81,201,39"/>
+<area shape="poly" title=" " alt="" coords="138,114,76,154,74,150,135,109"/>
+<area shape="rect" href="ControlSystem_8cpp.html" title=" " alt="" coords="133,152,288,177"/>
+<area shape="poly" title=" " alt="" coords="182,114,206,150,201,153,178,117"/>
+</map>
+</div>
+</div>
+<p><a href="IOPorts_8h_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a61e76c9ce5f219bbab6548b7b2cea4fe" id="r_a61e76c9ce5f219bbab6548b7b2cea4fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a61e76c9ce5f219bbab6548b7b2cea4fe">interruptRemote</a>&#160;&#160;&#160;12</td></tr>
+<tr class="separator:a61e76c9ce5f219bbab6548b7b2cea4fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1899b28a7d53e67be27b0226dc31a3" id="r_aca1899b28a7d53e67be27b0226dc31a3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#aca1899b28a7d53e67be27b0226dc31a3">buttonEndCycle</a>&#160;&#160;&#160;22</td></tr>
+<tr class="separator:aca1899b28a7d53e67be27b0226dc31a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50789aadf6193f5ea239a1be0315a0f4" id="r_a50789aadf6193f5ea239a1be0315a0f4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a50789aadf6193f5ea239a1be0315a0f4">buttonStartFeed</a>&#160;&#160;&#160;  23</td></tr>
+<tr class="separator:a50789aadf6193f5ea239a1be0315a0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54bfec5ca4295e06b5dccf59823e3007" id="r_a54bfec5ca4295e06b5dccf59823e3007"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a54bfec5ca4295e06b5dccf59823e3007">buttonSpindleStart</a>&#160;&#160;&#160;24</td></tr>
+<tr class="separator:a54bfec5ca4295e06b5dccf59823e3007"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fec72f870c4d9808b1a08584ff1ad2f" id="r_a5fec72f870c4d9808b1a08584ff1ad2f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a5fec72f870c4d9808b1a08584ff1ad2f">buttonSpindleStop</a>&#160;&#160;&#160;25</td></tr>
+<tr class="separator:a5fec72f870c4d9808b1a08584ff1ad2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad343626edd76f0c4fcd6d7556e4c1c12" id="r_ad343626edd76f0c4fcd6d7556e4c1c12"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#ad343626edd76f0c4fcd6d7556e4c1c12">buttonPush</a>&#160;&#160;&#160;26</td></tr>
+<tr class="separator:ad343626edd76f0c4fcd6d7556e4c1c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec58a873d92694433159d92b61267b88" id="r_aec58a873d92694433159d92b61267b88"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#aec58a873d92694433159d92b61267b88">buttonGeneralStop</a>&#160;&#160;&#160;27</td></tr>
+<tr class="separator:aec58a873d92694433159d92b61267b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4765941720cd6b2a25d8086aa1a893ad" id="r_a4765941720cd6b2a25d8086aa1a893ad"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a4765941720cd6b2a25d8086aa1a893ad">switchAutoCycleManual</a>&#160;&#160;&#160;28</td></tr>
+<tr class="separator:a4765941720cd6b2a25d8086aa1a893ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac896d3e3367087769c553c65101531a1" id="r_ac896d3e3367087769c553c65101531a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#ac896d3e3367087769c553c65101531a1">switchTopSlider</a>&#160;&#160;&#160;29</td></tr>
+<tr class="separator:ac896d3e3367087769c553c65101531a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc4c2698135e2c2b7f7c484e03cef48" id="r_a4fc4c2698135e2c2b7f7c484e03cef48"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a4fc4c2698135e2c2b7f7c484e03cef48">endSwitchTop</a>&#160;&#160;&#160;30</td></tr>
+<tr class="separator:a4fc4c2698135e2c2b7f7c484e03cef48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eb6e707a21f0eea03e89006437adedb" id="r_a5eb6e707a21f0eea03e89006437adedb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a5eb6e707a21f0eea03e89006437adedb">endSwitchBottom</a>&#160;&#160;&#160;31</td></tr>
+<tr class="separator:a5eb6e707a21f0eea03e89006437adedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c439e55b64c921de69c49f479a7bbea" id="r_a2c439e55b64c921de69c49f479a7bbea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a2c439e55b64c921de69c49f479a7bbea">electromagnetTop</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:a2c439e55b64c921de69c49f479a7bbea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef9e9cf9e866c54585e00654a9d6d51a" id="r_aef9e9cf9e866c54585e00654a9d6d51a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#aef9e9cf9e866c54585e00654a9d6d51a">electromagnetBottom</a>&#160;&#160;&#160;33</td></tr>
+<tr class="separator:aef9e9cf9e866c54585e00654a9d6d51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e21be228c944106ce7ba40cfc071637" id="r_a7e21be228c944106ce7ba40cfc071637"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a7e21be228c944106ce7ba40cfc071637">electromagnetManual</a>&#160;&#160;&#160;34</td></tr>
+<tr class="separator:a7e21be228c944106ce7ba40cfc071637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3862c30a9da8a5f283d7fe2d37fc3367" id="r_a3862c30a9da8a5f283d7fe2d37fc3367"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a3862c30a9da8a5f283d7fe2d37fc3367">electromagnetBrake</a>&#160;&#160;&#160;35</td></tr>
+<tr class="separator:a3862c30a9da8a5f283d7fe2d37fc3367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e74fedaa1a31c671505d480e4ea8089" id="r_a0e74fedaa1a31c671505d480e4ea8089"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a0e74fedaa1a31c671505d480e4ea8089">motorSpindle</a>&#160;&#160;&#160;36</td></tr>
+<tr class="separator:a0e74fedaa1a31c671505d480e4ea8089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bcf97ffdc02485015a718926865aebb" id="r_a3bcf97ffdc02485015a718926865aebb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a3bcf97ffdc02485015a718926865aebb">motorStartFeed</a>&#160;&#160;&#160;37</td></tr>
+<tr class="separator:a3bcf97ffdc02485015a718926865aebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48eafeff3278f4b2f935ef484eb5c0ef" id="r_a48eafeff3278f4b2f935ef484eb5c0ef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a48eafeff3278f4b2f935ef484eb5c0ef">motorSelfCoolant</a>&#160;&#160;&#160;38</td></tr>
+<tr class="separator:a48eafeff3278f4b2f935ef484eb5c0ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae56f6f9d91e88c8df09f2203ebba16b" id="r_aae56f6f9d91e88c8df09f2203ebba16b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#aae56f6f9d91e88c8df09f2203ebba16b">rs485TransceiverReceive</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:aae56f6f9d91e88c8df09f2203ebba16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:aeae5f49fabb087b8b1682d8d82896886" id="r_aeae5f49fabb087b8b1682d8d82896886"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#aeae5f49fabb087b8b1682d8d82896886">initSetupInputManipulation</a> ()</td></tr>
+<tr class="separator:aeae5f49fabb087b8b1682d8d82896886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a095234ae464e040321af2aa4ae4dc332" id="r_a095234ae464e040321af2aa4ae4dc332"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IOPorts_8h.html#a095234ae464e040321af2aa4ae4dc332">initSetupOutputExecutiveMechanism</a> ()</td></tr>
+<tr class="separator:a095234ae464e040321af2aa4ae4dc332"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Макросы</h2>
+<a id="aca1899b28a7d53e67be27b0226dc31a3" name="aca1899b28a7d53e67be27b0226dc31a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1899b28a7d53e67be27b0226dc31a3">&#9670;&#160;</a></span>buttonEndCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonEndCycle&#160;&#160;&#160;22</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec58a873d92694433159d92b61267b88" name="aec58a873d92694433159d92b61267b88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec58a873d92694433159d92b61267b88">&#9670;&#160;</a></span>buttonGeneralStop</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonGeneralStop&#160;&#160;&#160;27</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad343626edd76f0c4fcd6d7556e4c1c12" name="ad343626edd76f0c4fcd6d7556e4c1c12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad343626edd76f0c4fcd6d7556e4c1c12">&#9670;&#160;</a></span>buttonPush</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonPush&#160;&#160;&#160;26</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54bfec5ca4295e06b5dccf59823e3007" name="a54bfec5ca4295e06b5dccf59823e3007"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54bfec5ca4295e06b5dccf59823e3007">&#9670;&#160;</a></span>buttonSpindleStart</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonSpindleStart&#160;&#160;&#160;24</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fec72f870c4d9808b1a08584ff1ad2f" name="a5fec72f870c4d9808b1a08584ff1ad2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fec72f870c4d9808b1a08584ff1ad2f">&#9670;&#160;</a></span>buttonSpindleStop</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonSpindleStop&#160;&#160;&#160;25</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a50789aadf6193f5ea239a1be0315a0f4" name="a50789aadf6193f5ea239a1be0315a0f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50789aadf6193f5ea239a1be0315a0f4">&#9670;&#160;</a></span>buttonStartFeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define buttonStartFeed&#160;&#160;&#160;  23</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef9e9cf9e866c54585e00654a9d6d51a" name="aef9e9cf9e866c54585e00654a9d6d51a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef9e9cf9e866c54585e00654a9d6d51a">&#9670;&#160;</a></span>electromagnetBottom</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define electromagnetBottom&#160;&#160;&#160;33</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3862c30a9da8a5f283d7fe2d37fc3367" name="a3862c30a9da8a5f283d7fe2d37fc3367"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3862c30a9da8a5f283d7fe2d37fc3367">&#9670;&#160;</a></span>electromagnetBrake</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define electromagnetBrake&#160;&#160;&#160;35</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e21be228c944106ce7ba40cfc071637" name="a7e21be228c944106ce7ba40cfc071637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e21be228c944106ce7ba40cfc071637">&#9670;&#160;</a></span>electromagnetManual</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define electromagnetManual&#160;&#160;&#160;34</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c439e55b64c921de69c49f479a7bbea" name="a2c439e55b64c921de69c49f479a7bbea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c439e55b64c921de69c49f479a7bbea">&#9670;&#160;</a></span>electromagnetTop</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define electromagnetTop&#160;&#160;&#160;32</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5eb6e707a21f0eea03e89006437adedb" name="a5eb6e707a21f0eea03e89006437adedb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eb6e707a21f0eea03e89006437adedb">&#9670;&#160;</a></span>endSwitchBottom</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define endSwitchBottom&#160;&#160;&#160;31</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4fc4c2698135e2c2b7f7c484e03cef48" name="a4fc4c2698135e2c2b7f7c484e03cef48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fc4c2698135e2c2b7f7c484e03cef48">&#9670;&#160;</a></span>endSwitchTop</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define endSwitchTop&#160;&#160;&#160;30</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61e76c9ce5f219bbab6548b7b2cea4fe" name="a61e76c9ce5f219bbab6548b7b2cea4fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e76c9ce5f219bbab6548b7b2cea4fe">&#9670;&#160;</a></span>interruptRemote</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define interruptRemote&#160;&#160;&#160;12</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a48eafeff3278f4b2f935ef484eb5c0ef" name="a48eafeff3278f4b2f935ef484eb5c0ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48eafeff3278f4b2f935ef484eb5c0ef">&#9670;&#160;</a></span>motorSelfCoolant</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define motorSelfCoolant&#160;&#160;&#160;38</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e74fedaa1a31c671505d480e4ea8089" name="a0e74fedaa1a31c671505d480e4ea8089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e74fedaa1a31c671505d480e4ea8089">&#9670;&#160;</a></span>motorSpindle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define motorSpindle&#160;&#160;&#160;36</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3bcf97ffdc02485015a718926865aebb" name="a3bcf97ffdc02485015a718926865aebb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bcf97ffdc02485015a718926865aebb">&#9670;&#160;</a></span>motorStartFeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define motorStartFeed&#160;&#160;&#160;37</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae56f6f9d91e88c8df09f2203ebba16b" name="aae56f6f9d91e88c8df09f2203ebba16b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae56f6f9d91e88c8df09f2203ebba16b">&#9670;&#160;</a></span>rs485TransceiverReceive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define rs485TransceiverReceive&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4765941720cd6b2a25d8086aa1a893ad" name="a4765941720cd6b2a25d8086aa1a893ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4765941720cd6b2a25d8086aa1a893ad">&#9670;&#160;</a></span>switchAutoCycleManual</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define switchAutoCycleManual&#160;&#160;&#160;28</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac896d3e3367087769c553c65101531a1" name="ac896d3e3367087769c553c65101531a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac896d3e3367087769c553c65101531a1">&#9670;&#160;</a></span>switchTopSlider</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define switchTopSlider&#160;&#160;&#160;29</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Функции</h2>
+<a id="aeae5f49fabb087b8b1682d8d82896886" name="aeae5f49fabb087b8b1682d8d82896886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeae5f49fabb087b8b1682d8d82896886">&#9670;&#160;</a></span>initSetupInputManipulation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initSetupInputManipulation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a095234ae464e040321af2aa4ae4dc332" name="a095234ae464e040321af2aa4ae4dc332"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a095234ae464e040321af2aa4ae4dc332">&#9670;&#160;</a></span>initSetupOutputExecutiveMechanism()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initSetupOutputExecutiveMechanism </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

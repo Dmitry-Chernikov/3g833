@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Файл src/SUSWE320/SUSWE321.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_1f1897424cee2cf68792ab2527c0166f.html">SUSWE320</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Структуры данных</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
+<a href="#enum-members">Перечисления</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle"><div class="title">Файл SUSWE321.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Заголовочный файл для библиотеки (API) управления частотным преобразователем <a class="el" href="classSUSWE321.html" title="Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.">SUSWE321</a>.  
+<a href="#details">Подробнее...</a></p>
+<div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для SUSWE321.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="SUSWE321_8h__incl.png" border="0" usemap="#asrc_2SUSWE320_2SUSWE321_8h" alt=""/></div>
+<map name="asrc_2SUSWE320_2SUSWE321_8h" id="asrc_2SUSWE320_2SUSWE321_8h">
+<area shape="rect" title="Заголовочный файл для библиотеки (API) управления частотным преобразователем SUSWE321." alt="" coords="5,5,203,31"/>
+<area shape="rect" title=" " alt="" coords="65,79,143,104"/>
+<area shape="poly" title=" " alt="" coords="107,31,107,65,101,65,101,31"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Граф файлов, в которые включается этот файл:</div>
+<div class="dyncontent">
+<div class="center"><img src="SUSWE321_8h__dep__incl.png" border="0" usemap="#asrc_2SUSWE320_2SUSWE321_8hdep" alt=""/></div>
+<map name="asrc_2SUSWE320_2SUSWE321_8hdep" id="asrc_2SUSWE320_2SUSWE321_8hdep">
+<area shape="rect" title="Заголовочный файл для библиотеки (API) управления частотным преобразователем SUSWE321." alt="" coords="163,5,360,31"/>
+<area shape="rect" href="3g833_8cpp.html" title=" " alt="" coords="21,79,125,104"/>
+<area shape="poly" title=" " alt="" coords="219,38,105,81,103,76,218,33"/>
+<area shape="rect" href="ParameterGroup_8h.html" title=" " alt="" coords="150,79,373,104"/>
+<area shape="poly" title=" " alt="" coords="264,44,264,79,259,79,259,44"/>
+<area shape="rect" href="SUSWE321_8cpp.html" title="Реализация методов класса SUSWE321, предоставляющего интерфейс API для взаимодействия с частотником S..." alt="" coords="396,79,607,104"/>
+<area shape="poly" title=" " alt="" coords="314,32,463,76,462,81,312,37"/>
+<area shape="rect" href="ParameterGroup_8cpp.html" title=" " alt="" coords="5,152,243,177"/>
+<area shape="poly" title=" " alt="" coords="229,113,148,154,145,149,226,108"/>
+<area shape="rect" href="ParametersSUSWE320_8h.html" title=" " alt="" coords="267,152,533,177"/>
+<area shape="poly" title=" " alt="" coords="297,108,379,149,376,154,294,113"/>
+<area shape="rect" href="ParametersSUSWE320_8cpp.html" title=" " alt="" coords="261,225,539,251"/>
+<area shape="poly" title=" " alt="" coords="403,191,403,225,397,225,397,191"/>
+</map>
+</div>
+</div>
+<p><a href="SUSWE321_8h_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Структуры данных</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFaultInfo.html">FaultInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Структура для хранения информации об ошибках частотного преобразователя.  <a href="structFaultInfo.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unionParameterValue.html">ParameterValue</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Объединение для хранения значений разных типов.  <a href="unionParameterValue.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structParameter.html">Parameter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Описание параметра частотного преобразователя.  <a href="structParameter.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSUSWE321.html">SUSWE321</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Класс для управления частотным преобразователем <a class="el" href="classSUSWE321.html" title="Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.">SUSWE321</a> по протоколу Modbus RTU.  <a href="classSUSWE321.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a5a9f4784d3dbca3de0aa62d5dc5e28d6" id="r_a5a9f4784d3dbca3de0aa62d5dc5e28d6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#a5a9f4784d3dbca3de0aa62d5dc5e28d6">RS485Transmit</a>&#160;&#160;&#160;HIGH</td></tr>
+<tr class="memdesc:a5a9f4784d3dbca3de0aa62d5dc5e28d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Уровень сигнала для режима передачи данных по RS485 (высокий уровень).  <br /></td></tr>
+<tr class="separator:a5a9f4784d3dbca3de0aa62d5dc5e28d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afed3ed3a55806299fa520d47cc0a3ddd" id="r_afed3ed3a55806299fa520d47cc0a3ddd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#afed3ed3a55806299fa520d47cc0a3ddd">RS485Receive</a>&#160;&#160;&#160;LOW</td></tr>
+<tr class="memdesc:afed3ed3a55806299fa520d47cc0a3ddd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Уровень сигнала для режима приёма данных по RS485 (низкий уровень).  <br /></td></tr>
+<tr class="separator:afed3ed3a55806299fa520d47cc0a3ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Перечисления</h2></td></tr>
+<tr class="memitem:a051e4d035e053a4636efc58c1bde9b3e" id="r_a051e4d035e053a4636efc58c1bde9b3e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">Model</a> { <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780">MODEL_0_4</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b">MODEL_0_75</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f">MODEL_1_5</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4">MODEL_2_2</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128">MODEL_3_0</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4">MODEL_4_0</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9">MODEL_5_5</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979">MODEL_7_5</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0">MODEL_11_0</a>
+, <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1">MODEL_COUNT</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a051e4d035e053a4636efc58c1bde9b3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Перечисление доступных моделей частотного преобразователя.  <a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">Подробнее...</a><br /></td></tr>
+<tr class="separator:a051e4d035e053a4636efc58c1bde9b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb574b6ef9fe570bc77f511ab67cc3fe" id="r_acb574b6ef9fe570bc77f511ab67cc3fe"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> : uint16_t { <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c">GROUP_F0</a> = 0
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb">GROUP_F1</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0">GROUP_F2</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc">GROUP_F3</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469">GROUP_F4</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703">GROUP_F5</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e">GROUP_F6</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784">GROUP_F7</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b">GROUP_F8</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d">GROUP_F9</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88">GROUP_FA</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c">GROUP_FB</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30">GROUP_FC</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f">GROUP_FP</a>
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0">GROUP_d</a> = 112
+, <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94">GROUP_COUNT</a> = GROUP_d - 97
+<br />
+ }</td></tr>
+<tr class="memdesc:acb574b6ef9fe570bc77f511ab67cc3fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Группы параметров частотного преобразователя <a class="el" href="classSUSWE321.html" title="Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.">SUSWE321</a>.  <a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">Подробнее...</a><br /></td></tr>
+<tr class="separator:acb574b6ef9fe570bc77f511ab67cc3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a724d153b15c116583e273cce95c8c0d5" id="r_a724d153b15c116583e273cce95c8c0d5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">ControlCommand</a> : uint16_t { <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d">FORWARD_RUN_COMMAND</a>
+, <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec">REVERSE_RUN_COMMAND</a>
+, <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f">FORWARD_RUN_JOG_COMMAND</a>
+, <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1">REVERSE_RUN_JOG_COMMAND</a>
+, <br />
+&#160;&#160;<a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21">FREE_STOP_COMMAND</a>
+, <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea">DECELERATE_STOP_COMMAND</a>
+, <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2">FAULT_RESET_COMMAND</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a724d153b15c116583e273cce95c8c0d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Команды управления работой двигателя.  <a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">Подробнее...</a><br /></td></tr>
+<tr class="separator:a724d153b15c116583e273cce95c8c0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d63980e4031b0fc366e623868b27ed0" id="r_a4d63980e4031b0fc366e623868b27ed0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">ParameterType</a> { <a class="el" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c">FLOAT</a>
+, <a class="el" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a">INT</a>
+, <a class="el" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921">STRING</a>
+ }</td></tr>
+<tr class="memdesc:a4d63980e4031b0fc366e623868b27ed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Тип данных параметра.  <a href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">Подробнее...</a><br /></td></tr>
+<tr class="separator:a4d63980e4031b0fc366e623868b27ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:a9674bd1a9cbb5efa80c56f07b7892a28" id="r_a9674bd1a9cbb5efa80c56f07b7892a28"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SUSWE321_8h.html#a9674bd1a9cbb5efa80c56f07b7892a28">modelPowers</a> []</td></tr>
+<tr class="memdesc:a9674bd1a9cbb5efa80c56f07b7892a28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Массив мощностей в ваттах, соответствующих каждой модели.  <br /></td></tr>
+<tr class="separator:a9674bd1a9cbb5efa80c56f07b7892a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Заголовочный файл для библиотеки (API) управления частотным преобразователем <a class="el" href="classSUSWE321.html" title="Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.">SUSWE321</a>. </p>
+</div><h2 class="groupheader">Макросы</h2>
+<a id="afed3ed3a55806299fa520d47cc0a3ddd" name="afed3ed3a55806299fa520d47cc0a3ddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afed3ed3a55806299fa520d47cc0a3ddd">&#9670;&#160;</a></span>RS485Receive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RS485Receive&#160;&#160;&#160;LOW</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Уровень сигнала для режима приёма данных по RS485 (низкий уровень). </p>
+
+</div>
+</div>
+<a id="a5a9f4784d3dbca3de0aa62d5dc5e28d6" name="a5a9f4784d3dbca3de0aa62d5dc5e28d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a9f4784d3dbca3de0aa62d5dc5e28d6">&#9670;&#160;</a></span>RS485Transmit</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RS485Transmit&#160;&#160;&#160;HIGH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Уровень сигнала для режима передачи данных по RS485 (высокий уровень). </p>
+
+</div>
+</div>
+<h2 class="groupheader">Перечисления</h2>
+<a id="a724d153b15c116583e273cce95c8c0d5" name="a724d153b15c116583e273cce95c8c0d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a724d153b15c116583e273cce95c8c0d5">&#9670;&#160;</a></span>ControlCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">ControlCommand</a> : uint16_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Команды управления работой двигателя. </p>
+<p>Используются для отправки управляющих команд частотнику. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d" name="a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d"></a>FORWARD_RUN_COMMAND&#160;</td><td class="fielddoc"><p>Запуск двигателя вперёд </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec" name="a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec"></a>REVERSE_RUN_COMMAND&#160;</td><td class="fielddoc"><p>Запуск двигателя назад </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f" name="a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f"></a>FORWARD_RUN_JOG_COMMAND&#160;</td><td class="fielddoc"><p>Импульсный запуск вперёд </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1" name="a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1"></a>REVERSE_RUN_JOG_COMMAND&#160;</td><td class="fielddoc"><p>Импульсный запуск назад </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21" name="a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21"></a>FREE_STOP_COMMAND&#160;</td><td class="fielddoc"><p>Свободная остановка </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea" name="a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea"></a>DECELERATE_STOP_COMMAND&#160;</td><td class="fielddoc"><p>Остановка с торможением </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2" name="a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2"></a>FAULT_RESET_COMMAND&#160;</td><td class="fielddoc"><p>Сброс аварии </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="acb574b6ef9fe570bc77f511ab67cc3fe" name="acb574b6ef9fe570bc77f511ab67cc3fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb574b6ef9fe570bc77f511ab67cc3fe">&#9670;&#160;</a></span>GroupsParameter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> : uint16_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Группы параметров частотного преобразователя <a class="el" href="classSUSWE321.html" title="Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.">SUSWE321</a>. </p>
+<p>Каждая группа объединяет параметры по функциональному назначению. Адресация параметров производится по формуле: (GROUP &lt;&lt; 8) | subAddress. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c" name="acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c"></a>GROUP_F0&#160;</td><td class="fielddoc"><p>Основные рабочие параметры </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb" name="acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb"></a>GROUP_F1&#160;</td><td class="fielddoc"><p>Параметры управления V/F. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0" name="acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0"></a>GROUP_F2&#160;</td><td class="fielddoc"><p>Параметры векторного управления V. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc" name="acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc"></a>GROUP_F3&#160;</td><td class="fielddoc"><p>Вспомогательные эксплуатационные параметры 1. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469" name="acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469"></a>GROUP_F4&#160;</td><td class="fielddoc"><p>Вспомогательные эксплуатационные параметры 2. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703" name="acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703"></a>GROUP_F5&#160;</td><td class="fielddoc"><p>Параметры цифровых входов/выходов </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e" name="acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e"></a>GROUP_F6&#160;</td><td class="fielddoc"><p>Аналоговые входные и выходные функции </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784" name="acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784"></a>GROUP_F7&#160;</td><td class="fielddoc"><p>Параметры запуска программы (ПЛК) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b" name="acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b"></a>GROUP_F8&#160;</td><td class="fielddoc"><p>Параметры PID-регулятора </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d" name="acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d"></a>GROUP_F9&#160;</td><td class="fielddoc"><p>Параметры электродвигателя </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88" name="acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88"></a>GROUP_FA&#160;</td><td class="fielddoc"><p>Параметры защиты </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c" name="acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c"></a>GROUP_FB&#160;</td><td class="fielddoc"><p>Параметры дисплея и специальные функции </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30" name="acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30"></a>GROUP_FC&#160;</td><td class="fielddoc"><p>Параметры связи по RS485. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f" name="acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f"></a>GROUP_FP&#160;</td><td class="fielddoc"><p>Заводские параметры </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0" name="acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0"></a>GROUP_d&#160;</td><td class="fielddoc"><p>Параметры мониторинга (данные в реальном времени) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94" name="acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94"></a>GROUP_COUNT&#160;</td><td class="fielddoc"><p>Общее количество групп параметров </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a051e4d035e053a4636efc58c1bde9b3e" name="a051e4d035e053a4636efc58c1bde9b3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a051e4d035e053a4636efc58c1bde9b3e">&#9670;&#160;</a></span>Model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">Model</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Перечисление доступных моделей частотного преобразователя. </p>
+<p>Каждый элемент соответствует определённой модели по мощности. MODEL_COUNT — служебный элемент для определения количества моделей. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780" name="a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780"></a>MODEL_0_4&#160;</td><td class="fielddoc"><p>Модель 0.4 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b" name="a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b"></a>MODEL_0_75&#160;</td><td class="fielddoc"><p>Модель 0.75 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f" name="a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f"></a>MODEL_1_5&#160;</td><td class="fielddoc"><p>Модель 1.5 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4" name="a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4"></a>MODEL_2_2&#160;</td><td class="fielddoc"><p>Модель 2.2 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128" name="a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128"></a>MODEL_3_0&#160;</td><td class="fielddoc"><p>Модель 3.0 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4" name="a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4"></a>MODEL_4_0&#160;</td><td class="fielddoc"><p>Модель 4.0 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9" name="a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9"></a>MODEL_5_5&#160;</td><td class="fielddoc"><p>Модель 5.5 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979" name="a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979"></a>MODEL_7_5&#160;</td><td class="fielddoc"><p>Модель 7.5 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0" name="a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0"></a>MODEL_11_0&#160;</td><td class="fielddoc"><p>Модель 11.0 кВт </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1" name="a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1"></a>MODEL_COUNT&#160;</td><td class="fielddoc"><p>Количество моделей (используется для размера массива) </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a4d63980e4031b0fc366e623868b27ed0" name="a4d63980e4031b0fc366e623868b27ed0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d63980e4031b0fc366e623868b27ed0">&#9670;&#160;</a></span>ParameterType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">ParameterType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Тип данных параметра. </p>
+<p>Используется для определения типа значения в структуре <a class="el" href="structParameter.html" title="Описание параметра частотного преобразователя.">Parameter</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c" name="a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c"></a>FLOAT&#160;</td><td class="fielddoc"><p>Значение типа float. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a" name="a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a"></a>INT&#160;</td><td class="fielddoc"><p>Значение типа int. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921" name="a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921"></a>STRING&#160;</td><td class="fielddoc"><p>Значение типа строка (const char*) </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Переменные</h2>
+<a id="a9674bd1a9cbb5efa80c56f07b7892a28" name="a9674bd1a9cbb5efa80c56f07b7892a28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9674bd1a9cbb5efa80c56f07b7892a28">&#9670;&#160;</a></span>modelPowers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modelPowers[]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Инициализатор</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    400,   </div>
+<div class="line">    750,   </div>
+<div class="line">    1500,  </div>
+<div class="line">    2200,  </div>
+<div class="line">    3000,  </div>
+<div class="line">    4000,  </div>
+<div class="line">    5500,  </div>
+<div class="line">    7500,  </div>
+<div class="line">    11000  </div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>Массив мощностей в ваттах, соответствующих каждой модели. </p>
+<p>Порядок значений соответствует порядку в enum Model. Используется для получения мощности модели по её индексу. </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

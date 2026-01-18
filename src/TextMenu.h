@@ -12,8 +12,8 @@ using namespace TechnicalSpecifications3G833;
 #include "VariablesProject.h"
 #include "config.h"
 
-const unsigned long _intervals[] = {3000, 3000, 3000};
-const char _symbolDegree = (char)223;
+constexpr unsigned long _intervals[] = {3000, 3000, 3000};
+constexpr char _symbolDegree = static_cast<char>(223);
 
 extern unsigned long previousMillisMenu;
 extern bool startMenu;

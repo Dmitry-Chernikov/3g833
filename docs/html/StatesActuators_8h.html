@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Файл src/StatesActuators.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle"><div class="title">Файл StatesActuators.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для StatesActuators.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="StatesActuators_8h__incl.png" border="0" usemap="#asrc_2StatesActuators_8h" alt=""/></div>
+<map name="asrc_2StatesActuators_8h" id="asrc_2StatesActuators_8h">
+<area shape="rect" title=" " alt="" coords="5,5,156,31"/>
+<area shape="rect" title=" " alt="" coords="42,79,119,104"/>
+<area shape="poly" title=" " alt="" coords="83,31,83,65,78,65,78,31"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Граф файлов, в которые включается этот файл:</div>
+<div class="dyncontent">
+<div class="center"><img src="StatesActuators_8h__dep__incl.png" border="0" usemap="#asrc_2StatesActuators_8hdep" alt=""/></div>
+<map name="asrc_2StatesActuators_8hdep" id="asrc_2StatesActuators_8hdep">
+<area shape="rect" title=" " alt="" coords="130,5,281,31"/>
+<area shape="rect" href="3g833_8cpp.html" title=" " alt="" coords="5,225,109,251"/>
+<area shape="poly" title=" " alt="" coords="156,38,122,56,93,80,81,98,72,117,61,158,58,196,59,225,54,225,53,196,56,157,67,115,76,95,89,77,119,51,153,34"/>
+<area shape="rect" href="ControlSystem_8h.html" title=" " alt="" coords="247,152,388,177"/>
+<area shape="poly" title=" " alt="" coords="225,40,310,150,306,153,221,43"/>
+<area shape="rect" href="StatesActuators_8cpp.html" title=" " alt="" coords="290,79,454,104"/>
+<area shape="poly" title=" " alt="" coords="246,34,346,76,344,81,244,38"/>
+<area shape="rect" href="TextMenu_8h.html" title=" " alt="" coords="103,79,215,104"/>
+<area shape="poly" title=" " alt="" coords="192,44,168,80,164,77,188,41"/>
+<area shape="poly" title=" " alt="" coords="263,183,100,228,99,223,262,178"/>
+<area shape="rect" href="ControlSystem_8cpp.html" title=" " alt="" coords="240,225,395,251"/>
+<area shape="poly" title=" " alt="" coords="320,191,320,225,315,225,315,191"/>
+<area shape="poly" title=" " alt="" coords="128,114,105,131,85,153,68,192,61,226,56,225,63,190,80,151,101,127,124,109"/>
+<area shape="poly" title=" " alt="" coords="197,107,292,149,290,154,195,112"/>
+<area shape="rect" href="TextMenu_8cpp.html" title=" " alt="" coords="95,152,222,177"/>
+<area shape="poly" title=" " alt="" coords="161,118,161,152,156,152,156,118"/>
+</map>
+</div>
+</div>
+<p><a href="StatesActuators_8h_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a9833dab4a76f0aa67607b39006671708" id="r_a9833dab4a76f0aa67607b39006671708"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#a9833dab4a76f0aa67607b39006671708">triggerRS</a> (bool currentState, uint8_t TrigSet, uint8_t TrigReset)</td></tr>
+<tr class="separator:a9833dab4a76f0aa67607b39006671708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08e3d740c9eb4c2a31d37fb6685e6f84" id="r_a08e3d740c9eb4c2a31d37fb6685e6f84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#a08e3d740c9eb4c2a31d37fb6685e6f84">stateMillisDelay</a> (unsigned long *previousMillis, const unsigned long *Interval)</td></tr>
+<tr class="separator:a08e3d740c9eb4c2a31d37fb6685e6f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:aef7a24050694dcda9a86b990b946f3f3" id="r_aef7a24050694dcda9a86b990b946f3f3"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#aef7a24050694dcda9a86b990b946f3f3">stateEndCycle</a></td></tr>
+<tr class="separator:aef7a24050694dcda9a86b990b946f3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae55451d4ad776e686f30a03ad0184cf3" id="r_ae55451d4ad776e686f30a03ad0184cf3"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#ae55451d4ad776e686f30a03ad0184cf3">statePush</a></td></tr>
+<tr class="separator:ae55451d4ad776e686f30a03ad0184cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6780bbc174aa097656b59895e8fed895" id="r_a6780bbc174aa097656b59895e8fed895"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#a6780bbc174aa097656b59895e8fed895">stateStartFeed</a></td></tr>
+<tr class="separator:a6780bbc174aa097656b59895e8fed895"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b03dd799b4f9f17dd60c9c5c3045e2f" id="r_a4b03dd799b4f9f17dd60c9c5c3045e2f"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#a4b03dd799b4f9f17dd60c9c5c3045e2f">stateSpindle</a></td></tr>
+<tr class="separator:a4b03dd799b4f9f17dd60c9c5c3045e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac90299f1035ef5a9a0874537efce1284" id="r_ac90299f1035ef5a9a0874537efce1284"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#ac90299f1035ef5a9a0874537efce1284">stateAutoCycleManual</a></td></tr>
+<tr class="separator:ac90299f1035ef5a9a0874537efce1284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50ad36b48ff73eac0ed06c6c37ad119c" id="r_a50ad36b48ff73eac0ed06c6c37ad119c"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#a50ad36b48ff73eac0ed06c6c37ad119c">stateTopSlider</a></td></tr>
+<tr class="separator:a50ad36b48ff73eac0ed06c6c37ad119c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9899e66c88dad768e8c86e86de51afa" id="r_ac9899e66c88dad768e8c86e86de51afa"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#ac9899e66c88dad768e8c86e86de51afa">stateStartCycle</a></td></tr>
+<tr class="separator:ac9899e66c88dad768e8c86e86de51afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad232f07fdd58f6783e9bdac5d5fa9ad6" id="r_ad232f07fdd58f6783e9bdac5d5fa9ad6"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StatesActuators_8h.html#ad232f07fdd58f6783e9bdac5d5fa9ad6">stateGeneralStop</a></td></tr>
+<tr class="separator:ad232f07fdd58f6783e9bdac5d5fa9ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Функции</h2>
+<a id="a08e3d740c9eb4c2a31d37fb6685e6f84" name="a08e3d740c9eb4c2a31d37fb6685e6f84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08e3d740c9eb4c2a31d37fb6685e6f84">&#9670;&#160;</a></span>stateMillisDelay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stateMillisDelay </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long *&#160;</td>
+          <td class="paramname"><em>previousMillis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned long *&#160;</td>
+          <td class="paramname"><em>Interval</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9833dab4a76f0aa67607b39006671708" name="a9833dab4a76f0aa67607b39006671708"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9833dab4a76f0aa67607b39006671708">&#9670;&#160;</a></span>triggerRS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool triggerRS </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>currentState</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>TrigSet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>TrigReset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Переменные</h2>
+<a id="ac90299f1035ef5a9a0874537efce1284" name="ac90299f1035ef5a9a0874537efce1284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac90299f1035ef5a9a0874537efce1284">&#9670;&#160;</a></span>stateAutoCycleManual</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateAutoCycleManual</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef7a24050694dcda9a86b990b946f3f3" name="aef7a24050694dcda9a86b990b946f3f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef7a24050694dcda9a86b990b946f3f3">&#9670;&#160;</a></span>stateEndCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateEndCycle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad232f07fdd58f6783e9bdac5d5fa9ad6" name="ad232f07fdd58f6783e9bdac5d5fa9ad6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad232f07fdd58f6783e9bdac5d5fa9ad6">&#9670;&#160;</a></span>stateGeneralStop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateGeneralStop</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae55451d4ad776e686f30a03ad0184cf3" name="ae55451d4ad776e686f30a03ad0184cf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae55451d4ad776e686f30a03ad0184cf3">&#9670;&#160;</a></span>statePush</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool statePush</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b03dd799b4f9f17dd60c9c5c3045e2f" name="a4b03dd799b4f9f17dd60c9c5c3045e2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b03dd799b4f9f17dd60c9c5c3045e2f">&#9670;&#160;</a></span>stateSpindle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateSpindle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac9899e66c88dad768e8c86e86de51afa" name="ac9899e66c88dad768e8c86e86de51afa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9899e66c88dad768e8c86e86de51afa">&#9670;&#160;</a></span>stateStartCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateStartCycle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6780bbc174aa097656b59895e8fed895" name="a6780bbc174aa097656b59895e8fed895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6780bbc174aa097656b59895e8fed895">&#9670;&#160;</a></span>stateStartFeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateStartFeed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a50ad36b48ff73eac0ed06c6c37ad119c" name="a50ad36b48ff73eac0ed06c6c37ad119c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50ad36b48ff73eac0ed06c6c37ad119c">&#9670;&#160;</a></span>stateTopSlider</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool stateTopSlider</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

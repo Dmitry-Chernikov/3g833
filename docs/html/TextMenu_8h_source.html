@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Исходный файл src/TextMenu.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">TextMenu.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="TextMenu_8h.html">См. документацию.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;LiquidMenu.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="Display_8h.html">Display.h</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="Encoder_8h.html">Encoder.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="MemoryEeprom_8h.html">MemoryEeprom.h</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="StatesActuators_8h.html">StatesActuators.h</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="TechnicalSpecifications3G833_8h.html">TechnicalSpecifications3G833.h</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceTechnicalSpecifications3G833.html">TechnicalSpecifications3G833</a>;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="VariablesProject_8h.html">VariablesProject.h</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">config.h</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="TextMenu_8h.html#a65dc7653c3d67813d9f20a5644b8226c">   15</a></span><span class="keyword">constexpr</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_variable" href="TextMenu_8h.html#a65dc7653c3d67813d9f20a5644b8226c">_intervals</a>[] = {3000, 3000, 3000};</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="TextMenu_8h.html#a97b64cb9db0cc00950c495a634e6d2ad">   16</a></span><span class="keyword">constexpr</span> <span class="keywordtype">char</span> <a class="code hl_variable" href="TextMenu_8h.html#a97b64cb9db0cc00950c495a634e6d2ad">_symbolDegree</a> = <span class="keyword">static_cast&lt;</span><span class="keywordtype">char</span><span class="keyword">&gt;</span>(223);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_variable" href="TextMenu_8h.html#a2269060d4e74fb611d0568d4b94b133b">previousMillisMenu</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="TextMenu_8h.html#a3083bdb019c335f367f83dc7f7a648b3">startMenu</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_variable" href="TextMenu_8h.html#ad0468868cd09a3706809ecd53319fcb1">intervalMenu</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_variable" href="TextMenu_8h.html#acf29f5a2008694e12d199f3a20614572">updateMenu</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="TextMenu_8h.html#a8459fc4e94de7eefc74991e41779c8fc">   22</a></span><span class="keyword">extern</span> uint8_t <a class="code hl_variable" href="TextMenu_8h.html#a541032c0356b6d1e2f340fbb7a98699a">buttons</a>, <a class="code hl_variable" href="TextMenu_8h.html#a8459fc4e94de7eefc74991e41779c8fc">second</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_variable" href="TextMenu_8h.html#a8cfb382396014f3a405f086229203c46">_previousMillisSped</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">extern</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="TextMenu_8h.html#abe099f73d026cd80d9dab97311e82aa9">_speeds</a>[];</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">// Переменные для инициализации меню, текст, используемый для Меню индикации для линий сохранения.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="TextMenu_8h.html#ab49caee1e3265de99228ea8cffe680c7">IncDecMode</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">// Объекты Liquidline может быть использован больше, чем один раз.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#aaaf918e66e068bc02facebb75d6a9f7b">backLine</a>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a77a51b7f0204f5db65efe348d12f6820">welcomeLine1</a>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#ab27953ca8fe26868cca58a1e0d4b6fd5">welcomeLine2</a>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a2153c0f1f12cdebf17c7f8d7fe16ac52">welcomeScreen</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment">// Эти строки направлены на другие меню.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a8d6b2ebc142a8c90d7da5294cd068662">limitsLine</a>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#ac5b6ea32f8f76119976fac22c367fe3f">cylinderLine</a>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a317df6a620c5a4bcaa8fe2910c60751a">settingsScreen</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">// Это первое меню.</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">extern</span> LiquidMenu <a class="code hl_variable" href="TextMenu_8h.html#acc5d1111326be774aeea3e4a1897f812">mainMenu</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a7bb8bc3c39ba35fa77fe72b535f712e6">limitTopLine</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#abe6a70198fcb15b95d8c96de2c8e6510">limitBottomLine</a>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a5b50ba60ed2c12c4c3923cd79e75ddf3">topScreen</a>;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a8d816654e9912157a2f73023241a59d4">bottomScreen</a>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a19bb8c3818a5cffc8eac74c0f6c49ba1">oSaveLine</a>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">// Это второе меню.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">extern</span> LiquidMenu <a class="code hl_variable" href="TextMenu_8h.html#ae756d7b16784f83f19c1d7bfe12ed9c1">limitMenu</a>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#ae46f98e42a9a7b0a8a2bb65342a74884">diameterTitleLine</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a2f5dc6b56c842c4f3946bf2208c480d3">diameterValueLine</a>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#a9906f0e9118adb5a4535b657e6545ebe">diameterScreen</a>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#aa1e8269373ddf8a32125e2daad1cdca8">angleTitleLine</a>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">extern</span> LiquidLine <a class="code hl_variable" href="TextMenu_8h.html#a03044d0383fc674591c08a9a78a8e92f">angleValueLine</a>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">extern</span> LiquidScreen <a class="code hl_variable" href="TextMenu_8h.html#af4b29aa09a0c8d5cbebc9a03efdcc91f">angleScreen</a>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">// И это последнее третье меню.</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keyword">extern</span> LiquidMenu <a class="code hl_variable" href="TextMenu_8h.html#a8794c4facf429ba1000902ba19097340">cylinderMenu</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * Объект LiquidSystem объединяет объекты LiquidMenu для формирования системы</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * меню. Он обеспечивает те же функции, что и LiquidMenu с добавлением add_menu</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * () и change_menu ().</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">extern</span> LiquidSystem <a class="code hl_variable" href="TextMenu_8h.html#aa6c464292fc321351e004f4ea7cbd310">menuSystem</a>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a6b09d99e8ffceb2d686b7f79377beec2">settingTextMenu</a>();</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment">// Функция для проверки выхода за пределы</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="keywordtype">bool</span> <a class="code hl_function" href="TextMenu_8h.html#aac9744482bf77934a5029d69dc509598">isOutOfBounds</a>(<span class="keywordtype">float</span> paramManipulation, <span class="keywordtype">float</span> maxParam, <span class="keywordtype">float</span> minParam);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">// Функция для обновления сообщения об ошибке</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aee7711d68c6add5a7363003e3b1405c1">updateErrorMessage</a>(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne, uint8_t posLineTwo, <a class="code hl_enumeration" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation, <span class="keywordtype">float</span> &amp;paramManipulation, <span class="keywordtype">float</span> maxParam,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                        <span class="keywordtype">float</span> minParam, String messInc, String messDec);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">// Функция для проверки достижения порога</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="keywordtype">bool</span> <a class="code hl_function" href="TextMenu_8h.html#a08c3e387815b2c7dd20b7512308c88a0">hasReachedThreshold</a>(<span class="keywordtype">float</span> paramManipulation, <span class="keywordtype">float</span> maxParam, <span class="keywordtype">float</span> minParam, <span class="keywordtype">float</span> threshold, <a class="code hl_enumeration" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">// Функция для управления скоростью</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#ae9fa764d4175e368e6c2a66de0dfe98c">manageSpeed</a>(<span class="keywordtype">bool</span> currentSpeed, <span class="keywordtype">bool</span> &amp;nextSpeed, <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> &amp;previousMillisSped, <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> interval);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keywordtype">bool</span> <a class="code hl_function" href="TextMenu_8h.html#ab02f4d31795a3e2b64f2b44fef09f44a">allSpeedsInactive</a>(<span class="keywordtype">bool</span> *speeds, <span class="keywordtype">int</span> size);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a4a7dad2ec067ecc32970cfe94577c497">changeParamMenu</a>(<a class="code hl_enumeration" href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a> typeOperation, <span class="keywordtype">float</span> &amp;paramManipulation, <span class="keywordtype">float</span> maxParam, <span class="keywordtype">float</span> minParam, <span class="keywordtype">bool</span> *speeds, <a class="code hl_enumeration" href="VariablesProject_8h.html#a49a4ea971d769a2797333fa86d0540a3">StartLevelSpeed</a> startSpeed, <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> &amp;previousMillisSped,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                     <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aad4d2945b332e1b57dd22cec832941dd">goBack</a>();</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a238aff6506f3a38cec389684f74abf5f">gotoLimitMenu</a>();</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#ac360b566da86bdb310b43e141556bb4b">gotoCylinderMenu</a>();</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a1e501ef8cd6b5fe23025a5a1c1485e4b">setLimitTop</a>();</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aacbf7140a5fcaedcbb3f1cfd4df9303f">increaseLimitTop</a>();</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#ab6e1064235f77ac26b0c944524fc8f94">decreaseLimitTop</a>();</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#af6d5418252b8724e5943cf00a9fe4af6">setLimitBottom</a>();</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#abf68341dfb835b3decb17a4b1a3a6d41">increaseLimitBottom</a>();</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aedf097fe215e0a11425d5fe2687121d8">decreaseLimitBottom</a>();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a30b013121672bd95ebdcf189d34ad69c">modeEditValue</a>();</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aaddba12d430904a46c21eb7789173632">increaseDiameter</a>();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a2af41e496cf15ca99ab9be56f87770c9">decreaseDiameter</a>();</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#aa278e81af3a97423eaa922f68546de9a">increaseAngle</a>();</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#a60885e8d3732c025894cec25c73814ce">decreaseAngle</a>();</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="keywordtype">void</span> <a class="code hl_function" href="TextMenu_8h.html#afdf1ca9e7afc3e7ec41b47fea4b3d80d">Menu</a>();</div>
+<div class="ttc" id="aDisplay_8h_html"><div class="ttname"><a href="Display_8h.html">Display.h</a></div></div>
+<div class="ttc" id="aEncoder_8h_html"><div class="ttname"><a href="Encoder_8h.html">Encoder.h</a></div></div>
+<div class="ttc" id="aMemoryEeprom_8h_html"><div class="ttname"><a href="MemoryEeprom_8h.html">MemoryEeprom.h</a></div></div>
+<div class="ttc" id="aStatesActuators_8h_html"><div class="ttname"><a href="StatesActuators_8h.html">StatesActuators.h</a></div></div>
+<div class="ttc" id="aTechnicalSpecifications3G833_8h_html"><div class="ttname"><a href="TechnicalSpecifications3G833_8h.html">TechnicalSpecifications3G833.h</a></div></div>
+<div class="ttc" id="aTextMenu_8h_html_a03044d0383fc674591c08a9a78a8e92f"><div class="ttname"><a href="TextMenu_8h.html#a03044d0383fc674591c08a9a78a8e92f">angleValueLine</a></div><div class="ttdeci">LiquidLine angleValueLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a08c3e387815b2c7dd20b7512308c88a0"><div class="ttname"><a href="TextMenu_8h.html#a08c3e387815b2c7dd20b7512308c88a0">hasReachedThreshold</a></div><div class="ttdeci">bool hasReachedThreshold(float paramManipulation, float maxParam, float minParam, float threshold, DecIncrTypes typeOperation)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:108</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a19bb8c3818a5cffc8eac74c0f6c49ba1"><div class="ttname"><a href="TextMenu_8h.html#a19bb8c3818a5cffc8eac74c0f6c49ba1">oSaveLine</a></div><div class="ttdeci">LiquidLine oSaveLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a1e501ef8cd6b5fe23025a5a1c1485e4b"><div class="ttname"><a href="TextMenu_8h.html#a1e501ef8cd6b5fe23025a5a1c1485e4b">setLimitTop</a></div><div class="ttdeci">void setLimitTop()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:205</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a2153c0f1f12cdebf17c7f8d7fe16ac52"><div class="ttname"><a href="TextMenu_8h.html#a2153c0f1f12cdebf17c7f8d7fe16ac52">welcomeScreen</a></div><div class="ttdeci">LiquidScreen welcomeScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a2269060d4e74fb611d0568d4b94b133b"><div class="ttname"><a href="TextMenu_8h.html#a2269060d4e74fb611d0568d4b94b133b">previousMillisMenu</a></div><div class="ttdeci">unsigned long previousMillisMenu</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:3</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a238aff6506f3a38cec389684f74abf5f"><div class="ttname"><a href="TextMenu_8h.html#a238aff6506f3a38cec389684f74abf5f">gotoLimitMenu</a></div><div class="ttdeci">void gotoLimitMenu()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:185</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a2af41e496cf15ca99ab9be56f87770c9"><div class="ttname"><a href="TextMenu_8h.html#a2af41e496cf15ca99ab9be56f87770c9">decreaseDiameter</a></div><div class="ttdeci">void decreaseDiameter()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:305</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a2f5dc6b56c842c4f3946bf2208c480d3"><div class="ttname"><a href="TextMenu_8h.html#a2f5dc6b56c842c4f3946bf2208c480d3">diameterValueLine</a></div><div class="ttdeci">LiquidLine diameterValueLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a3083bdb019c335f367f83dc7f7a648b3"><div class="ttname"><a href="TextMenu_8h.html#a3083bdb019c335f367f83dc7f7a648b3">startMenu</a></div><div class="ttdeci">bool startMenu</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:4</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a30b013121672bd95ebdcf189d34ad69c"><div class="ttname"><a href="TextMenu_8h.html#a30b013121672bd95ebdcf189d34ad69c">modeEditValue</a></div><div class="ttdeci">void modeEditValue()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:285</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a317df6a620c5a4bcaa8fe2910c60751a"><div class="ttname"><a href="TextMenu_8h.html#a317df6a620c5a4bcaa8fe2910c60751a">settingsScreen</a></div><div class="ttdeci">LiquidScreen settingsScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a429cfada6c932274db5ea8c32a8a6c35"><div class="ttname"><a href="TextMenu_8h.html#a429cfada6c932274db5ea8c32a8a6c35">linearMoveLine</a></div><div class="ttdeci">LiquidLine linearMoveLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a4a7dad2ec067ecc32970cfe94577c497"><div class="ttname"><a href="TextMenu_8h.html#a4a7dad2ec067ecc32970cfe94577c497">changeParamMenu</a></div><div class="ttdeci">void changeParamMenu(DecIncrTypes typeOperation, float &amp;paramManipulation, float maxParam, float minParam, bool *speeds, StartLevelSpeed startSpeed, unsigned long &amp;previousMillisSped, const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:127</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a541032c0356b6d1e2f340fbb7a98699a"><div class="ttname"><a href="TextMenu_8h.html#a541032c0356b6d1e2f340fbb7a98699a">buttons</a></div><div class="ttdeci">uint8_t buttons</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:7</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a5b50ba60ed2c12c4c3923cd79e75ddf3"><div class="ttname"><a href="TextMenu_8h.html#a5b50ba60ed2c12c4c3923cd79e75ddf3">topScreen</a></div><div class="ttdeci">LiquidScreen topScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a60885e8d3732c025894cec25c73814ce"><div class="ttname"><a href="TextMenu_8h.html#a60885e8d3732c025894cec25c73814ce">decreaseAngle</a></div><div class="ttdeci">void decreaseAngle()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:315</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a65dc7653c3d67813d9f20a5644b8226c"><div class="ttname"><a href="TextMenu_8h.html#a65dc7653c3d67813d9f20a5644b8226c">_intervals</a></div><div class="ttdeci">constexpr unsigned long _intervals[]</div><div class="ttdef"><b>Definition</b> TextMenu.h:15</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a6b09d99e8ffceb2d686b7f79377beec2"><div class="ttname"><a href="TextMenu_8h.html#a6b09d99e8ffceb2d686b7f79377beec2">settingTextMenu</a></div><div class="ttdeci">void settingTextMenu()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:50</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a77a51b7f0204f5db65efe348d12f6820"><div class="ttname"><a href="TextMenu_8h.html#a77a51b7f0204f5db65efe348d12f6820">welcomeLine1</a></div><div class="ttdeci">LiquidLine welcomeLine1</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a7bb8bc3c39ba35fa77fe72b535f712e6"><div class="ttname"><a href="TextMenu_8h.html#a7bb8bc3c39ba35fa77fe72b535f712e6">limitTopLine</a></div><div class="ttdeci">LiquidLine limitTopLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a7bdb23cf276f39ee5cc901f39be4aee9"><div class="ttname"><a href="TextMenu_8h.html#a7bdb23cf276f39ee5cc901f39be4aee9">oSecondaryScreen</a></div><div class="ttdeci">LiquidScreen oSecondaryScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a8459fc4e94de7eefc74991e41779c8fc"><div class="ttname"><a href="TextMenu_8h.html#a8459fc4e94de7eefc74991e41779c8fc">second</a></div><div class="ttdeci">uint8_t second</div><div class="ttdef"><b>Definition</b> TextMenu.h:22</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a8794c4facf429ba1000902ba19097340"><div class="ttname"><a href="TextMenu_8h.html#a8794c4facf429ba1000902ba19097340">cylinderMenu</a></div><div class="ttdeci">LiquidMenu cylinderMenu</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a8cfb382396014f3a405f086229203c46"><div class="ttname"><a href="TextMenu_8h.html#a8cfb382396014f3a405f086229203c46">_previousMillisSped</a></div><div class="ttdeci">unsigned long _previousMillisSped</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:9</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a8d6b2ebc142a8c90d7da5294cd068662"><div class="ttname"><a href="TextMenu_8h.html#a8d6b2ebc142a8c90d7da5294cd068662">limitsLine</a></div><div class="ttdeci">LiquidLine limitsLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a8d816654e9912157a2f73023241a59d4"><div class="ttname"><a href="TextMenu_8h.html#a8d816654e9912157a2f73023241a59d4">bottomScreen</a></div><div class="ttdeci">LiquidScreen bottomScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a97b64cb9db0cc00950c495a634e6d2ad"><div class="ttname"><a href="TextMenu_8h.html#a97b64cb9db0cc00950c495a634e6d2ad">_symbolDegree</a></div><div class="ttdeci">constexpr char _symbolDegree</div><div class="ttdef"><b>Definition</b> TextMenu.h:16</div></div>
+<div class="ttc" id="aTextMenu_8h_html_a9906f0e9118adb5a4535b657e6545ebe"><div class="ttname"><a href="TextMenu_8h.html#a9906f0e9118adb5a4535b657e6545ebe">diameterScreen</a></div><div class="ttdeci">LiquidScreen diameterScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aa1e8269373ddf8a32125e2daad1cdca8"><div class="ttname"><a href="TextMenu_8h.html#aa1e8269373ddf8a32125e2daad1cdca8">angleTitleLine</a></div><div class="ttdeci">LiquidLine angleTitleLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aa278e81af3a97423eaa922f68546de9a"><div class="ttname"><a href="TextMenu_8h.html#aa278e81af3a97423eaa922f68546de9a">increaseAngle</a></div><div class="ttdeci">void increaseAngle()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:310</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aa6c464292fc321351e004f4ea7cbd310"><div class="ttname"><a href="TextMenu_8h.html#aa6c464292fc321351e004f4ea7cbd310">menuSystem</a></div><div class="ttdeci">LiquidSystem menuSystem</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aaaf918e66e068bc02facebb75d6a9f7b"><div class="ttname"><a href="TextMenu_8h.html#aaaf918e66e068bc02facebb75d6a9f7b">backLine</a></div><div class="ttdeci">LiquidLine backLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aac9744482bf77934a5029d69dc509598"><div class="ttname"><a href="TextMenu_8h.html#aac9744482bf77934a5029d69dc509598">isOutOfBounds</a></div><div class="ttdeci">bool isOutOfBounds(float paramManipulation, float maxParam, float minParam)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:92</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aacbf7140a5fcaedcbb3f1cfd4df9303f"><div class="ttname"><a href="TextMenu_8h.html#aacbf7140a5fcaedcbb3f1cfd4df9303f">increaseLimitTop</a></div><div class="ttdeci">void increaseLimitTop()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:235</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aad4d2945b332e1b57dd22cec832941dd"><div class="ttname"><a href="TextMenu_8h.html#aad4d2945b332e1b57dd22cec832941dd">goBack</a></div><div class="ttdeci">void goBack()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:171</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aaddba12d430904a46c21eb7789173632"><div class="ttname"><a href="TextMenu_8h.html#aaddba12d430904a46c21eb7789173632">increaseDiameter</a></div><div class="ttdeci">void increaseDiameter()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:300</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ab02f4d31795a3e2b64f2b44fef09f44a"><div class="ttname"><a href="TextMenu_8h.html#ab02f4d31795a3e2b64f2b44fef09f44a">allSpeedsInactive</a></div><div class="ttdeci">bool allSpeedsInactive(bool *speeds, int size)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:118</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ab27953ca8fe26868cca58a1e0d4b6fd5"><div class="ttname"><a href="TextMenu_8h.html#ab27953ca8fe26868cca58a1e0d4b6fd5">welcomeLine2</a></div><div class="ttdeci">LiquidLine welcomeLine2</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ab49caee1e3265de99228ea8cffe680c7"><div class="ttname"><a href="TextMenu_8h.html#ab49caee1e3265de99228ea8cffe680c7">IncDecMode</a></div><div class="ttdeci">volatile bool IncDecMode</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:12</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ab6e1064235f77ac26b0c944524fc8f94"><div class="ttname"><a href="TextMenu_8h.html#ab6e1064235f77ac26b0c944524fc8f94">decreaseLimitTop</a></div><div class="ttdeci">void decreaseLimitTop()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:240</div></div>
+<div class="ttc" id="aTextMenu_8h_html_abe099f73d026cd80d9dab97311e82aa9"><div class="ttname"><a href="TextMenu_8h.html#abe099f73d026cd80d9dab97311e82aa9">_speeds</a></div><div class="ttdeci">bool _speeds[]</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:10</div></div>
+<div class="ttc" id="aTextMenu_8h_html_abe6a70198fcb15b95d8c96de2c8e6510"><div class="ttname"><a href="TextMenu_8h.html#abe6a70198fcb15b95d8c96de2c8e6510">limitBottomLine</a></div><div class="ttdeci">LiquidLine limitBottomLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_abf68341dfb835b3decb17a4b1a3a6d41"><div class="ttname"><a href="TextMenu_8h.html#abf68341dfb835b3decb17a4b1a3a6d41">increaseLimitBottom</a></div><div class="ttdeci">void increaseLimitBottom()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:275</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ac360b566da86bdb310b43e141556bb4b"><div class="ttname"><a href="TextMenu_8h.html#ac360b566da86bdb310b43e141556bb4b">gotoCylinderMenu</a></div><div class="ttdeci">void gotoCylinderMenu()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:195</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ac5b6ea32f8f76119976fac22c367fe3f"><div class="ttname"><a href="TextMenu_8h.html#ac5b6ea32f8f76119976fac22c367fe3f">cylinderLine</a></div><div class="ttdeci">LiquidLine cylinderLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_acc5d1111326be774aeea3e4a1897f812"><div class="ttname"><a href="TextMenu_8h.html#acc5d1111326be774aeea3e4a1897f812">mainMenu</a></div><div class="ttdeci">LiquidMenu mainMenu</div></div>
+<div class="ttc" id="aTextMenu_8h_html_acf29f5a2008694e12d199f3a20614572"><div class="ttname"><a href="TextMenu_8h.html#acf29f5a2008694e12d199f3a20614572">updateMenu</a></div><div class="ttdeci">unsigned long updateMenu</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:6</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ad0468868cd09a3706809ecd53319fcb1"><div class="ttname"><a href="TextMenu_8h.html#ad0468868cd09a3706809ecd53319fcb1">intervalMenu</a></div><div class="ttdeci">unsigned long intervalMenu</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:5</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ae46f98e42a9a7b0a8a2bb65342a74884"><div class="ttname"><a href="TextMenu_8h.html#ae46f98e42a9a7b0a8a2bb65342a74884">diameterTitleLine</a></div><div class="ttdeci">LiquidLine diameterTitleLine</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ae756d7b16784f83f19c1d7bfe12ed9c1"><div class="ttname"><a href="TextMenu_8h.html#ae756d7b16784f83f19c1d7bfe12ed9c1">limitMenu</a></div><div class="ttdeci">LiquidMenu limitMenu</div></div>
+<div class="ttc" id="aTextMenu_8h_html_ae9fa764d4175e368e6c2a66de0dfe98c"><div class="ttname"><a href="TextMenu_8h.html#ae9fa764d4175e368e6c2a66de0dfe98c">manageSpeed</a></div><div class="ttdeci">void manageSpeed(bool currentSpeed, bool &amp;nextSpeed, unsigned long &amp;previousMillisSped, unsigned long interval)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:113</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aedf097fe215e0a11425d5fe2687121d8"><div class="ttname"><a href="TextMenu_8h.html#aedf097fe215e0a11425d5fe2687121d8">decreaseLimitBottom</a></div><div class="ttdeci">void decreaseLimitBottom()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:280</div></div>
+<div class="ttc" id="aTextMenu_8h_html_aee7711d68c6add5a7363003e3b1405c1"><div class="ttname"><a href="TextMenu_8h.html#aee7711d68c6add5a7363003e3b1405c1">updateErrorMessage</a></div><div class="ttdeci">void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne, uint8_t posLineTwo, DecIncrTypes typeOperation, float &amp;paramManipulation, float maxParam, float minParam, String messInc, String messDec)</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:98</div></div>
+<div class="ttc" id="aTextMenu_8h_html_af4b29aa09a0c8d5cbebc9a03efdcc91f"><div class="ttname"><a href="TextMenu_8h.html#af4b29aa09a0c8d5cbebc9a03efdcc91f">angleScreen</a></div><div class="ttdeci">LiquidScreen angleScreen</div></div>
+<div class="ttc" id="aTextMenu_8h_html_af6d5418252b8724e5943cf00a9fe4af6"><div class="ttname"><a href="TextMenu_8h.html#af6d5418252b8724e5943cf00a9fe4af6">setLimitBottom</a></div><div class="ttdeci">void setLimitBottom()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:245</div></div>
+<div class="ttc" id="aTextMenu_8h_html_afdf1ca9e7afc3e7ec41b47fea4b3d80d"><div class="ttname"><a href="TextMenu_8h.html#afdf1ca9e7afc3e7ec41b47fea4b3d80d">Menu</a></div><div class="ttdeci">void Menu()</div><div class="ttdef"><b>Definition</b> TextMenu.cpp:321</div></div>
+<div class="ttc" id="aVariablesProject_8h_html"><div class="ttname"><a href="VariablesProject_8h.html">VariablesProject.h</a></div></div>
+<div class="ttc" id="aVariablesProject_8h_html_a49a4ea971d769a2797333fa86d0540a3"><div class="ttname"><a href="VariablesProject_8h.html#a49a4ea971d769a2797333fa86d0540a3">StartLevelSpeed</a></div><div class="ttdeci">StartLevelSpeed</div><div class="ttdef"><b>Definition</b> VariablesProject.h:13</div></div>
+<div class="ttc" id="aVariablesProject_8h_html_a8e4fa9a5cd3073e7151151140c9c0607"><div class="ttname"><a href="VariablesProject_8h.html#a8e4fa9a5cd3073e7151151140c9c0607">DecIncrTypes</a></div><div class="ttdeci">DecIncrTypes</div><div class="ttdef"><b>Definition</b> VariablesProject.h:11</div></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="anamespaceTechnicalSpecifications3G833_html"><div class="ttname"><a href="namespaceTechnicalSpecifications3G833.html">TechnicalSpecifications3G833</a></div><div class="ttdef"><b>Definition</b> TechnicalSpecifications3G833.h:5</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

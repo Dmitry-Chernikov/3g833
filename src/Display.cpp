@@ -7,8 +7,8 @@ void initDisplay() {
   _lcd.setBacklight(WHITE);
 }
 
-void lcdPrintString(Adafruit_RGBLCDShield &lcd, String msg, String msgData, String msgAfterData, uint8_t colorBefore, uint8_t colorAfter, uint8_t posLineOne, uint8_t posLineTwo,
-                    unsigned long msgDelay, bool clearBeforeRendering, bool clearAfterRendering) {
+void lcdPrintString(Adafruit_RGBLCDShield &lcd, const String &msg, const String &msgData, const String &msgAfterData, const uint8_t colorBefore, const uint8_t colorAfter, const uint8_t posLineOne, const uint8_t posLineTwo,
+                    const unsigned long msgDelay, const bool clearBeforeRendering, const bool clearAfterRendering) {
   if (clearBeforeRendering)
     lcd.clear();
   if (colorBefore != -1)
@@ -31,7 +31,7 @@ void lcdPrintString(Adafruit_RGBLCDShield &lcd, String msg, String msgData, Stri
     lcd.clear();
 }
 
-void lcdPrintString(String msg, String msgData, String msgAfterData, uint8_t colorBefore, uint8_t colorAfter, uint8_t posLineOne, uint8_t posLineTwo, unsigned long msgDelay, bool clearBeforeRendering,
-                    bool clearAfterRendering) {
+void lcdPrintString(const String &msg, const String &msgData, const String &msgAfterData, const uint8_t colorBefore, const uint8_t colorAfter, const uint8_t posLineOne, const uint8_t posLineTwo, const unsigned long msgDelay, const bool clearBeforeRendering,
+                    const bool clearAfterRendering) {
   lcdPrintString(_lcd, msg, msgData, msgAfterData, colorBefore, colorAfter, posLineOne, posLineTwo, msgDelay, clearBeforeRendering, clearAfterRendering);
 }

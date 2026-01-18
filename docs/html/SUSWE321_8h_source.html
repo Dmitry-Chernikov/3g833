@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Honing machin 3g833: Исходный файл src/SUSWE320/SUSWE321.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Honing machin 3g833
+   </div>
+   <div id="projectbrief">Проект программы для управления хонинговальным станком 3Г833</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_1f1897424cee2cf68792ab2527c0166f.html">SUSWE320</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">SUSWE321.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="SUSWE321_8h.html">См. документацию.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a5a9f4784d3dbca3de0aa62d5dc5e28d6">   13</a></span><span class="preprocessor">#define RS485Transmit HIGH</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#afed3ed3a55806299fa520d47cc0a3ddd">   19</a></span><span class="preprocessor">#define RS485Receive LOW</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="foldopen" id="foldopen00028" data-start="{" data-end="};">
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">   28</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">Model</a> {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780">MODEL_0_4</a>,     </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b">MODEL_0_75</a>,    </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f">MODEL_1_5</a>,     </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4">MODEL_2_2</a>,     </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128">MODEL_3_0</a>,     </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4">MODEL_4_0</a>,     </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9">MODEL_5_5</a>,     </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979">MODEL_7_5</a>,     </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0">MODEL_11_0</a>,    </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1">MODEL_COUNT</a>    </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>};</div>
+</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="};">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a9674bd1a9cbb5efa80c56f07b7892a28">   48</a></span><span class="keyword">constexpr</span> <span class="keywordtype">int</span> <a class="code hl_variable" href="SUSWE321_8h.html#a9674bd1a9cbb5efa80c56f07b7892a28">modelPowers</a>[] = {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    400,   </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    750,   </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    1500,  </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    2200,  </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    3000,  </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    4000,  </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    5500,  </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    7500,  </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    11000  </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
+</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="foldopen" id="foldopen00067" data-start="{" data-end="};">
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">   67</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> : uint16_t {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c">   68</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c">GROUP_F0</a> = 0,     </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb">   69</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb">GROUP_F1</a>,         </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0">   70</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0">GROUP_F2</a>,         </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc">   71</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc">GROUP_F3</a>,         </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469">   72</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469">GROUP_F4</a>,         </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703">   73</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703">GROUP_F5</a>,         </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e">   74</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e">GROUP_F6</a>,         </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784">   75</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784">GROUP_F7</a>,         </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b">   76</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b">GROUP_F8</a>,         </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d">   77</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d">GROUP_F9</a>,         </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88">   78</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88">GROUP_FA</a>,         </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c">   79</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c">GROUP_FB</a>,         </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30">   80</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30">GROUP_FC</a>,         </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f">   81</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f">GROUP_FP</a>,         </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0">   82</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0">GROUP_d</a> = 112,    </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94">GROUP_COUNT</a> = <a class="code hl_enumvalue" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0">GROUP_d</a> - 97  </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94">   84</a></span>};</div>
+</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="foldopen" id="foldopen00092" data-start="{" data-end="};">
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">   92</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">ControlCommand</a> : uint16_t {</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d">   93</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d">FORWARD_RUN_COMMAND</a>,           </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec">   94</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec">REVERSE_RUN_COMMAND</a>,           </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f">   95</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f">FORWARD_RUN_JOG_COMMAND</a>,       </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1">   96</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1">REVERSE_RUN_JOG_COMMAND</a>,       </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21">   97</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21">FREE_STOP_COMMAND</a>,             </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea">   98</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea">DECELERATE_STOP_COMMAND</a>,       </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2">FAULT_RESET_COMMAND</a>            </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2">  100</a></span>};</div>
+</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="foldopen" id="foldopen00108" data-start="{" data-end="};">
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="structFaultInfo.html">  108</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structFaultInfo.html">FaultInfo</a> {</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="structFaultInfo.html#aad42c8446d73633852c8a93a4b82c3be">  109</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structFaultInfo.html#aad42c8446d73633852c8a93a4b82c3be">name</a>;       </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="structFaultInfo.html#a916b8c1fd8f1d65bb71db78ecb8a11ee">  110</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structFaultInfo.html#a916b8c1fd8f1d65bb71db78ecb8a11ee">causes</a>;     </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="structFaultInfo.html#a1039641511cb58fd48ae1c3d400c15f6">  111</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structFaultInfo.html#a1039641511cb58fd48ae1c3d400c15f6">solution</a>;   </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>};</div>
+</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="foldopen" id="foldopen00120" data-start="{" data-end="};">
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">  120</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">ParameterType</a> {</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c">  121</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c">FLOAT</a>,   </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a">  122</a></span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a">INT</a>,     </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <a class="code hl_enumvalue" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921">STRING</a>   </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921">  124</a></span>};</div>
+</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="foldopen" id="foldopen00133" data-start="{" data-end="};">
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="unionParameterValue.html">  133</a></span><span class="keyword">union </span><a class="code hl_union" href="unionParameterValue.html">ParameterValue</a> {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="unionParameterValue.html#a7dbfcb93da142d4b38ccf8090dbe960e">  134</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="unionParameterValue.html#a7dbfcb93da142d4b38ccf8090dbe960e">floatValue</a>;        </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="unionParameterValue.html#a831100e93a3ea5ea966773167f79fe31">  135</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="unionParameterValue.html#a831100e93a3ea5ea966773167f79fe31">intValue</a>;            </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="unionParameterValue.html#a06b28fa923b8dad6625b1a55a238e9b6">  136</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="unionParameterValue.html#a06b28fa923b8dad6625b1a55a238e9b6">stringValue</a>; </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>};</div>
+</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="foldopen" id="foldopen00145" data-start="{" data-end="};">
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="structParameter.html">  145</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structParameter.html">Parameter</a> {</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="structParameter.html#a56605c7426512e35e9ce0e62e25c80c0">  146</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structParameter.html#a56605c7426512e35e9ce0e62e25c80c0">name</a>;              </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="structParameter.html#a7c6b3233aa81abf243f9d5870c842c0e">  147</a></span>    <a class="code hl_union" href="unionParameterValue.html">ParameterValue</a> <a class="code hl_variable" href="structParameter.html#a7c6b3233aa81abf243f9d5870c842c0e">factoryDefault</a>; </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno"><a class="line" href="structParameter.html#aff360672bbfb49076144d5b551e9d373">  148</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structParameter.html#aff360672bbfb49076144d5b551e9d373">unit</a>;              </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="structParameter.html#a6dc230f9b9b4633c993555a484924685">  149</a></span>    <a class="code hl_union" href="unionParameterValue.html">ParameterValue</a> <a class="code hl_variable" href="structParameter.html#a6dc230f9b9b4633c993555a484924685">minSetting</a>;     </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="structParameter.html#a99a194c47eb5b17b5a387052c8af831e">  150</a></span>    <a class="code hl_union" href="unionParameterValue.html">ParameterValue</a> <a class="code hl_variable" href="structParameter.html#a99a194c47eb5b17b5a387052c8af831e">maxSetting</a>;     </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="structParameter.html#a7969b6055fa52fdb4cf23e5028d53445">  151</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structParameter.html#a7969b6055fa52fdb4cf23e5028d53445">description</a>;       </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="structParameter.html#aeff5663e8c96cccaaffa73157dc804a5">  152</a></span>    <a class="code hl_enumeration" href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">ParameterType</a> <a class="code hl_variable" href="structParameter.html#aeff5663e8c96cccaaffa73157dc804a5">type</a>;            </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>};</div>
+</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="foldopen" id="foldopen00162" data-start="{" data-end="};">
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="classSUSWE321.html">  162</a></span><span class="keyword">class </span><a class="code hl_class" href="classSUSWE321.html">SUSWE321</a> {</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <a class="code hl_class" href="classSUSWE321.html">SUSWE321</a>(uint8_t slaveAddress, HardwareSerial* serialPort, HardwareSerial* serialDebug, <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> baud, uint8_t transmitterModeContact);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSUSWE321.html#a8980f9a6394afe9ae72e68c85ae73b75">begin</a>();</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classSUSWE321.html#aba9fe7a1605a8f2fbecb7ce5561ece44">  184</a></span>    <a class="code hl_function" href="classSUSWE321.html#aba9fe7a1605a8f2fbecb7ce5561ece44">~SUSWE321</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="classSUSWE321.html#a062a6cea994820f829250b6d6b1a14dd">  190</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a062a6cea994820f829250b6d6b1a14dd">isInitialized</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> _initialized; }</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#aed89c220c72a7e3ce9be7a12ee7a6836">readFaultDescription</a>(uint16_t* faultCode) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a68b9557bd5fb1f94f37d98a697bc499d">readRunningState</a>(uint16_t* state) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a5cf6c265038e9ad017c3c0613c6d635f">writeControlCommand</a>(<a class="code hl_enumeration" href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">ControlCommand</a> command) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a139fc52d3dd121e1af1bfe9218437c1e">readSingleGroupParameter</a>(<a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> group, uint8_t numberGroup, uint16_t* <a class="code hl_variable" href="Utils_8h.html#a7375fa3485ce43bbc621f90ce895d52a">value</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a882bf0ea0b0857bbeda62aa7131a5c75">readParametersInGroups</a>(<a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> group, uint8_t numberGroup, uint16_t* arrayValues, <span class="keywordtype">size_t</span> count) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a3e4189ba958fd621ac2acd06c3143345">writeSingleGroupParameter</a>(<a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> group, uint8_t numberGroup, uint16_t <a class="code hl_variable" href="Utils_8h.html#a7375fa3485ce43bbc621f90ce895d52a">value</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#a4ee6688ee12b1badad4039f5ab14aa85">writeParametersInGroups</a>(<a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> group, uint8_t numberGroup, <span class="keyword">const</span> uint16_t* arrayData, <span class="keywordtype">size_t</span> dataCount) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classSUSWE321.html#aeb8b084c35ab371aed77ead493264f79">checkCommunicationSettings</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">bool</span> _initialized = <span class="keyword">false</span>;               </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    uint8_t _slaveAddress;                   </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    HardwareSerial* _serialPort;             </div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    HardwareSerial* _serialDebug;            </div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _baud;                     </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    uint8_t _transmitterModeContact;         </div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _totalTimeout;             </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> _interCharTimeout;         </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    <span class="keyword">enum</span> CodeFunction : uint8_t {</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        READ = 0x03,       </div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>        WRITE_ONE = 0x06,  </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        WRITE_RANGE = 0x10 </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    };</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> uint16_t buildParameterAddress(<span class="keyword">const</span> <a class="code hl_enumeration" href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a> group, <span class="keyword">const</span> uint8_t subAddress) {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        <span class="keywordflow">return</span> ((<span class="keyword">static_cast&lt;</span>uint16_t<span class="keyword">&gt;</span>(group) &lt;&lt; 8) | subAddress);</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    }</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordtype">bool</span> readSingleParameter(uint16_t address, uint16_t* <a class="code hl_variable" href="Utils_8h.html#a7375fa3485ce43bbc621f90ce895d52a">value</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="keywordtype">bool</span> writeSingleParameter(uint16_t address, uint16_t <a class="code hl_variable" href="Utils_8h.html#a7375fa3485ce43bbc621f90ce895d52a">value</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    <span class="keywordtype">bool</span> readParameters(uint8_t slaveAddress, uint16_t startAddress, uint16_t* arrayValues, <span class="keywordtype">size_t</span> numberRegisters = 1) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    <span class="keywordtype">bool</span> writeParameters(uint8_t slaveAddress, uint16_t startAddress, <span class="keyword">const</span> uint16_t* arrayValues, <span class="keywordtype">size_t</span> numberRegisters) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    <span class="keywordtype">bool</span> validateModbusResponse(<span class="keyword">const</span> uint8_t* response, <span class="keywordtype">size_t</span> responseSize, uint8_t expectedAddress, uint8_t expectedFunction) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    uint16_t calculateCRC(<span class="keyword">const</span> uint8_t* data, uint8_t length) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="keywordtype">void</span> sendData(<span class="keyword">const</span> uint8_t* data, <span class="keywordtype">size_t</span> length) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    <span class="keywordtype">bool</span> receiveData(uint8_t* <a class="code hl_variable" href="Utils_8h.html#aa5f79df40a41a9e16140245ac4ea3dba">buffer</a>, <span class="keywordtype">size_t</span> length) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>};</div>
+</div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3e"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3e">Model</a></div><div class="ttdeci">Model</div><div class="ttdoc">Перечисление доступных моделей частотного преобразователя.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:28</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea01f2bb5362e355a708eaf6720ed2cc8b">Model::MODEL_0_75</a></div><div class="ttdeci">@ MODEL_0_75</div><div class="ttdoc">Модель 0.75 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea0d28076c5f31e38d2faf3d6c56d81128">Model::MODEL_3_0</a></div><div class="ttdeci">@ MODEL_3_0</div><div class="ttdoc">Модель 3.0 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea35e04565178b3d251ee0bab382e81dc1">Model::MODEL_COUNT</a></div><div class="ttdeci">@ MODEL_COUNT</div><div class="ttdoc">Количество моделей (используется для размера массива)</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea7711dc9016fc44adf146a85614ffa979">Model::MODEL_7_5</a></div><div class="ttdeci">@ MODEL_7_5</div><div class="ttdoc">Модель 7.5 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3ea8356f742c74da7cc918cff1d8d8790b0">Model::MODEL_11_0</a></div><div class="ttdeci">@ MODEL_11_0</div><div class="ttdoc">Модель 11.0 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaab433385b349e3d4194c186fb93e7ee4">Model::MODEL_2_2</a></div><div class="ttdeci">@ MODEL_2_2</div><div class="ttdoc">Модель 2.2 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaae288a97af3c681edbac66c4a73aeef4">Model::MODEL_4_0</a></div><div class="ttdeci">@ MODEL_4_0</div><div class="ttdoc">Модель 4.0 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eaaf2976280cb5b441ca2bb53aaa1d55f9">Model::MODEL_5_5</a></div><div class="ttdeci">@ MODEL_5_5</div><div class="ttdoc">Модель 5.5 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eab47579c1f9db87ee42ef8ea608f7530f">Model::MODEL_1_5</a></div><div class="ttdeci">@ MODEL_1_5</div><div class="ttdoc">Модель 1.5 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780"><div class="ttname"><a href="SUSWE321_8h.html#a051e4d035e053a4636efc58c1bde9b3eafe62fa57434b59990d0d1e07aaace780">Model::MODEL_0_4</a></div><div class="ttdeci">@ MODEL_0_4</div><div class="ttdoc">Модель 0.4 кВт</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a4d63980e4031b0fc366e623868b27ed0"><div class="ttname"><a href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0">ParameterType</a></div><div class="ttdeci">ParameterType</div><div class="ttdoc">Тип данных параметра.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:120</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c"><div class="ttname"><a href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0a9cf4a0866224b0bb4a7a895da27c9c4c">FLOAT</a></div><div class="ttdeci">@ FLOAT</div><div class="ttdoc">Значение типа float.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:121</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921"><div class="ttname"><a href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0aee847e634a4297b274316de8a8ca9921">STRING</a></div><div class="ttdeci">@ STRING</div><div class="ttdoc">Значение типа строка (const char*)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:123</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a"><div class="ttname"><a href="SUSWE321_8h.html#a4d63980e4031b0fc366e623868b27ed0afd5a5f51ce25953f3db2c7e93eb7864a">INT</a></div><div class="ttdeci">@ INT</div><div class="ttdoc">Значение типа int.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:122</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5">ControlCommand</a></div><div class="ttdeci">ControlCommand</div><div class="ttdoc">Команды управления работой двигателя.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:92</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a4055a4423a09e848cad3f9d9f0ba5d2d">FORWARD_RUN_COMMAND</a></div><div class="ttdeci">@ FORWARD_RUN_COMMAND</div><div class="ttdoc">Запуск двигателя вперёд</div><div class="ttdef"><b>Definition</b> SUSWE321.h:93</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a408dcfae7dfd685662149470bf4c0bec">REVERSE_RUN_COMMAND</a></div><div class="ttdeci">@ REVERSE_RUN_COMMAND</div><div class="ttdoc">Запуск двигателя назад</div><div class="ttdef"><b>Definition</b> SUSWE321.h:94</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a7a538978e606e39bbe13eebf4ab6ebea">DECELERATE_STOP_COMMAND</a></div><div class="ttdeci">@ DECELERATE_STOP_COMMAND</div><div class="ttdoc">Остановка с торможением</div><div class="ttdef"><b>Definition</b> SUSWE321.h:98</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5a91022e844129a0379fb8248d6fb94c21">FREE_STOP_COMMAND</a></div><div class="ttdeci">@ FREE_STOP_COMMAND</div><div class="ttdoc">Свободная остановка</div><div class="ttdef"><b>Definition</b> SUSWE321.h:97</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5aafde8306423425b692764c60349b45a2">FAULT_RESET_COMMAND</a></div><div class="ttdeci">@ FAULT_RESET_COMMAND</div><div class="ttdoc">Сброс аварии</div><div class="ttdef"><b>Definition</b> SUSWE321.h:99</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5ab1fc6380092ee4f9441cdafc51e5abb1">REVERSE_RUN_JOG_COMMAND</a></div><div class="ttdeci">@ REVERSE_RUN_JOG_COMMAND</div><div class="ttdoc">Импульсный запуск назад</div><div class="ttdef"><b>Definition</b> SUSWE321.h:96</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f"><div class="ttname"><a href="SUSWE321_8h.html#a724d153b15c116583e273cce95c8c0d5acba8e98cae8fd60aa2c90585eb2f3e2f">FORWARD_RUN_JOG_COMMAND</a></div><div class="ttdeci">@ FORWARD_RUN_JOG_COMMAND</div><div class="ttdoc">Импульсный запуск вперёд</div><div class="ttdef"><b>Definition</b> SUSWE321.h:95</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_a9674bd1a9cbb5efa80c56f07b7892a28"><div class="ttname"><a href="SUSWE321_8h.html#a9674bd1a9cbb5efa80c56f07b7892a28">modelPowers</a></div><div class="ttdeci">constexpr int modelPowers[]</div><div class="ttdoc">Массив мощностей в ваттах, соответствующих каждой модели.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:48</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fe"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fe">GroupsParameter</a></div><div class="ttdeci">GroupsParameter</div><div class="ttdoc">Группы параметров частотного преобразователя SUSWE321.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:67</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea2928d6a19550d4acb4118370a8280c88">GROUP_FA</a></div><div class="ttdeci">@ GROUP_FA</div><div class="ttdoc">Параметры защиты</div><div class="ttdef"><b>Definition</b> SUSWE321.h:78</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea47a1f8de56d333a91877849aaff3dccc">GROUP_F3</a></div><div class="ttdeci">@ GROUP_F3</div><div class="ttdoc">Вспомогательные эксплуатационные параметры 1.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:71</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6019d8a7f5d94f116fffe700d68723fb">GROUP_F1</a></div><div class="ttdeci">@ GROUP_F1</div><div class="ttdoc">Параметры управления V/F.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:69</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea60bea80dcbc528293d0cc779ef93c5f0">GROUP_F2</a></div><div class="ttdeci">@ GROUP_F2</div><div class="ttdoc">Параметры векторного управления V.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:70</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea697af9567936b3fa708434a81161f784">GROUP_F7</a></div><div class="ttdeci">@ GROUP_F7</div><div class="ttdoc">Параметры запуска программы (ПЛК)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:75</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea6bf6357a016c4ea887a092fbfd89469e">GROUP_F6</a></div><div class="ttdeci">@ GROUP_F6</div><div class="ttdoc">Аналоговые входные и выходные функции</div><div class="ttdef"><b>Definition</b> SUSWE321.h:74</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea727a7afdc448f3860d321102e1ec8a6f">GROUP_FP</a></div><div class="ttdeci">@ GROUP_FP</div><div class="ttdoc">Заводские параметры</div><div class="ttdef"><b>Definition</b> SUSWE321.h:81</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea7ccc1df38b4bf12973e82ae1b775c5a0">GROUP_d</a></div><div class="ttdeci">@ GROUP_d</div><div class="ttdoc">Параметры мониторинга (данные в реальном времени)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:82</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fea9c38e2b6ffd15b59fe330edaafa09703">GROUP_F5</a></div><div class="ttdeci">@ GROUP_F5</div><div class="ttdoc">Параметры цифровых входов/выходов</div><div class="ttdef"><b>Definition</b> SUSWE321.h:73</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab5574715734ee7e56016d9314b111469">GROUP_F4</a></div><div class="ttdeci">@ GROUP_F4</div><div class="ttdoc">Вспомогательные эксплуатационные параметры 2.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:72</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feab8b99d394709538ec85f063a6ca3d12d">GROUP_F9</a></div><div class="ttdeci">@ GROUP_F9</div><div class="ttdoc">Параметры электродвигателя</div><div class="ttdef"><b>Definition</b> SUSWE321.h:77</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feac9bc6abb28007dcb9e2639dfae84ee4c">GROUP_FB</a></div><div class="ttdeci">@ GROUP_FB</div><div class="ttdoc">Параметры дисплея и специальные функции</div><div class="ttdef"><b>Definition</b> SUSWE321.h:79</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3fead495dcaeb22e0aedf7452ea53f310c94">GROUP_COUNT</a></div><div class="ttdeci">@ GROUP_COUNT</div><div class="ttdoc">Общее количество групп параметров</div><div class="ttdef"><b>Definition</b> SUSWE321.h:83</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feadaa158d1000b9cd634b63c89486ece30">GROUP_FC</a></div><div class="ttdeci">@ GROUP_FC</div><div class="ttdoc">Параметры связи по RS485.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:80</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaea088a2ada4a9ca2b221daf340b70d5b">GROUP_F8</a></div><div class="ttdeci">@ GROUP_F8</div><div class="ttdoc">Параметры PID-регулятора</div><div class="ttdef"><b>Definition</b> SUSWE321.h:76</div></div>
+<div class="ttc" id="aSUSWE321_8h_html_acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c"><div class="ttname"><a href="SUSWE321_8h.html#acb574b6ef9fe570bc77f511ab67cc3feaed72d799db061ee4ea61f2ef5685d75c">GROUP_F0</a></div><div class="ttdeci">@ GROUP_F0</div><div class="ttdoc">Основные рабочие параметры</div><div class="ttdef"><b>Definition</b> SUSWE321.h:68</div></div>
+<div class="ttc" id="aUtils_8h_html_a7375fa3485ce43bbc621f90ce895d52a"><div class="ttname"><a href="Utils_8h.html#a7375fa3485ce43bbc621f90ce895d52a">value</a></div><div class="ttdeci">int16_t value</div><div class="ttdef"><b>Definition</b> Utils.h:275</div></div>
+<div class="ttc" id="aUtils_8h_html_aa5f79df40a41a9e16140245ac4ea3dba"><div class="ttname"><a href="Utils_8h.html#aa5f79df40a41a9e16140245ac4ea3dba">buffer</a></div><div class="ttdeci">uint8_t buffer[]</div><div class="ttdef"><b>Definition</b> Utils.h:283</div></div>
+<div class="ttc" id="aclassSUSWE321_html"><div class="ttname"><a href="classSUSWE321.html">SUSWE321</a></div><div class="ttdoc">Класс для управления частотным преобразователем SUSWE321 по протоколу Modbus RTU.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:162</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a062a6cea994820f829250b6d6b1a14dd"><div class="ttname"><a href="classSUSWE321.html#a062a6cea994820f829250b6d6b1a14dd">SUSWE321::isInitialized</a></div><div class="ttdeci">bool isInitialized() const</div><div class="ttdoc">Проверяет, была ли успешная инициализация класса.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:190</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a139fc52d3dd121e1af1bfe9218437c1e"><div class="ttname"><a href="classSUSWE321.html#a139fc52d3dd121e1af1bfe9218437c1e">SUSWE321::readSingleGroupParameter</a></div><div class="ttdeci">bool readSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t *value) const</div><div class="ttdoc">Чтение одного параметра из указанной группы.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:685</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a3e4189ba958fd621ac2acd06c3143345"><div class="ttname"><a href="classSUSWE321.html#a3e4189ba958fd621ac2acd06c3143345">SUSWE321::writeSingleGroupParameter</a></div><div class="ttdeci">bool writeSingleGroupParameter(GroupsParameter group, uint8_t numberGroup, uint16_t value) const</div><div class="ttdoc">Запись значения в один параметр указанной группы.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:736</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a4ee6688ee12b1badad4039f5ab14aa85"><div class="ttname"><a href="classSUSWE321.html#a4ee6688ee12b1badad4039f5ab14aa85">SUSWE321::writeParametersInGroups</a></div><div class="ttdeci">bool writeParametersInGroups(GroupsParameter group, uint8_t numberGroup, const uint16_t *arrayData, size_t dataCount) const</div><div class="ttdoc">Запись нескольких значений в параметры одной группы.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:718</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a5cf6c265038e9ad017c3c0613c6d635f"><div class="ttname"><a href="classSUSWE321.html#a5cf6c265038e9ad017c3c0613c6d635f">SUSWE321::writeControlCommand</a></div><div class="ttdeci">bool writeControlCommand(ControlCommand command) const</div><div class="ttdoc">Отправка команды управления двигателем.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:635</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a68b9557bd5fb1f94f37d98a697bc499d"><div class="ttname"><a href="classSUSWE321.html#a68b9557bd5fb1f94f37d98a697bc499d">SUSWE321::readRunningState</a></div><div class="ttdeci">bool readRunningState(uint16_t *state) const</div><div class="ttdoc">Чтение текущего состояния двигателя (работает/остановлен).</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:620</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a882bf0ea0b0857bbeda62aa7131a5c75"><div class="ttname"><a href="classSUSWE321.html#a882bf0ea0b0857bbeda62aa7131a5c75">SUSWE321::readParametersInGroups</a></div><div class="ttdeci">bool readParametersInGroups(GroupsParameter group, uint8_t numberGroup, uint16_t *arrayValues, size_t count) const</div><div class="ttdoc">Чтение нескольких параметров из одной группы.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:667</div></div>
+<div class="ttc" id="aclassSUSWE321_html_a8980f9a6394afe9ae72e68c85ae73b75"><div class="ttname"><a href="classSUSWE321.html#a8980f9a6394afe9ae72e68c85ae73b75">SUSWE321::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Инициализация класса и настройка аппаратных параметров.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:38</div></div>
+<div class="ttc" id="aclassSUSWE321_html_aba9fe7a1605a8f2fbecb7ce5561ece44"><div class="ttname"><a href="classSUSWE321.html#aba9fe7a1605a8f2fbecb7ce5561ece44">SUSWE321::~SUSWE321</a></div><div class="ttdeci">~SUSWE321()=default</div><div class="ttdoc">Деструктор по умолчанию.</div></div>
+<div class="ttc" id="aclassSUSWE321_html_aeb8b084c35ab371aed77ead493264f79"><div class="ttname"><a href="classSUSWE321.html#aeb8b084c35ab371aed77ead493264f79">SUSWE321::checkCommunicationSettings</a></div><div class="ttdeci">bool checkCommunicationSettings() const</div><div class="ttdoc">Проверка корректности настроек связи.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:752</div></div>
+<div class="ttc" id="aclassSUSWE321_html_aed89c220c72a7e3ce9be7a12ee7a6836"><div class="ttname"><a href="classSUSWE321.html#aed89c220c72a7e3ce9be7a12ee7a6836">SUSWE321::readFaultDescription</a></div><div class="ttdeci">bool readFaultDescription(uint16_t *faultCode) const</div><div class="ttdoc">Чтение кода текущей ошибки.</div><div class="ttdef"><b>Definition</b> SUSWE321.cpp:605</div></div>
+<div class="ttc" id="astructFaultInfo_html"><div class="ttname"><a href="structFaultInfo.html">FaultInfo</a></div><div class="ttdoc">Структура для хранения информации об ошибках частотного преобразователя.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:108</div></div>
+<div class="ttc" id="astructFaultInfo_html_a1039641511cb58fd48ae1c3d400c15f6"><div class="ttname"><a href="structFaultInfo.html#a1039641511cb58fd48ae1c3d400c15f6">FaultInfo::solution</a></div><div class="ttdeci">const char * solution</div><div class="ttdoc">Рекомендованные действия по устранению</div><div class="ttdef"><b>Definition</b> SUSWE321.h:111</div></div>
+<div class="ttc" id="astructFaultInfo_html_a916b8c1fd8f1d65bb71db78ecb8a11ee"><div class="ttname"><a href="structFaultInfo.html#a916b8c1fd8f1d65bb71db78ecb8a11ee">FaultInfo::causes</a></div><div class="ttdeci">const char * causes</div><div class="ttdoc">Возможные причины возникновения ошибки</div><div class="ttdef"><b>Definition</b> SUSWE321.h:110</div></div>
+<div class="ttc" id="astructFaultInfo_html_aad42c8446d73633852c8a93a4b82c3be"><div class="ttname"><a href="structFaultInfo.html#aad42c8446d73633852c8a93a4b82c3be">FaultInfo::name</a></div><div class="ttdeci">const char * name</div><div class="ttdoc">Название ошибки (например, &quot;Перегрузка по току&quot;)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:109</div></div>
+<div class="ttc" id="astructParameter_html"><div class="ttname"><a href="structParameter.html">Parameter</a></div><div class="ttdoc">Описание параметра частотного преобразователя.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:145</div></div>
+<div class="ttc" id="astructParameter_html_a56605c7426512e35e9ce0e62e25c80c0"><div class="ttname"><a href="structParameter.html#a56605c7426512e35e9ce0e62e25c80c0">Parameter::name</a></div><div class="ttdeci">const char * name</div><div class="ttdoc">Название параметра (например, &quot;Частота задания&quot;)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:146</div></div>
+<div class="ttc" id="astructParameter_html_a6dc230f9b9b4633c993555a484924685"><div class="ttname"><a href="structParameter.html#a6dc230f9b9b4633c993555a484924685">Parameter::minSetting</a></div><div class="ttdeci">ParameterValue minSetting</div><div class="ttdoc">Минимально допустимое значение</div><div class="ttdef"><b>Definition</b> SUSWE321.h:149</div></div>
+<div class="ttc" id="astructParameter_html_a7969b6055fa52fdb4cf23e5028d53445"><div class="ttname"><a href="structParameter.html#a7969b6055fa52fdb4cf23e5028d53445">Parameter::description</a></div><div class="ttdeci">const char * description</div><div class="ttdoc">Подробное описание параметра</div><div class="ttdef"><b>Definition</b> SUSWE321.h:151</div></div>
+<div class="ttc" id="astructParameter_html_a7c6b3233aa81abf243f9d5870c842c0e"><div class="ttname"><a href="structParameter.html#a7c6b3233aa81abf243f9d5870c842c0e">Parameter::factoryDefault</a></div><div class="ttdeci">ParameterValue factoryDefault</div><div class="ttdoc">Значение по умолчанию</div><div class="ttdef"><b>Definition</b> SUSWE321.h:147</div></div>
+<div class="ttc" id="astructParameter_html_a99a194c47eb5b17b5a387052c8af831e"><div class="ttname"><a href="structParameter.html#a99a194c47eb5b17b5a387052c8af831e">Parameter::maxSetting</a></div><div class="ttdeci">ParameterValue maxSetting</div><div class="ttdoc">Максимально допустимое значение</div><div class="ttdef"><b>Definition</b> SUSWE321.h:150</div></div>
+<div class="ttc" id="astructParameter_html_aeff5663e8c96cccaaffa73157dc804a5"><div class="ttname"><a href="structParameter.html#aeff5663e8c96cccaaffa73157dc804a5">Parameter::type</a></div><div class="ttdeci">ParameterType type</div><div class="ttdoc">Тип данных значения</div><div class="ttdef"><b>Definition</b> SUSWE321.h:152</div></div>
+<div class="ttc" id="astructParameter_html_aff360672bbfb49076144d5b551e9d373"><div class="ttname"><a href="structParameter.html#aff360672bbfb49076144d5b551e9d373">Parameter::unit</a></div><div class="ttdeci">const char * unit</div><div class="ttdoc">Единица измерения (например, &quot;Гц&quot;, &quot;В&quot;, &quot;%&quot;)</div><div class="ttdef"><b>Definition</b> SUSWE321.h:148</div></div>
+<div class="ttc" id="aunionParameterValue_html"><div class="ttname"><a href="unionParameterValue.html">ParameterValue</a></div><div class="ttdoc">Объединение для хранения значений разных типов.</div><div class="ttdef"><b>Definition</b> SUSWE321.h:133</div></div>
+<div class="ttc" id="aunionParameterValue_html_a06b28fa923b8dad6625b1a55a238e9b6"><div class="ttname"><a href="unionParameterValue.html#a06b28fa923b8dad6625b1a55a238e9b6">ParameterValue::stringValue</a></div><div class="ttdeci">const char * stringValue</div><div class="ttdoc">Хранение строкового значения</div><div class="ttdef"><b>Definition</b> SUSWE321.h:136</div></div>
+<div class="ttc" id="aunionParameterValue_html_a7dbfcb93da142d4b38ccf8090dbe960e"><div class="ttname"><a href="unionParameterValue.html#a7dbfcb93da142d4b38ccf8090dbe960e">ParameterValue::floatValue</a></div><div class="ttdeci">float floatValue</div><div class="ttdoc">Хранение значения с плавающей точкой</div><div class="ttdef"><b>Definition</b> SUSWE321.h:134</div></div>
+<div class="ttc" id="aunionParameterValue_html_a831100e93a3ea5ea966773167f79fe31"><div class="ttname"><a href="unionParameterValue.html#a831100e93a3ea5ea966773167f79fe31">ParameterValue::intValue</a></div><div class="ttdeci">int intValue</div><div class="ttdoc">Хранение целочисленного значения</div><div class="ttdef"><b>Definition</b> SUSWE321.h:135</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

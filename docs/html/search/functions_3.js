@@ -1,0 +1,13 @@
+var searchData=
+[
+  ['calcrotationalperipheralspeed_0',['calcRotationalPeripheralSpeed',['../namespaceTechnicalSpecifications3G833_1_1KinematicsRotational.html#ab3b6ba755855be22037efed1ce4a426e',1,'TechnicalSpecifications3G833::KinematicsRotational']]],
+  ['calculatecrc_1',['calculateCRC',['../Utils_8h.html#a1053db02c3bd04c4f2a66d76a1d1ae24',1,'Utils.h']]],
+  ['changeparammenu_2',['changeparammenu',['../TextMenu_8cpp.html#a4a7dad2ec067ecc32970cfe94577c497',1,'changeParamMenu(DecIncrTypes typeOperation, float &amp;paramManipulation, float maxParam, float minParam, bool *speeds, StartLevelSpeed startSpeed, unsigned long &amp;previousMillisSped, const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo):&#160;TextMenu.cpp'],['../TextMenu_8h.html#a4a7dad2ec067ecc32970cfe94577c497',1,'changeParamMenu(DecIncrTypes typeOperation, float &amp;paramManipulation, float maxParam, float minParam, bool *speeds, StartLevelSpeed startSpeed, unsigned long &amp;previousMillisSped, const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo):&#160;TextMenu.cpp']]],
+  ['checkcommunicationsettings_3',['checkCommunicationSettings',['../classSUSWE321.html#aeb8b084c35ab371aed77ead493264f79',1,'SUSWE321']]],
+  ['clearmemory_4',['clearmemory',['../MemoryEeprom_8cpp.html#abab10a47ad7db459c3e5df22b1dd9105',1,'clearMemory():&#160;MemoryEeprom.cpp'],['../MemoryEeprom_8h.html#abab10a47ad7db459c3e5df22b1dd9105',1,'clearMemory():&#160;MemoryEeprom.cpp']]],
+  ['crc16_5',['crc16',['../Utils_8h.html#a2914d9c3bcfd34dbf6b7d50a8df42811',1,'Utils.h']]],
+  ['crc_5fchk_5fvalue_6',['crc_chk_value',['../Utils_8h.html#ae715b0d36b820f188fd0183f1df787e7',1,'Utils.h']]],
+  ['createparameter_7',['createparameter',['../classParametersSUSWE320.html#a1e5e9c02f179c0bc678fe671679b9b65',1,'ParametersSUSWE320::createParameter(const char *name, float defaultValue, const char *unit, float min, float max, const char *description)'],['../classParametersSUSWE320.html#a811bb5f1099a2ee3799093f343c1cb62',1,'ParametersSUSWE320::createParameter(const char *name, int defaultValue, const char *unit, int min, int max, const char *description)'],['../classParametersSUSWE320.html#a00fe0f6612804c170ec78cbf2dc4946b',1,'ParametersSUSWE320::createParameter(const char *name, const char *defaultValue, const char *unit, const char *min, const char *max, const char *description)']]],
+  ['cylinderline_8',['cylinderLine',['../TextMenu_8cpp.html#a6f3cd5badb0c8d8cbd07b0fdb58a90ad',1,'TextMenu.cpp']]],
+  ['cylindermenu_9',['cylinderMenu',['../TextMenu_8cpp.html#aea4ea1e0c9446bc560ef5bee0d2bcf49',1,'TextMenu.cpp']]]
+];

@@ -1,0 +1,19 @@
+<map id="src/Encoder.h" name="src/Encoder.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="412,5,515,31"/>
+<area shape="rect" id="Node000002" href="$MemoryEeprom_8h.html" title=" " alt="" coords="215,79,341,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="435,33,322,76,320,71,433,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="205,225,282,251"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="468,31,471,60,470,99,461,141,452,161,440,179,409,205,371,222,333,233,296,238,296,233,332,228,370,217,406,201,436,176,448,159,456,140,464,99,465,60,463,31"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="501,79,589,104"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="478,29,523,68,519,72,475,33"/>
+<area shape="rect" id="Node000003" href="$Display_8h.html" title=" " alt="" coords="92,152,168,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="255,106,168,148,165,144,253,102"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="267,106,249,127,235,153,232,183,237,212,232,212,227,183,230,151,245,124,263,103"/>
+<area shape="rect" id="Node000006" href="$config_8h.html" title=" " alt="" coords="244,152,312,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="281,104,281,138,275,138,275,104"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="336,152,425,177"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="296,102,354,142,351,146,293,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,225,180,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,179,107,215,103,212,121,176"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="150,175,215,216,212,220,147,180"/>
+</map>
