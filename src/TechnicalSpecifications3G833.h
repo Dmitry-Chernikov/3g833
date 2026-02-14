@@ -41,7 +41,7 @@ namespace TechnicalSpecifications3G833 {
     constexpr double motorSpindleRPM = 1430.00;   // Максимальная скорость вращения мотора шпинделя
     constexpr double motorReturnsRPM = 930.00;    // Максимальная скорость вращения мотора возвратно-поступательного движения
 
-    /** Мощность моторов в Вт **/
+    /** Мощность моторов в Ваттах**/
     constexpr double motorSpindlePower = 3000.00; // Максимальная мощность мотора шпинделя
     constexpr double motorReturnsPower = 1100.00; // Максимальная мощность мотора возвратно-поступательного движения
 

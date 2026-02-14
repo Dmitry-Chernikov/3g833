@@ -1,11 +1,10 @@
+Этот каталог предназначен для проектных (приватных) библиотек.
+PlatformIO скомпилирует их в статические библиотеки и подключит к исполняемому файлу.
 
-This directory is intended for project specific (private) libraries.
-PlatformIO will compile them to static libraries and link into the executable file.
+Исходный код каждой библиотеки следует размещать в отдельной директории
+("lib/имя_вашей_библиотеки/[Код]").
 
-The source code of each library should be placed in a separate directory
-("lib/your_library_name/[Code]").
-
-For example, see the structure of the following example libraries `Foo` and `Bar`:
+Например, рассмотрим структуру примеров библиотек `Foo` и `Bar`:
 
 |--lib
 |  |
@@ -15,32 +14,26 @@ For example, see the structure of the following example libraries `Foo` and `Bar
 |  |  |--src
 |  |     |- Bar.c
 |  |     |- Bar.h
-|  |  |- library.json (optional. for custom build options, etc) https://docs.platformio.org/page/librarymanager/config.html
+|  |  |- library.json (необязательно. для пользовательских настроек сборки и т.п.)
+         https://docs.platformio.org/page/librarymanager/config.html
 |  |
 |  |--Foo
 |  |  |- Foo.c
 |  |  |- Foo.h
 |  |
-|  |- README --> THIS FILE
+|  |- README --> ЭТОТ ФАЙЛ
 |
 |- platformio.ini
 |--src
    |- main.c
 
-Example contents of `src/main.c` using Foo and Bar:
-```
+Пример содержимого файла `src/main.c`, использующего библиотеки Foo и Bar:
+
 #include <Foo.h>
 #include <Bar.h>
+int main (void) { ... }
 
-int main (void)
-{
-  ...
-}
+Поиск зависимостей библиотек PlatformIO автоматически определит необходимые библиотеки, сканируя исходные файлы проекта.
 
-```
-
-The PlatformIO Library Dependency Finder will find automatically dependent
-libraries by scanning project source files.
-
-More information about PlatformIO Library Dependency Finder
+Дополнительная информация о поиске зависимостей PlatformIO:
 - https://docs.platformio.org/page/librarymanager/ldf.html

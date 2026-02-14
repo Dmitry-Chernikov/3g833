@@ -1,0 +1,25 @@
+{
+  "name": "VFD-Library-HS321",
+  "version": "1.0.0",
+  "description": "API for controlling the frequency converter HS321 via the Modbus RTU protocol. Implies the interaction with the frequency via the RS485 interface. the interaction with the frequency via the RS485 interface. Supports reading/writing parameters, sending control commands and diagnostics.",
+  "keywords": "AC, drive, VF, HS321, Frequency, Converter",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Dmitry-Chernikov/VFD-Library-HS321.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Dmitry Chernikov",
+      "email": "chernicov_dima@mail.ru",
+      "url": "https://github.com/Dmitry-Chernikov",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Dmitry-Chernikov",
+  "dependencies": {},
+  "frameworks": ["arduino"],
+  "platforms": ["atmelavr"]
+}
