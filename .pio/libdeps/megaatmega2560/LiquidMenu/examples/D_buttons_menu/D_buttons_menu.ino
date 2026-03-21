@@ -131,101 +131,100 @@ LiquidMenu menu(lcd);
  * writes it to the pin.
  */
 void pwm_up() {
-	if (pwmLevel < 225) {
-		pwmLevel += 25;
-	} else {
-		pwmLevel = 250;
-	}
-	analogWrite(pwmPin, pwmLevel);
+    if (pwmLevel < 225) {
+        pwmLevel += 25;
+    } else {
+        pwmLevel = 250;
+    }
+    analogWrite(pwmPin, pwmLevel);
 }
 
 // Function to be attached to the pwm_line object.
 void pwm_down() {
-	if (pwmLevel > 25) {
-		pwmLevel -= 25;
-	} else {
-		pwmLevel = 0;
-	}
-	analogWrite(pwmPin, pwmLevel);
+    if (pwmLevel > 25) {
+        pwmLevel -= 25;
+    } else {
+        pwmLevel = 0;
+    }
+    analogWrite(pwmPin, pwmLevel);
 }
 
 void setup() {
-	Serial.begin(250000);
+    Serial.begin(250000);
 
-	pinMode(analogPin, INPUT);
-	pinMode(ledPin, OUTPUT);
-	pinMode(pwmPin, OUTPUT);
+    pinMode(analogPin, INPUT);
+    pinMode(ledPin, OUTPUT);
+    pinMode(pwmPin, OUTPUT);
 
-	lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-	// Function to attach functions to LiquidLine objects.
-	pwm_line.attach_function(1, pwm_up);
-	pwm_line.attach_function(2, pwm_down);
+    // Function to attach functions to LiquidLine objects.
+    pwm_line.attach_function(1, pwm_up);
+    pwm_line.attach_function(2, pwm_down);
 
-	menu.add_screen(welcome_screen);
-	menu.add_screen(screen2);
-	menu.add_screen(pwm_screen);
+    menu.add_screen(welcome_screen);
+    menu.add_screen(screen2);
+    menu.add_screen(pwm_screen);
 
-	strncpy(ledState_text, string_off, sizeof(string_off));
+    strncpy(ledState_text, string_off, sizeof(string_off));
 
-	menu.update();
+    menu.update();
 }
 
 void loop() {
+    // Check all the buttons
+    if (right.check() == LOW) {
+        Serial.println(F("RIGHT button pressed"));
+        menu.next_screen();
+    }
+    if (left.check() == LOW) {
+        Serial.println(F("LEFT button pressed"));
+        menu.previous_screen();
+    }
+    if (up.check() == LOW) {
+        Serial.println(F("UP button pressed"));
+        // Calls the function identified with one
+        // for the focused line.
+        menu.call_function(1);
+    }
+    if (down.check() == LOW) {
+        Serial.println(F("DOWN button pressed"));
+        menu.call_function(2);
+    }
+    if (enter.check() == LOW) {
+        Serial.println(F("ENTER button pressed"));
+        // Switches focus to the next line.
+        menu.switch_focus();
+    }
 
-	// Check all the buttons
-	if (right.check() == LOW) {
-		Serial.println(F("RIGHT button pressed"));
-		menu.next_screen();
-	}
-	if (left.check() == LOW) {
-		Serial.println(F("LEFT button pressed"));
-		menu.previous_screen();
-	}
-	if (up.check() == LOW) {
-		Serial.println(F("UP button pressed"));
-		// Calls the function identified with one
-		// for the focused line.
-		menu.call_function(1);
-	}
-	if (down.check() == LOW) {
-		Serial.println(F("DOWN button pressed"));
-		menu.call_function(2);
-	}
-	if (enter.check() == LOW) {
-		Serial.println(F("ENTER button pressed"));
-		// Switches focus to the next line.
-		menu.switch_focus();
-	}
 
+    // Periodically switches the state of the LED.
+    static unsigned long lastMillis = 0;
+    static unsigned int period = 2000;
+    if (millis() - lastMillis > period) {
+        lastMillis = millis();
 
-	// Periodically switches the state of the LED.
-	static unsigned long lastMillis = 0;
-	static unsigned int period = 2000;
-	if (millis() - lastMillis > period) {
-		lastMillis = millis();
+        Serial.print("LED turned ");
+        if (ledState == LOW) {
+            ledState = HIGH;
+            // Changes the text that is printed on the display.
+            strncpy(ledState_text, string_on, sizeof(string_on));
+            Serial.println(ledState_text);
+            menu.update();
+        } else {
+            ledState = LOW;
+            strncpy(ledState_text, string_off, sizeof(string_off));
+            Serial.println(ledState_text);
+            menu.update();
+        }
+        digitalWrite(ledPin, ledState);
 
-		Serial.print("LED turned ");
-		if (ledState == LOW) {
-			ledState = HIGH;
-			// Changes the text that is printed on the display.
-			strncpy(ledState_text, string_on, sizeof(string_on));
-			Serial.println(ledState_text);
-			menu.update();
-		} else {
-			ledState = LOW;
-			strncpy(ledState_text, string_off, sizeof(string_off));
-			Serial.println(ledState_text);
-			menu.update();
-		}
-		digitalWrite(ledPin, ledState);
-
-		// The 'analogValue' is updated every second.
-		analogValue = analogRead(analogPin);
-		static unsigned short lastAnalogValue = 0;
-		if (analogValue != lastAnalogValue) {
-			lastAnalogValue = analogValue;
-			menu.update();
-		}
-	}
+        // The 'analogValue' is updated every second.
+        analogValue = analogRead(analogPin);
+        static unsigned short lastAnalogValue = 0;
+        if (analogValue != lastAnalogValue) {
+            lastAnalogValue = analogValue;
+            menu.update();
+        }
+    }
 }

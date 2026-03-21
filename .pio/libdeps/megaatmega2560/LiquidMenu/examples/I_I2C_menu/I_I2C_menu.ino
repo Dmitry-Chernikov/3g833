@@ -88,40 +88,40 @@ LiquidMenu menu(lcd);
 
 
 void setup() {
-  Serial.begin(250000);
+    Serial.begin(250000);
 
-  pinMode(analogPin, INPUT);
+    pinMode(analogPin, INPUT);
 
-  // This is the I2C LCD object initialization.
-  lcd.init();
-  lcd.backlight();
+    // This is the I2C LCD object initialization.
+    lcd.init();
+    lcd.backlight();
 
-  // Menu initialization.
-  menu.init();
+    // Menu initialization.
+    menu.init();
 
-  // This is the method used to add a screen object to the menu.
-  menu.add_screen(welcome_screen);
-  menu.add_screen(secondary_screen);
+    // This is the method used to add a screen object to the menu.
+    menu.add_screen(welcome_screen);
+    menu.add_screen(secondary_screen);
 }
 
 void loop() {
-  // Periodic reading of the analog pin.
-  if (millis() - lastMs_check > period_check) {
-    lastMs_check = millis();
-    analogReading = analogRead(analogPin);
-    /*
+    // Periodic reading of the analog pin.
+    if (millis() - lastMs_check > period_check) {
+        lastMs_check = millis();
+        analogReading = analogRead(analogPin);
+        /*
      * Check if the analog value have changed
      * and update the display if it has.
      */
-    if (analogReading != lastAnalogReading) {
-      lastAnalogReading = analogReading;
-      menu.update();
+        if (analogReading != lastAnalogReading) {
+            lastAnalogReading = analogReading;
+            menu.update();
+        }
     }
-  }
 
-  // Periodic switching to the next screen.
-  if (millis() - lastMs_nextScreen > period_nextScreen) {
-    lastMs_nextScreen = millis();
-    menu.next_screen();
-  }
+    // Periodic switching to the next screen.
+    if (millis() - lastMs_nextScreen > period_nextScreen) {
+        lastMs_nextScreen = millis();
+        menu.next_screen();
+    }
 }

@@ -23,11 +23,11 @@ used in the library, also configures the debugging messages.
  * @{
  */
 //#ifndef LIQUIDMENU_LIBRARY
-    /// Wrapped library ID
+/// Wrapped library ID
 //    #define LIQUIDMENU_LIBRARY LiquidCrystal_LIBRARY
 //#endif
 //#ifndef DisplayClass
-    /// Name of wrapped library's class
+/// Name of wrapped library's class
 //    #define DisplayClass LiquidCrystal
 //#endif
 //!@}
@@ -52,7 +52,7 @@ used in the library, also configures the debugging messages.
 #include <Adafruit_RGBLCDShield.h>
 
 #ifndef DisplayClass
-	#define DisplayClass Adafruit_RGBLCDShield
+#define DisplayClass Adafruit_RGBLCDShield
 #endif
 //!@}
 //!@}

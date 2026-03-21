@@ -62,49 +62,49 @@ LiquidCrystal lcd(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 // The glyph are separated in a namespace. To use them use
 // namespace_name::variable_name.
 namespace glyphs {
-uint8_t thermometer[8] = {
-  0b00100,
-  0b01010,
-  0b01010,
-  0b01010,
-  0b10001,
-  0b11111,
-  0b01110,
-  0b00000
-};
+    uint8_t thermometer[8] = {
+        0b00100,
+        0b01010,
+        0b01010,
+        0b01010,
+        0b10001,
+        0b11111,
+        0b01110,
+        0b00000
+    };
 
-uint8_t celsiusSymbol[8] = {
-  0b00011,
-  0b00011,
-  0b00000,
-  0b00000,
-  0b00000,
-  0b00000,
-  0b00000,
-  0b00000
-};
+    uint8_t celsiusSymbol[8] = {
+        0b00011,
+        0b00011,
+        0b00000,
+        0b00000,
+        0b00000,
+        0b00000,
+        0b00000,
+        0b00000
+    };
 
-uint8_t fan1[8] = {
-  0b00000,
-  0b11001,
-  0b01011,
-  0b00100,
-  0b11010,
-  0b10011,
-  0b00000,
-  0b00000
-};
+    uint8_t fan1[8] = {
+        0b00000,
+        0b11001,
+        0b01011,
+        0b00100,
+        0b11010,
+        0b10011,
+        0b00000,
+        0b00000
+    };
 
-uint8_t fan2[8] = {
-  0b00000,
-  0b10011,
-  0b11010,
-  0b00100,
-  0b01011,
-  0b11001,
-  0b00000,
-  0b00000
-};
+    uint8_t fan2[8] = {
+        0b00000,
+        0b10011,
+        0b11010,
+        0b00100,
+        0b01011,
+        0b11001,
+        0b00000,
+        0b00000
+    };
 } //namespace glyphs
 
 // These are the indexes we will use to create the characters
@@ -125,48 +125,48 @@ LiquidScreen screen1(line1, line2, line3);
 LiquidMenu menu(lcd, welcome_screen, screen1);
 
 void setup() {
-  Serial.begin(250000);
+    Serial.begin(250000);
 
-  // Here we create the characters using the LiquidCrystal library.
-  // The fan glyph will be animated. This is the first glyph.
-  lcd.createChar(fan_glyphIndex, glyphs::fan1);
-  // This is the second glyph, indexed after the first.
-  lcd.createChar(fan_glyphIndex + 1, glyphs::fan2);
-  lcd.createChar(thermometer_glyphIndex, glyphs::thermometer);
-  lcd.createChar(celsiusSymbol_glyphIndex, glyphs::celsiusSymbol);
+    // Here we create the characters using the LiquidCrystal library.
+    // The fan glyph will be animated. This is the first glyph.
+    lcd.createChar(fan_glyphIndex, glyphs::fan1);
+    // This is the second glyph, indexed after the first.
+    lcd.createChar(fan_glyphIndex + 1, glyphs::fan2);
+    lcd.createChar(thermometer_glyphIndex, glyphs::thermometer);
+    lcd.createChar(celsiusSymbol_glyphIndex, glyphs::celsiusSymbol);
 
-  // This functions tells the LiquidLine objects that their first
-  // variable is not an integer value but an index to a glyph.
-  line1.set_asGlyph(1);
-  line2.set_asGlyph(1);
-  line3.set_asGlyph(1);
+    // This functions tells the LiquidLine objects that their first
+    // variable is not an integer value but an index to a glyph.
+    line1.set_asGlyph(1);
+    line2.set_asGlyph(1);
+    line3.set_asGlyph(1);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 }
 
 void loop() {
-  // This block cycles the value of the variable pointing to
-  // one of the fan glyphs to point to the other.
-  static unsigned long lastMs_fanAnimation = 0;
-  static unsigned int period_fanAnimation = 500;
-  if (millis() - lastMs_fanAnimation > period_fanAnimation) {
-    lastMs_fanAnimation = millis();
-    static bool currentAnimation_fan = 0;
-    if (currentAnimation_fan == 0) {
-      currentAnimation_fan = 1;
-      fan_glyphIndex = 1;
-    } else {
-      currentAnimation_fan = 0;
-      fan_glyphIndex = 0;
+    // This block cycles the value of the variable pointing to
+    // one of the fan glyphs to point to the other.
+    static unsigned long lastMs_fanAnimation = 0;
+    static unsigned int period_fanAnimation = 500;
+    if (millis() - lastMs_fanAnimation > period_fanAnimation) {
+        lastMs_fanAnimation = millis();
+        static bool currentAnimation_fan = 0;
+        if (currentAnimation_fan == 0) {
+            currentAnimation_fan = 1;
+            fan_glyphIndex = 1;
+        } else {
+            currentAnimation_fan = 0;
+            fan_glyphIndex = 0;
+        }
+        // The display must be updated to show the new glyph.
+        menu.softUpdate();
     }
-    // The display must be updated to show the new glyph.
-    menu.softUpdate();
-  }
 
-  static unsigned long lastMs_nextScreen = 0;
-  static unsigned int period_nextScreen = 4000;
-  if (millis() - lastMs_nextScreen > period_nextScreen) {
-    lastMs_nextScreen = millis();
-    menu.next_screen();
-  }
+    static unsigned long lastMs_nextScreen = 0;
+    static unsigned int period_nextScreen = 4000;
+    if (millis() - lastMs_nextScreen > period_nextScreen) {
+        lastMs_nextScreen = millis();
+        menu.next_screen();
+    }
 }

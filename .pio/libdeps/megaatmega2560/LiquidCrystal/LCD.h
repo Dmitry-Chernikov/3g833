@@ -73,7 +73,7 @@
     result into the code. Thus, there is no run-time overhead when using
     _BV().
 */
-#ifndef _BV    
+#ifndef _BV
 #define _BV(bit) (1 << (bit))
 #endif
 
@@ -98,10 +98,9 @@
  @param      uSec[in] time in microseconds.
  @result     None
  */
-inline static void waitUsec ( uint16_t uSec )
-{
+inline static void waitUsec(uint16_t uSec) {
 #ifndef FAST_MODE
-   delayMicroseconds ( uSec );
+    delayMicroseconds(uSec);
 #endif // FAST_MODE
 }
 
@@ -196,19 +195,17 @@ inline static void waitUsec ( uint16_t uSec )
  */
 typedef enum { POSITIVE, NEGATIVE } t_backlightPol;
 
-class LCD : public Print 
-{
+class LCD : public Print {
 public:
-   
-   /*!
+    /*!
     @method
     @abstract   LiquidCrystal abstract constructor.
     @discussion LiquidCrystal class abstract constructor needed to create
     the base abstract class.
     */
-   LCD ( );
-   
-   /*!
+    LCD();
+
+    /*!
     @function
     @abstract   LCD initialization.
     @discussion Initializes the LCD to a given size (col, row). This methods
@@ -223,9 +220,9 @@ public:
     @param      rows[in] the number of rows that the display has
     @param      charsize[in] character size, default==LCD_5x8DOTS
     */
-   virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
-   
-   /*!
+    virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+
+    /*!
     @function
     @abstract   Clears the LCD.
     @discussion Clears the LCD screen and positions the cursor in the upper-left 
@@ -235,9 +232,9 @@ public:
     
     @param      none
     */
-   void clear();
-   
-   /*!
+    void clear();
+
+    /*!
     @function
     @abstract   Sets the cursor to the upper-left corner.
     @discussion Positions the cursor in the upper-left of the LCD. 
@@ -248,9 +245,9 @@ public:
     
     @param      none
     */
-   void home();
-   
-   /*!
+    void home();
+
+    /*!
     @function
     @abstract   Turns off the LCD display.
     @discussion Turns off the LCD display, without losing the text currently 
@@ -258,9 +255,9 @@ public:
     
     @param      none
     */
-   void noDisplay();
-   
-   /*!
+    void noDisplay();
+
+    /*!
     @function
     @abstract   Turns on the LCD display.
     @discussion Turns on the LCD display, after it's been turned off with 
@@ -269,17 +266,17 @@ public:
     
     @param      none
     */
-   void display();
-   
-   /*!
+    void display();
+
+    /*!
     @function
     @abstract   Turns off the blinking of the LCD cursor.
     
     @param      none
     */
-   void noBlink();
-   
-   /*!
+    void noBlink();
+
+    /*!
     @function
     @abstract   Display the cursor of the LCD.
     @discussion Display the blinking LCD cursor. If used in combination with 
@@ -287,17 +284,17 @@ public:
     
     @param      none
     */
-   void blink();
-   
-   /*!
+    void blink();
+
+    /*!
     @function
     @abstract   Hides the LCD cursor.
     
     @param      none
     */
-   void noCursor();
-   
-   /*!
+    void noCursor();
+
+    /*!
     @function
     @abstract   Display the LCD cursor.
     @discussion Display the LCD cursor: an underscore (line) at the location 
@@ -305,27 +302,27 @@ public:
     
     @param      none
     */
-   void cursor();
-   
-   /*!
+    void cursor();
+
+    /*!
     @function
     @abstract   Scrolls the contents of the display (text and cursor) one space 
     to the left.
     
     @param      none
     */
-   void scrollDisplayLeft();
-   
-   /*!
+    void scrollDisplayLeft();
+
+    /*!
     @function
     @abstract   Scrolls the contents of the display (text and cursor) one space 
     to the right.
     
     @param      none
     */
-   void scrollDisplayRight();
-   
-   /*!
+    void scrollDisplayRight();
+
+    /*!
     @function
     @abstract   Set the direction for text written to the LCD to left-to-right.
     @discussion Set the direction for text written to the LCD to left-to-right. 
@@ -336,9 +333,9 @@ public:
     
     @param      none
     */
-   void leftToRight();
-   
-   /*!
+    void leftToRight();
+
+    /*!
     @function
     @abstract   Set the direction for text written to the LCD to right-to-left.
     @discussion Set the direction for text written to the LCD to right-to-left. 
@@ -349,26 +346,26 @@ public:
     
     @param      none
     */
-   void rightToLeft();
-   
-   /*!
+    void rightToLeft();
+
+    /*!
     @function
     @abstract   Moves the cursor one space to the left.
     @discussion 
     @param      none
-    */   
-   void moveCursorLeft();
-   
-   
-   /*!
+    */
+    void moveCursorLeft();
+
+
+    /*!
     @function
     @abstract   Moves the cursor one space to the right.
     
     @param      none
     */
-   void moveCursorRight();
-   
-   /*!
+    void moveCursorRight();
+
+    /*!
     @function
     @abstract   Turns on automatic scrolling of the LCD.
     @discussion Turns on automatic scrolling of the LCD. This causes each 
@@ -381,9 +378,9 @@ public:
     
     @param      none
     */
-   void autoscroll();
-   
-   /*!
+    void autoscroll();
+
+    /*!
     @function
     @abstract   Turns off automatic scrolling of the LCD.
     @discussion Turns off automatic scrolling of the LCD, this is the default
@@ -391,9 +388,9 @@ public:
     
     @param      none
     */
-   void noAutoscroll();
-   
-   /*!
+    void noAutoscroll();
+
+    /*!
     @function
     @abstract   Creates a custom character for use on the LCD.
     @discussion Create a custom character (glyph) for use on the LCD. 
@@ -409,10 +406,10 @@ public:
     (0 to 7)
     @param      charmap[in] the bitmap array representing each row of the character.
     */
-   void createChar(uint8_t location, uint8_t charmap[]);
+    void createChar(uint8_t location, uint8_t charmap[]);
 
 #ifdef __AVR__
-   /*!
+    /*!
     @function
     @abstract   Creates a custom character for use on the LCD.
     @discussion Create a custom character (glyph) for use on t{he LCD.
@@ -432,10 +429,10 @@ public:
                 Usage for flash defined characters:
                 const char str_pstr[] PROGMEM = {0xc, 0x12, 0x12, 0xc, 0, 0, 0, 0};
     */
-   void createChar(uint8_t location, const char *charmap);
+    void createChar(uint8_t location, const char *charmap);
 #endif // __AVR__
-   
-   /*!
+
+    /*!
     @function
     @abstract   Position the LCD cursor.
     @discussion Sets the position of the LCD cursor. Set the location at which 
@@ -444,48 +441,48 @@ public:
     @param      col[in] LCD column
     @param      row[in] LCD row - line.
     */
-   void setCursor(uint8_t col, uint8_t row);
-   
-   /*!
+    void setCursor(uint8_t col, uint8_t row);
+
+    /*!
     @function
     @abstract   Switch-on the LCD backlight.
     @discussion Switch-on the LCD backlight.
     The setBacklightPin has to be called before setting the backlight for
     this method to work. @see setBacklightPin. 
     */
-   void backlight ( void );
-   
-   /*!
+    void backlight(void);
+
+    /*!
     @function
     @abstract   Switch-off the LCD backlight.
     @discussion Switch-off the LCD backlight.
     The setBacklightPin has to be called before setting the backlight for
     this method to work. @see setBacklightPin. 
-    */   
-   void noBacklight ( void );
-   
-   /*!
+    */
+    void noBacklight(void);
+
+    /*!
     @function
     @abstract   Switch on the LCD module.
     @discussion Switch on the LCD module, it will switch on the LCD controller
     and the backlight. This method has the same effect of calling display and
     backlight. @see display, @see backlight
     */
-   void on ( void );
+    void on(void);
 
-   /*!
+    /*!
     @function
     @abstract   Switch off the LCD module.
     @discussion Switch off the LCD module, it will switch off the LCD controller
     and the backlight. This method has the same effect of calling noDisplay and
     noBacklight. @see display, @see backlight
-    */   
-   void off ( void );
-   
-   //
-   // virtual class methods
-   // --------------------------------------------------------------------------
-   /*!
+    */
+    void off(void);
+
+    //
+    // virtual class methods
+    // --------------------------------------------------------------------------
+    /*!
     @function
     @abstract   Sets the pin to control the backlight.
     @discussion Sets the pin in the device to control the backlight.
@@ -495,9 +492,10 @@ public:
     @param      value: pin associated to backlight control.
     @param      pol: backlight polarity control (POSITIVE, NEGATIVE)
     */
-   virtual void setBacklightPin ( uint8_t value, t_backlightPol pol ) { };
-   
-   /*!
+    virtual void setBacklightPin(uint8_t value, t_backlightPol pol) {
+    };
+
+    /*!
     @function
     @abstract   Sets the pin to control the backlight.
     @discussion Sets the pin in the device to control the backlight. The behaviour
@@ -514,9 +512,10 @@ public:
     BACKLIGHT_OFF will be interpreted as off and BACKLIGHT_ON will drive the
     backlight on.
     */
-   virtual void setBacklight ( uint8_t value ) { };
-   
-   /*!
+    virtual void setBacklight(uint8_t value) {
+    };
+
+    /*!
     @function
     @abstract   Writes to the LCD.
     @discussion This method writes character to the LCD in the current cursor
@@ -528,31 +527,31 @@ public:
     @param      value[in] Value to write to the LCD.
     */
 #if (ARDUINO <  100)
-   virtual void write(uint8_t value);
+    virtual void write(uint8_t value);
 #else
-   virtual size_t write(uint8_t value);
+    virtual size_t write(uint8_t value);
 #endif
-   
+
 #if (ARDUINO <  100)
-   using Print::write;
+    using Print::write;
 #else
-   using Print::write;
-#endif   
-   
+    using Print::write;
+#endif
+
 protected:
-   // Internal LCD variables to control the LCD shared between all derived
-   // classes.
-   uint8_t _displayfunction;  // LCD_5x10DOTS or LCD_5x8DOTS, LCD_4BITMODE or 
-                              // LCD_8BITMODE, LCD_1LINE or LCD_2LINE
-   uint8_t _displaycontrol;   // LCD base control command LCD on/off, blink, cursor
-                              // all commands are "ored" to its contents.
-   uint8_t _displaymode;      // Text entry mode to the LCD
-   uint8_t _numlines;         // Number of lines of the LCD, initialized with begin()
-   uint8_t _cols;             // Number of columns in the LCD
-   t_backlightPol _polarity;   // Backlight polarity
-   
+    // Internal LCD variables to control the LCD shared between all derived
+    // classes.
+    uint8_t _displayfunction; // LCD_5x10DOTS or LCD_5x8DOTS, LCD_4BITMODE or 
+    // LCD_8BITMODE, LCD_1LINE or LCD_2LINE
+    uint8_t _displaycontrol; // LCD base control command LCD on/off, blink, cursor
+    // all commands are "ored" to its contents.
+    uint8_t _displaymode; // Text entry mode to the LCD
+    uint8_t _numlines; // Number of lines of the LCD, initialized with begin()
+    uint8_t _cols; // Number of columns in the LCD
+    t_backlightPol _polarity; // Backlight polarity
+
 private:
-   /*!
+    /*!
     @function
     @abstract   Send a command to the LCD.
     @discussion This method sends a command to the LCD by setting the Register
@@ -564,9 +563,9 @@ private:
     @param      value[in] Command value to send to the LCD (COMMAND, DATA or
     FOUR_BITS).
     */
-   void command(uint8_t value);
+    void command(uint8_t value);
 
-   /*!
+    /*!
     @function
     @abstract   Send a particular value to the LCD.
     @discussion Sends a particular value to the LCD. This is a pure abstract
@@ -580,11 +579,11 @@ private:
     the LCD.
     */
 #if (ARDUINO <  100)
-   virtual void send(uint8_t value, uint8_t mode) { };
+    virtual void send(uint8_t value, uint8_t mode) {
+    };
 #else
-   virtual void send(uint8_t value, uint8_t mode) = 0;
+    virtual void send(uint8_t value, uint8_t mode) = 0;
 #endif
-   
 };
 
 #endif

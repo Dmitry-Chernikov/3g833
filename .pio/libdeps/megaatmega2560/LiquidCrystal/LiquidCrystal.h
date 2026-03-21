@@ -53,50 +53,55 @@
  */
 #define EXEC_TIME 37
 
-class LiquidCrystal : public LCD
-{
+class LiquidCrystal : public LCD {
 public:
-   /*!
+    /*!
     @method     
     @abstract   8 bit LCD constructors.
     @discussion Defines the pin assignment that the LCD will have.
     The constructor does not initialize the LCD.
     */
-   LiquidCrystal(uint8_t rs, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-   LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-   
-   // Constructors with backlight control
-   LiquidCrystal(uint8_t rs, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
-                 uint8_t backlightPin, t_backlightPol pol);
-   LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
-                 uint8_t backlightPin, t_backlightPol pol);   
-   /*!
+    LiquidCrystal(uint8_t rs, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+
+    LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+
+    // Constructors with backlight control
+    LiquidCrystal(uint8_t rs, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
+                  uint8_t backlightPin, t_backlightPol pol);
+
+    LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
+                  uint8_t backlightPin, t_backlightPol pol);
+
+    /*!
     @method     
     @abstract   4 bit LCD constructors.
     @discussion Defines the pin assignment that the LCD will have.
     The constructor does not initialize the LCD.
     */
-   LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
-   LiquidCrystal(uint8_t rs, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
-   
-   // Constructors with backlight control
-   LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t backlightPin, t_backlightPol pol);
-   LiquidCrystal(uint8_t rs, uint8_t enable,
-                 uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-                 uint8_t backlightPin, t_backlightPol pol);
-   /*!
+    LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
+
+    LiquidCrystal(uint8_t rs, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
+
+    // Constructors with backlight control
+    LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t backlightPin, t_backlightPol pol);
+
+    LiquidCrystal(uint8_t rs, uint8_t enable,
+                  uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+                  uint8_t backlightPin, t_backlightPol pol);
+
+    /*!
     @function
     @abstract   Send a particular value to the LCD.
     @discussion Sends a particular value to the LCD for writing to the LCD or
@@ -108,9 +113,9 @@ public:
     @result     mode LOW - write to the LCD CGRAM, HIGH - write a command to
     the LCD.
     */
-   virtual void send(uint8_t value, uint8_t mode);
-   
-   /*!
+    virtual void send(uint8_t value, uint8_t mode);
+
+    /*!
     @function
     @abstract   Sets the pin to control the backlight.
     @discussion Sets the pin in the device to control the backlight.
@@ -118,10 +123,10 @@ public:
     @param      pin: pin assigned to the backlight
     @param      pol: backlight pin control polarity (POSITIVE, NEGATIVE).
     */
-   void setBacklightPin ( uint8_t pin, t_backlightPol pol );
-   
+    void setBacklightPin(uint8_t pin, t_backlightPol pol);
+
 #if defined(ARDUINO_ARCH_ESP32)
-   /*!
+    /*!
     @function
     @abstract   Wrapper around ESP32-hal-ledcWrite.
     @discussion The ESP32 MCU does not have the analogWrite() function.
@@ -132,10 +137,10 @@ public:
     @param      value: from 0 to valueMax
     @param      valueMax: default: 255, Max: 1023
    */
-   void analogWrite( uint8_t channel, uint32_t value, uint32_t valueMax );
+    void analogWrite(uint8_t channel, uint32_t value, uint32_t valueMax);
 #endif
 
-   /*!
+    /*!
     @function
     @abstract   Switch-on/off the LCD backlight.
     @discussion Switch-on/off the LCD backlight.
@@ -149,40 +154,39 @@ public:
     @param      value: backlight value. 0: off, 1..255: dim control of the 
     backlight. For negative logic 255: off, 254..0: dim control.
     */
-   void setBacklight ( uint8_t value );
-   
+    void setBacklight(uint8_t value);
+
 private:
-   
-   /*!
+    /*!
     @method     
     @abstract   Initializes the LCD pin allocation and associated HW
     @discussion Initializes the LCD pin allocation and configuration.
     */
-   void init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
-             uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
-             uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
-   
-   /*!
+    void init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable,
+              uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
+              uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+
+    /*!
     @method     
     @abstract   Writes numBits bits from value value to the LCD.
     @discussion Writes numBists bits (the least significant) to the LCD control 
     data lines.
-    */   
-   void writeNbits(uint8_t value, uint8_t numBits);
-   
-   /*!
+    */
+    void writeNbits(uint8_t value, uint8_t numBits);
+
+    /*!
     @method     
     @abstract   Pulse the LCD enable line (En).
     @discussion Sends a pulse of 1 uS to the Enable pin to execute an command
     or write operation.
-    */ 
-   void pulseEnable();
-   
-   uint8_t _rs_pin;       // LOW: command.  HIGH: character.
-   uint8_t _rw_pin;       // LOW: write to LCD.  HIGH: read from LCD.
-   uint8_t _enable_pin;   // activated by a HIGH pulse.
-   uint8_t _data_pins[8]; // Data pins.
-   uint8_t _backlightPin; // Pin associated to control the LCD backlight
+    */
+    void pulseEnable();
+
+    uint8_t _rs_pin; // LOW: command.  HIGH: character.
+    uint8_t _rw_pin; // LOW: write to LCD.  HIGH: read from LCD.
+    uint8_t _enable_pin; // activated by a HIGH pulse.
+    uint8_t _data_pins[8]; // Data pins.
+    uint8_t _backlightPin; // Pin associated to control the LCD backlight
 };
 
 #endif

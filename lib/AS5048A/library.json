@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "description": "Simple SPI library for interacting with the AS5048A corner sensor.The sensor should be connected to the hardware SPI pins (MISO, MOSI, SCK). The CS pin can be connected to any GPIO pin but should be passed to the constructor.",
   "keywords": "AS5048A, Sensors, library",
-  "repository":
-  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/Dmitry-Chernikov/AS5048A-Arduino/tree/master"
   },
-  "authors":
-  [
+  "authors": [
     {
       "name": "Dmitry Chernikov",
       "email": "chernicov_dima@mail.ru",

@@ -51,9 +51,9 @@
 #else
 
 #if (ARDUINO < 10000)
-   #include <../Wire/Wire.h>
+#include <../Wire/Wire.h>
 #else
-   #include <Wire.h>
+#include <Wire.h>
 #endif
 
 #endif
@@ -61,11 +61,9 @@
 #include "LCD.h"
 
 
-class LiquidCrystal_I2C_ByVac : public LCD
-{
+class LiquidCrystal_I2C_ByVac : public LCD {
 public:
-
-   /*!
+    /*!
     @method
     @abstract   Class constructor.
     @discussion Initializes class variables and defines the I2C address of the
@@ -74,9 +72,9 @@ public:
     @param      lcd_Addr[in] I2C address of the IO expansion module. For BV4218,
     the address can be configured using the address commands (to be implemented).
     */
-   LiquidCrystal_I2C_ByVac (uint8_t lcd_Addr);
+    LiquidCrystal_I2C_ByVac(uint8_t lcd_Addr);
 
-   /*!
+    /*!
     @function
     @abstract   LCD initialization and associated HW.
     @discussion Initializes the LCD to a given size (col, row). This methods
@@ -92,9 +90,9 @@ public:
     @param      charsize[in] size of the characters of the LCD: LCD_5x8DOTS or
     LCD_5x10DOTS.
     */
-   virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+    virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
 
-   /*!
+    /*!
     @function
     @abstract   Send a particular value to the LCD.
     @discussion Sends a particular value to the LCD for writing to the LCD or
@@ -106,19 +104,19 @@ public:
     @param      mode[in] DATA - write to the LCD CGRAM, COMMAND - write a
     command to the LCD.
     */
-   virtual void send(uint8_t value, uint8_t mode);
+    virtual void send(uint8_t value, uint8_t mode);
 
 
-   /*!
+    /*!
     @function
     @abstract   Switch-on/off the LCD backlight.
     @discussion Switch-on/off the LCD backlight.
 
     @param      value: backlight mode (HIGH|LOW)
     */
-   void setBacklight ( uint8_t value );
+    void setBacklight(uint8_t value);
 
-   /*!
+    /*!
     @function
     @abstract   Switch-on/off the LCD contrast.
     @discussion Switch-on/off the LCD contrast.
@@ -126,18 +124,17 @@ public:
 
     @param      value: contrast mode (HIGH|LOW)
     */
-   void setContrast ( uint8_t value );
+    void setContrast(uint8_t value);
 
 private:
-
-   /*!
+    /*!
     @method
     @abstract   Initializes the LCD class
     @discussion Initializes the LCD class and IO expansion module.
     */
-   int  init();
+    int init();
 
-   /*!
+    /*!
     @function
     @abstract   Initialises class private variables
     @discussion This is the class single point for initialising private variables.
@@ -146,8 +143,7 @@ private:
     the address can be configured using the address commands.
     */
 
-   uint8_t _Addr;             // I2C Address of the IO expander
-
+    uint8_t _Addr; // I2C Address of the IO expander
 };
 
 #endif

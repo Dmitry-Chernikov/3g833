@@ -84,70 +84,70 @@ LiquidMenu menu(lcd);
 
 // Checks all the buttons.
 void buttonsCheck() {
-	if (right.check() == LOW) {
-		menu.next_screen();
-	}
-	if (left.check() == LOW) {
-		menu.previous_screen();
-	}
-	if (enter.check() == LOW) {
-		// Switches focus to the next line.
-		menu.switch_focus();
-	}
+    if (right.check() == LOW) {
+        menu.next_screen();
+    }
+    if (left.check() == LOW) {
+        menu.previous_screen();
+    }
+    if (enter.check() == LOW) {
+        // Switches focus to the next line.
+        menu.switch_focus();
+    }
 }
 
 // Indicator symbol definition, it will change the default symbol for the right focus.
 // http://omerk.github.io/lcdchargen/
 uint8_t rFocus[8] = {
-	0b00000,
-	0b00000,
-	0b00100,
-	0b01110,
-	0b00100,
-	0b00000,
-	0b00000,
-	0b00000
+    0b00000,
+    0b00000,
+    0b00100,
+    0b01110,
+    0b00100,
+    0b00000,
+    0b00000,
+    0b00000
 };
 
 // Blank function, it is attached to the lines so that they become focusable.
 void func() {
-	return;
+    return;
 }
 
 void setup() {
-	Serial.begin(250000);
+    Serial.begin(250000);
 
-	lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
     // Changes the right focus symbol.
-	menu.set_focusSymbol(Position::RIGHT, rFocus);
+    menu.set_focusSymbol(Position::RIGHT, rFocus);
 
     // Sets the focus position for this line to be on the left.
-	leftFocus_line.set_focusPosition(Position::LEFT);
-	rightFocus_line.set_focusPosition(Position::RIGHT);
-	// 'CUSTOM' focus position needs column and row parameters.
-	customFocus_line.set_focusPosition(Position::CUSTOM, 15, 0);
-	// The focus position can be changed for the whole screen or
-	// menu at once. 'CUSTOM' position cannot be set because it
-	// needs individual coordinates.
-	leftF12_screen.set_focusPosition(Position::LEFT);
+    leftFocus_line.set_focusPosition(Position::LEFT);
+    rightFocus_line.set_focusPosition(Position::RIGHT);
+    // 'CUSTOM' focus position needs column and row parameters.
+    customFocus_line.set_focusPosition(Position::CUSTOM, 15, 0);
+    // The focus position can be changed for the whole screen or
+    // menu at once. 'CUSTOM' position cannot be set because it
+    // needs individual coordinates.
+    leftF12_screen.set_focusPosition(Position::LEFT);
 
     // Attaching a function to a line makes the line focusable.
-	leftFocus_line.attach_function(1, func);
-	rightFocus_line.attach_function(1, func);
-	customFocus_line.attach_function(1, func);
-	leftF1_line.attach_function(1, func);
-	leftF2_line.attach_function(1, func);
+    leftFocus_line.attach_function(1, func);
+    rightFocus_line.attach_function(1, func);
+    customFocus_line.attach_function(1, func);
+    leftF1_line.attach_function(1, func);
+    leftF2_line.attach_function(1, func);
 
-	menu.add_screen(welcome_screen);
-	menu.add_screen(leftright_screen);
-	menu.add_screen(customFocus_screen);
-	menu.add_screen(leftright_screen);
-	menu.add_screen(leftF12_screen);
+    menu.add_screen(welcome_screen);
+    menu.add_screen(leftright_screen);
+    menu.add_screen(customFocus_screen);
+    menu.add_screen(leftright_screen);
+    menu.add_screen(leftF12_screen);
 
-	menu.update();
+    menu.update();
 }
 
 void loop() {
-	buttonsCheck();
+    buttonsCheck();
 }

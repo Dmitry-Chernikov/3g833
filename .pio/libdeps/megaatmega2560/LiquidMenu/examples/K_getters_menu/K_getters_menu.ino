@@ -54,7 +54,7 @@ unsigned long updateLastMs = 0;
 
 // This is the first getter function, it reads the potentiometer value.
 int readPot() {
-  return analogRead(potPin);
+    return analogRead(potPin);
 }
 
 // This strings will be used by the second getter function.
@@ -64,17 +64,17 @@ const char potHighStr[] = "high";
 const char potMaxStr[] = "maximum";
 
 // This getter function demonstrates how to return a pointer to a string.
-const char* getPotPosition() {
-  unsigned int potValue = readPot();
-  if (potValue < 10) {
-    return potMinStr;
-  } else if (potValue < 512) {
-    return potLowStr;
-  } else if (potValue < 1000) {
-    return potHighStr;
-  } else {
-    return potMaxStr;
-  }
+const char *getPotPosition() {
+    unsigned int potValue = readPot();
+    if (potValue < 10) {
+        return potMinStr;
+    } else if (potValue < 512) {
+        return potLowStr;
+    } else if (potValue < 1000) {
+        return potHighStr;
+    } else {
+        return potMaxStr;
+    }
 }
 
 LiquidLine welcome_line1(0, 0, "LiquidMenu ", LIQUIDMENU_VERSION);
@@ -88,29 +88,29 @@ LiquidScreen pot_screen(potValue_line, potPosition_line);
 LiquidMenu menu(lcd);
 
 void setup() {
-  Serial.begin(250000);
-  Serial.println("Getters menu");
+    Serial.begin(250000);
+    Serial.println("Getters menu");
 
-  pinMode(potPin, INPUT);
+    pinMode(potPin, INPUT);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-  menu.add_screen(welcome_screen);
-  menu.add_screen(pot_screen);
+    menu.add_screen(welcome_screen);
+    menu.add_screen(pot_screen);
 
-  // Display the welcome screen as a splash screen.
-  menu.update();
-  delay(1000);
-  if (menu.get_currentScreen() == &welcome_screen) {
-    menu.change_screen(&pot_screen);
+    // Display the welcome screen as a splash screen.
     menu.update();
-  }
+    delay(1000);
+    if (menu.get_currentScreen() == &welcome_screen) {
+        menu.change_screen(&pot_screen);
+        menu.update();
+    }
 }
 
 void loop() {
-  if (millis() - updateLastMs > updatePeriod) {
-    updateLastMs = millis();
+    if (millis() - updateLastMs > updatePeriod) {
+        updateLastMs = millis();
 
-    menu.update();
-  }
+        menu.update();
+    }
 }

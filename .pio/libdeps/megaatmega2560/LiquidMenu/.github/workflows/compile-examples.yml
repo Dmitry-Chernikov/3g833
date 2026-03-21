@@ -22,8 +22,8 @@ jobs:
       matrix:
         fqbn:
           - arduino:avr:uno
-#           - arduino:avr:leonardo
-#           - arduino:avr:mega:cpu=atmega2560
+    #           - arduino:avr:leonardo
+    #           - arduino:avr:mega:cpu=atmega2560
 
     steps:
       - name: Checkout
@@ -60,7 +60,7 @@ jobs:
         with:
           name: sketches-reports
           path: sketches-reports
-        
+
   compile-i2c-examples:
     runs-on: ubuntu-latest
     
@@ -68,8 +68,8 @@ jobs:
       matrix:
         fqbn:
           - arduino:avr:uno
-#           - arduino:avr:leonardo
-#           - arduino:avr:mega:cpu=atmega2560
+    #           - arduino:avr:leonardo
+    #           - arduino:avr:mega:cpu=atmega2560
 
     steps:
       - name: Checkout

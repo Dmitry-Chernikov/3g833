@@ -68,62 +68,66 @@ LiquidMenu menu(lcd, welcome_screen, screen2, screen3, screen4);
  * More on this in the function_menu.ino example.
 */
 void callback_function() {
-  Serial.println(F("You called the callback function."));
+    Serial.println(F("You called the callback function."));
 }
 
 void setup() {
-  Serial.begin(250000);
+    Serial.begin(250000);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-  // Here we attach the function defined earlier to four LiquidLine objects.
-  line21.attach_function(1, callback_function);
-  line31.attach_function(1, callback_function);
-  line41.attach_function(1, callback_function);
-  type_line.attach_function(1, callback_function);
+    // Here we attach the function defined earlier to four LiquidLine objects.
+    line21.attach_function(1, callback_function);
+    line31.attach_function(1, callback_function);
+    line41.attach_function(1, callback_function);
+    type_line.attach_function(1, callback_function);
 
-  menu.update();
+    menu.update();
 
-  Serial.print(F("LiquidMenu ")); Serial.print(LIQUIDMENU_VERSION); Serial.println(F(" - Serial example:"));
-  Serial.println(F("To navigate the menu type 'menu.next_screen()' or 'menu.previous_screen()'."));
-  Serial.println(F("To switch focus type 'menu.switch_focus()'."));
-  Serial.println(F("To call the callback function type 'menu.call_function(1)'."));
-  Serial.println(F("To adjust the focus position type 'menu.set_focusPosition(Position::LEFT)'"));
-  Serial.println(F("  or 'menu.set_focusPosition(Position::RIGHT)'."));
-  Serial.println(F("To update the display type 'menu.update()'.")); Serial.println();
+    Serial.print(F("LiquidMenu "));
+    Serial.print(LIQUIDMENU_VERSION);
+    Serial.println(F(" - Serial example:"));
+    Serial.println(F("To navigate the menu type 'menu.next_screen()' or 'menu.previous_screen()'."));
+    Serial.println(F("To switch focus type 'menu.switch_focus()'."));
+    Serial.println(F("To call the callback function type 'menu.call_function(1)'."));
+    Serial.println(F("To adjust the focus position type 'menu.set_focusPosition(Position::LEFT)'"));
+    Serial.println(F("  or 'menu.set_focusPosition(Position::RIGHT)'."));
+    Serial.println(F("To update the display type 'menu.update()'."));
+    Serial.println();
 }
 
 void loop() {
-  // This handles the serial input.
-  while (Serial.available() > 0) {
-    String command = Serial.readStringUntil('\0');
-    if (command == "menu.next_screen()") {
-      Serial.println(command);
-      menu.next_screen();
-    } else if (command == "menu.previous_screen()") {
-      Serial.println(command);
-      menu.previous_screen();
-    } else if (command == "menu.switch_focus()") {
-      Serial.println(command);
-      menu.switch_focus(); // switches focus to the next line
-      // focus is used with functions (see 'functions_menu' example)
-    } else if (command == "menu.call_function(1)") {
-      Serial.println(command);
-      // The attached function is called.
-      menu.call_function(1);
-    } else if (command == "menu.set_focusPosition(Position::LEFT)") {
-      Serial.println(command);
-      // this function sets the focus position
-      menu.set_focusPosition(Position::LEFT);
-    } else if (command == "menu.set_focusPosition(Position::RIGHT)") {
-      Serial.println(command);
-      menu.set_focusPosition(Position::RIGHT);
-    } else if (command == "menu.update()") {
-      Serial.println(command);
-      menu.update();
-    } else {
-      Serial.print(command); Serial.println(F(" - unknown command"));
+    // This handles the serial input.
+    while (Serial.available() > 0) {
+        String command = Serial.readStringUntil('\0');
+        if (command == "menu.next_screen()") {
+            Serial.println(command);
+            menu.next_screen();
+        } else if (command == "menu.previous_screen()") {
+            Serial.println(command);
+            menu.previous_screen();
+        } else if (command == "menu.switch_focus()") {
+            Serial.println(command);
+            menu.switch_focus(); // switches focus to the next line
+            // focus is used with functions (see 'functions_menu' example)
+        } else if (command == "menu.call_function(1)") {
+            Serial.println(command);
+            // The attached function is called.
+            menu.call_function(1);
+        } else if (command == "menu.set_focusPosition(Position::LEFT)") {
+            Serial.println(command);
+            // this function sets the focus position
+            menu.set_focusPosition(Position::LEFT);
+        } else if (command == "menu.set_focusPosition(Position::RIGHT)") {
+            Serial.println(command);
+            menu.set_focusPosition(Position::RIGHT);
+        } else if (command == "menu.update()") {
+            Serial.println(command);
+            menu.update();
+        } else {
+            Serial.print(command);
+            Serial.println(F(" - unknown command"));
+        }
+        menu.update();
     }
-    menu.update();
-  }
 }

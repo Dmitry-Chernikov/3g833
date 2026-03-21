@@ -309,10 +309,9 @@
 
 typedef enum { SW_CLEAR, HW_CLEAR } t_sr1w_circuitType;
 
-class LiquidCrystal_SR1W : public LCD
-{
+class LiquidCrystal_SR1W : public LCD {
 public:
-   /*!
+    /*!
     @method     
     @abstract   LCD 1 wire SHIFT REGISTER constructor.
     @discussion Defines the pin assignments that connect to the shift register.
@@ -323,10 +322,10 @@ public:
     @param circuitType[in]  optionally select an alternate circuit type
     @param blpol[in]        optional backlight polarity (default = POSITIVE)
     */
-   LiquidCrystal_SR1W (uint8_t srdata, t_sr1w_circuitType circuitType, 
+    LiquidCrystal_SR1W(uint8_t srdata, t_sr1w_circuitType circuitType,
                        t_backlightPol blpol = POSITIVE);
-   
-   /*!
+
+    /*!
     @function
     @abstract   Send a particular value to the LCD.
     @discussion Sends a particular value to the LCD for writing to the LCD or
@@ -338,10 +337,10 @@ public:
     @param      mode[in]  DATA=8bit data, COMMAND=8bit cmd, FOUR_BITS=4bit cmd
     the LCD.
     */
-   virtual void send(uint8_t value, uint8_t mode);
-   
-   
-   /*!
+    virtual void send(uint8_t value, uint8_t mode);
+
+
+    /*!
     @function
     @abstract   Switch-on/off the LCD backlight.
     @discussion Switch-on/off the LCD backlight.
@@ -350,38 +349,37 @@ public:
     
     @param      mode[in] backlight mode (0 off, non-zero on)
     */
-   void setBacklight ( uint8_t mode );
-   
+    void setBacklight(uint8_t mode);
+
 private:
-   
-   /*!
+    /*!
     @method     
     @abstract   Initializes the LCD pin allocation
     @discussion Initializes the LCD pin allocation and configuration.
     */
-   void init ( uint8_t srdata, t_sr1w_circuitType circuitType, t_backlightPol blpol, 
-               uint8_t lines, uint8_t font );
-   
-   /*!
+    void init(uint8_t srdata, t_sr1w_circuitType circuitType, t_backlightPol blpol,
+              uint8_t lines, uint8_t font);
+
+    /*!
     @method     
     @abstract Clears the shift register to ensure the Latch/Enable pins aren't 
     triggered accidentally.
     */
-   uint8_t clearSR ();
-   
-   /*!
+    uint8_t clearSR();
+
+    /*!
     * @method
     * @abstract takes care of shifting and the enable pulse
     */
-   uint8_t loadSR (uint8_t val);
-   
-   fio_register _srRegister; // Serial PIN
-   fio_bit _srMask;
-   
-   t_sr1w_circuitType _circuitType;
-   
-   uint8_t _blPolarity;
-   uint8_t _blMask;
+    uint8_t loadSR(uint8_t val);
+
+    fio_register _srRegister; // Serial PIN
+    fio_bit _srMask;
+
+    t_sr1w_circuitType _circuitType;
+
+    uint8_t _blPolarity;
+    uint8_t _blMask;
 };
 
 #else

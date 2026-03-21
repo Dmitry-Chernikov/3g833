@@ -80,34 +80,52 @@ void settingTextMenu();
 bool isOutOfBounds(float paramManipulation, float maxParam, float minParam);
 
 // Функция для обновления сообщения об ошибке
-void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne, uint8_t posLineTwo, DecIncrTypes typeOperation, float &paramManipulation, float maxParam,
+void updateErrorMessage(Adafruit_RGBLCDShield lcd, String mesLineOne, String mesLineTwo, uint8_t posLineOne,
+                        uint8_t posLineTwo, DecIncrTypes typeOperation, float &paramManipulation, float maxParam,
                         float minParam, String messInc, String messDec);
 
 // Функция для проверки достижения порога
-bool hasReachedThreshold(float paramManipulation, float maxParam, float minParam, float threshold, DecIncrTypes typeOperation);
+bool hasReachedThreshold(float paramManipulation, float maxParam, float minParam, float threshold,
+                         DecIncrTypes typeOperation);
 
 // Функция для управления скоростью
 void manageSpeed(bool currentSpeed, bool &nextSpeed, unsigned long &previousMillisSped, unsigned long interval);
 
 bool allSpeedsInactive(bool *speeds, int size);
 
-void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation, float maxParam, float minParam, bool *speeds, StartLevelSpeed startSpeed, unsigned long &previousMillisSped,
-                     const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne, uint8_t posLineTwo);
+void changeParamMenu(DecIncrTypes typeOperation, float &paramManipulation, float maxParam, float minParam, bool *speeds,
+                     StartLevelSpeed startSpeed, unsigned long &previousMillisSped,
+                     const unsigned long *intervals, String messInc, String messDec, uint8_t posLineOne,
+                     uint8_t posLineTwo);
 
 void goBack();
+
 void gotoLimitMenu();
+
 void gotoCylinderMenu();
+
 void setLimitTop();
+
 void increaseLimitTop();
+
 void decreaseLimitTop();
+
 void setLimitBottom();
+
 void increaseLimitBottom();
+
 void decreaseLimitBottom();
+
 void modeEditValue();
+
 void increaseDiameter();
+
 void decreaseDiameter();
+
 void increaseAngle();
+
 void decreaseAngle();
+
 ///////////////////////////Процедуры меню end/////////////////////////////////////
 
 void Menu();

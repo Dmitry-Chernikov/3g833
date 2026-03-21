@@ -73,7 +73,6 @@ typedef uint8_t fio_register;
 #endif // Processor dependent fast IO definition 
 
 
-
 #if !defined(FIO_FALLBACK) && !defined(ATOMIC_BLOCK)
 /*
  * Define an ATOMIC_BLOCK that implements ATOMIC_FORCEON type
@@ -83,14 +82,12 @@ typedef uint8_t fio_register;
 #define ATOMIC_FORCEON uint8_t sreg_save \
               __attribute__((__cleanup__(__iSeiParam))) = 0
 
-static __inline__ uint8_t __iCliRetVal(void)
-{
-	noInterrupts();
-	return(1);
+static __inline__ uint8_t __iCliRetVal(void) {
+    noInterrupts();
+    return (1);
 }
-static __inline__ void __iSeiParam(const uint8_t *__s)
-{
-	interrupts();
+static __inline__ void __iSeiParam(const uint8_t *__s) {
+    interrupts();
 }
 #define ATOMIC_BLOCK(type) for(type,  __Todo = __iCliRetVal(); __Todo; __Todo = 0)
 
@@ -106,7 +103,7 @@ static __inline__ void __iSeiParam(const uint8_t *__s)
     result into the code. Thus, there is no run-time overhead when using
     _BV().
 */
-#ifndef _BV    
+#ifndef _BV
 #define _BV(bit) (1 << (bit))
 #endif
 
@@ -148,7 +145,7 @@ fio_bit fio_pinToBit(uint8_t pin);
  @param value[in] desired output
  */
 // __attribute__ ((always_inline)) /* let the optimizer decide that for now */
-void fio_digitalWrite ( fio_register pinRegister, fio_bit pinBit, uint8_t value );
+void fio_digitalWrite(fio_register pinRegister, fio_bit pinBit, uint8_t value);
 
 /**
  * This is where the magic happens that makes things fast.
@@ -178,7 +175,7 @@ void fio_digitalWrite ( fio_register pinRegister, fio_bit pinBit, uint8_t value 
  @param pinBit[in] Bit - Pin if fast io is disabled
  @result Value read from pin
  */
-int fio_digitalRead ( fio_register pinRegister, fio_bit pinBit );
+int fio_digitalRead(fio_register pinRegister, fio_bit pinBit);
 
 /*!
  @method
@@ -191,8 +188,8 @@ int fio_digitalRead ( fio_register pinRegister, fio_bit pinBit );
  @param clockBit[in] Bit of data pin - Pin if fast digital write is disabled
  @param bitOrder[in] bit order
  */
-void fio_shiftOut( fio_register dataRegister, fio_bit dataBit, fio_register clockRegister, 
-                  fio_bit clockBit, uint8_t value, uint8_t bitOrder );
+void fio_shiftOut(fio_register dataRegister, fio_bit dataBit, fio_register clockRegister,
+                  fio_bit clockBit, uint8_t value, uint8_t bitOrder);
 
 /*!
  @method
@@ -215,6 +212,7 @@ void fio_shiftOut(fio_register dataRegister, fio_bit dataBit, fio_register clock
  * @param value[in] value to shift out, last byte is ignored and always shifted out LOW
  */
 void fio_shiftOut1(fio_register shift1Register, fio_bit shift1Bit, uint8_t value, boolean noLatch = false);
+
 /*!
  * @method
  * @abstract one wire shift out
@@ -223,6 +221,7 @@ void fio_shiftOut1(fio_register shift1Register, fio_bit shift1Bit, uint8_t value
  * @param value[in] value to shift out, last byte is ignored and always shifted out LOW
  */
 void fio_shiftOut1(uint8_t pin, uint8_t value, boolean noLatch = false);
+
 /*!
  * @method
  * @abstract initializes one wire shift out protocol
@@ -231,6 +230,7 @@ void fio_shiftOut1(uint8_t pin, uint8_t value, boolean noLatch = false);
  * @param shift1Bit[in] pins bit
  */
 void fio_shiftOut1_init(fio_register shift1Register, fio_bit shift1Bit);
+
 /*!
  * @method
  * @abstract initializes one wire shift out protocol

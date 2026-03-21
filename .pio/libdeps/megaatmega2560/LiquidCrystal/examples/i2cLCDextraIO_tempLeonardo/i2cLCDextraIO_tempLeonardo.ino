@@ -127,12 +127,12 @@ LiquidCrystal_I2C lcd(0x38);
 
 #ifdef _LCD_4BIT_
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2, BACKLIGHT_PIN, POSITIVE);
-const int    CONTRAST_PIN  = 9;
-const int    CONTRAST      = 65;
+const int CONTRAST_PIN = 9;
+const int CONTRAST = 65;
 #endif
 
 #ifdef _LCD_SR_
-LiquidCrystal_SR lcd(3,2,TWO_WIRE);
+LiquidCrystal_SR lcd(3, 2, TWO_WIRE);
 //                   | |
 //                   | \-- Clock Pin
 //                   \---- Data/Enable Pin
@@ -159,14 +159,14 @@ static double tempFilter;
     display. The bitmap goes from a blank character to full black.
 */
 const uint8_t charBitmap[][8] = {
-   { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 },
-   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x0 },
-   { 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x0 },
-   { 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x0 },
-   { 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x0 },
-   { 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0 },
-   { 0xe, 0x11, 0x11, 0x11, 0xe, 0, 0, 0 },
-   { 0x6, 0x9, 0x9, 0x6, 0x0, 0, 0, 0}
+    {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+    {0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x0},
+    {0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x0},
+    {0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x0},
+    {0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x0},
+    {0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0},
+    {0xe, 0x11, 0x11, 0x11, 0xe, 0, 0, 0},
+    {0x6, 0x9, 0x9, 0x6, 0x0, 0, 0, 0}
 };
 
 /*!
@@ -177,16 +177,15 @@ const uint8_t charBitmap[][8] = {
     @param      
     @result     Free RAM available.
 */
-static int freeMemory() 
-{
-  int free_memory;
+static int freeMemory() {
+    int free_memory;
 
-  if((int)__brkval == 0)
-     free_memory = ((int)&free_memory) - ((int)&__bss_end);
-  else
-    free_memory = ((int)&free_memory) - ((int)__brkval);
+    if ((int) __brkval == 0)
+        free_memory = ((int) &free_memory) - ((int) &__bss_end);
+    else
+        free_memory = ((int) &free_memory) - ((int) __brkval);
 
-  return free_memory;
+    return free_memory;
 }
 
 /*!
@@ -197,18 +196,17 @@ static int freeMemory()
     @result     The internal temperature reading - in degrees C 
 */
 
-static int readTemperature()
-{
-   ADMUX = 0xC7;                          // activate interal temperature sensor, 
-                                          // using 2.56V ref. voltage
-   ADCSRB |= _BV(MUX5);
-   
-   ADCSRA |= _BV(ADSC);                   // start the conversion
-   while (bit_is_set(ADCSRA, ADSC));      // ADSC is cleared when the conversion 
-                                          // finishes
-                                          
-   // combine bytes & correct for temperature offset (approximate)
-   return ( (ADCL | (ADCH << 8)) - TEMP_CAL_OFFSET);  
+static int readTemperature() {
+    ADMUX = 0xC7; // activate interal temperature sensor, 
+    // using 2.56V ref. voltage
+    ADCSRB |= _BV(MUX5);
+
+    ADCSRA |= _BV(ADSC); // start the conversion
+    while (bit_is_set(ADCSRA, ADSC)); // ADSC is cleared when the conversion 
+    // finishes
+
+    // combine bytes & correct for temperature offset (approximate)
+    return ((ADCL | (ADCH << 8)) - TEMP_CAL_OFFSET);
 }
 
 /*!
@@ -224,38 +222,34 @@ static int readTemperature()
 
     @result     None
 */
-static void drawBars ( int value, uint8_t row, uint8_t barLength, char start, 
-                       char end )
-{
-   int numBars;
+static void drawBars(int value, uint8_t row, uint8_t barLength, char start,
+                     char end) {
+    int numBars;
 
-   // Set initial titles on the display
-   myLCD->setCursor (0, row);
-   myLCD->print (start);
+    // Set initial titles on the display
+    myLCD->setCursor(0, row);
+    myLCD->print(start);
 
-   // Calculate the size of the bar
-   value = map ( value, MIN_TEMP, MAX_TEMP, 0, ( barLength ) * CHAR_WIDTH );
-   numBars = value / CHAR_WIDTH;
-   
-   // Limit the size of the bargraph to barLength
-   if ( numBars > barLength )
-   {
-     numBars = barLength;
-   }
-   myLCD->setCursor ( 1, row );
-   
-   // Draw the bars
-   while ( numBars-- )
-   {
-      myLCD->print ( char( 5 ) );
-   }
-   
-   // Draw the fractions
-   numBars = value % CHAR_WIDTH;
-   myLCD->print ( char(numBars) );
-   myLCD->setCursor (barLength + 1, row);
-   myLCD->print (end);
+    // Calculate the size of the bar
+    value = map(value, MIN_TEMP, MAX_TEMP, 0, (barLength) * CHAR_WIDTH);
+    numBars = value / CHAR_WIDTH;
 
+    // Limit the size of the bargraph to barLength
+    if (numBars > barLength) {
+        numBars = barLength;
+    }
+    myLCD->setCursor(1, row);
+
+    // Draw the bars
+    while (numBars--) {
+        myLCD->print(char(5));
+    }
+
+    // Draw the fractions
+    numBars = value % CHAR_WIDTH;
+    myLCD->print(char(numBars));
+    myLCD->setCursor(barLength + 1, row);
+    myLCD->print(end);
 }
 
 /*!
@@ -266,78 +260,74 @@ static void drawBars ( int value, uint8_t row, uint8_t barLength, char start,
     @result     
 */
 
-static void initHW ( void )
-{
-   int i; 
-   int charBitmapSize = (sizeof(charBitmap ) / sizeof (charBitmap[0]));
-   
-   Serial.begin ( 57600 );
-   
-   // Hardware initialise
-   // ------------------------------------
-   
-   //ADCSRA |= (1 << ADEN);  // Initialise ADC block (no need done by env)
-   
-   // Initialise LCD HW: backlight and LCD
-   // -------------------------------------
+static void initHW(void) {
+    int i;
+    int charBitmapSize = (sizeof(charBitmap) / sizeof (charBitmap[0]));
+
+    Serial.begin(57600);
+
+    // Hardware initialise
+    // ------------------------------------
+
+    //ADCSRA |= (1 << ADEN);  // Initialise ADC block (no need done by env)
+
+    // Initialise LCD HW: backlight and LCD
+    // -------------------------------------
 #ifdef _LCD_4BIT_
-  pinMode(CONTRAST_PIN, OUTPUT);
-  analogWrite (CONTRAST_PIN, CONTRAST);
+    pinMode(CONTRAST_PIN, OUTPUT);
+    analogWrite(CONTRAST_PIN, CONTRAST);
 #endif
 
 #ifdef _LCD_I2C_
-   pinMode ( BACKLIGHT_PIN, OUTPUT );
-   digitalWrite (BACKLIGHT_PIN, HIGH);
+    pinMode(BACKLIGHT_PIN, OUTPUT);
+    digitalWrite(BACKLIGHT_PIN, HIGH);
 #endif
-   pinMode ( STATUS_PIN, OUTPUT );
+    pinMode(STATUS_PIN, OUTPUT);
 
-   myLCD->begin ( 20, 2 );
-   // Load custom character set into CGRAM
-   // --------------------------------------------------------------------
-   for ( i = 0; i < charBitmapSize; i++ )
-   {
-      myLCD->createChar ( i, (uint8_t *)charBitmap[i] );
-   }
+    myLCD->begin(20, 2);
+    // Load custom character set into CGRAM
+    // --------------------------------------------------------------------
+    for (i = 0; i < charBitmapSize; i++) {
+        myLCD->createChar(i, (uint8_t *) charBitmap[i]);
+    }
 }
 
-void setup ()
-{
-   initHW();
-   
-   Serial.println ( freeMemory () );
-   myLCD->clear ();
-   myLCD->print ( F("Free Mem: "));
-   myLCD->print ( freeMemory () );
-   delay ( 2000 );
-   myLCD->clear ();
-   myLCD->print (F("Temp:"));
-   myLCD->setCursor ( 8, 0 );
+void setup() {
+    initHW();
 
-   tempFilter = 0;
-   myLCD->print ( readTemperature() );
+    Serial.println(freeMemory());
+    myLCD->clear();
+    myLCD->print(F("Free Mem: "));
+    myLCD->print(freeMemory());
+    delay(2000);
+    myLCD->clear();
+    myLCD->print(F("Temp:"));
+    myLCD->setCursor(8, 0);
+
+    tempFilter = 0;
+    myLCD->print(readTemperature());
 }
 
 
-void loop ()
-{
-  int temp;
-  static byte status = 1;
-  
-  status ^= 1;
-  digitalWrite ( STATUS_PIN, status);
-  
-  temp = readTemperature();
-  tempFilter = ( FILTER_ALP * temp) + (( 1.0 - FILTER_ALP ) * tempFilter);
+void loop() {
+    int temp;
+    static byte status = 1;
 
-  // Display the information to the LCD
-  myLCD->setCursor ( 8, 0 );
-  myLCD->print ("     ");
-  myLCD->setCursor ( 8, 0 );
-  myLCD->print ( tempFilter, 1 );
-  myLCD->setCursor ( 12, 0 );
-  myLCD->print ( "\x07" );
-  myLCD->print ("C");
-  drawBars ( tempFilter, 1, 14, '-', '+' );
-  
-  delay (LOOP_DELAY);
+    status ^= 1;
+    digitalWrite(STATUS_PIN, status);
+
+    temp = readTemperature();
+    tempFilter = (FILTER_ALP * temp) + ((1.0 - FILTER_ALP) * tempFilter);
+
+    // Display the information to the LCD
+    myLCD->setCursor(8, 0);
+    myLCD->print("     ");
+    myLCD->setCursor(8, 0);
+    myLCD->print(tempFilter, 1);
+    myLCD->setCursor(12, 0);
+    myLCD->print("\x07");
+    myLCD->print("C");
+    drawBars(tempFilter, 1, 14, '-', '+');
+
+    delay(LOOP_DELAY);
 }

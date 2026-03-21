@@ -53,17 +53,16 @@
  library calls to set/get port through I2C bus.
  */
 
-class I2CIO  
-{
+class I2CIO {
 public:
-   /*!
+    /*!
     @method     
     @abstract   Constructor method
     @discussion Class constructor constructor. 
     */
-   I2CIO ( );
-   
-   /*!
+    I2CIO();
+
+    /*!
     @method
     @abstract   Initializes the device.
     @discussion This method initializes the device allocating an I2C address.
@@ -73,10 +72,10 @@ public:
     
     @param      i2cAddr: I2C Address where the device is located.
     @result     1 if the device was initialized correctly, 0 otherwise
-    */   
-   int begin ( uint8_t i2cAddr );
-   
-   /*!
+    */
+    int begin(uint8_t i2cAddr);
+
+    /*!
     @method
     @abstract   Sets the mode of a particular pin.
     @discussion Sets the mode of a particular pin to INPUT, OUTPUT. digitalWrite
@@ -84,10 +83,10 @@ public:
     
     @param      pin[in] Pin from the I2C IO expander to be configured. Range 0..7
     @param      dir[in] Pin direction (INPUT, OUTPUT).
-    */   
-   void pinMode ( uint8_t pin, uint8_t dir );
-   
-   /*!
+    */
+    void pinMode(uint8_t pin, uint8_t dir);
+
+    /*!
     @method
     @abstract   Sets all the pins of the device in a particular direction.
     @discussion This method sets all the pins of the device in a particular
@@ -95,9 +94,9 @@ public:
     either inputs or outputs.
     @param      dir[in] Direction of all the pins of the device (INPUT, OUTPUT).
     */
-   void portMode ( uint8_t dir );
-   
-   /*!
+    void portMode(uint8_t dir);
+
+    /*!
     @method
     @abstract   Reads all the pins of the device that are configured as INPUT.
     @discussion Reads from the device the status of the pins that are configured
@@ -105,10 +104,10 @@ public:
     Please refer to pinMode or portMode.
     
     @param      none
-    */   
-   uint8_t read ( void );
-   
-   /*!
+    */
+    uint8_t read(void);
+
+    /*!
     @method
     @abstract   Read a pin from the device.
     @discussion Reads a particular pin from the device. To read a particular
@@ -120,9 +119,9 @@ public:
     as an output, reading its value will always return LOW regardless of its
     real state.
     */
-   uint8_t digitalRead ( uint8_t pin );
-   
-   /*!
+    uint8_t digitalRead(uint8_t pin);
+
+    /*!
     @method
     @abstract   Write a value to the device.
     @discussion Writes to a set of pins in the device. The value is the binary
@@ -134,10 +133,10 @@ public:
     
     @param      value[in] value to be written to the device.
     @result     1 on success, 0 otherwise
-    */   
-   int write ( uint8_t value );
-   
-   /*!
+    */
+    int write(uint8_t value);
+
+    /*!
     @method
     @abstract   Writes a digital level to a particular pin.
     @discussion Write a level to the indicated pin of the device. For this 
@@ -147,27 +146,24 @@ public:
     @param      pin[in] device pin to change level. Range (0..7).
     @para       level[in] logic level to set the pin at (HIGH, LOW).
     @result     1 on success, 0 otherwise.
-    */   
-   int digitalWrite ( uint8_t pin, uint8_t level );
-   
-   
-   
-private:
-   uint8_t _shadow;      // Shadow output
-   uint8_t _dirMask;     // Direction mask
-   uint8_t _i2cAddr;     // I2C address
-   bool    _initialised; // Initialised object
+    */
+    int digitalWrite(uint8_t pin, uint8_t level);
 
-  /*!
+private:
+    uint8_t _shadow; // Shadow output
+    uint8_t _dirMask; // Direction mask
+    uint8_t _i2cAddr; // I2C address
+    bool _initialised; // Initialised object
+
+    /*!
    @method
    @abstract   Check if I2C device is available.
    @discussion Checks to see if an I2C device is available at address i2cAddr.
    
    @param      i2cAddr[in] I2C address to check availability 
    @result     true if available, false otherwise.
-   */   
-   bool isAvailable (uint8_t i2cAddr);
-   
+   */
+    bool isAvailable(uint8_t i2cAddr);
 };
 
 #endif

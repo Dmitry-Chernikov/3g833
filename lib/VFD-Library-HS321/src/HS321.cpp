@@ -22,17 +22,17 @@
  * @param transmitterModeContact Номер цифрового пина, управляющего направлением передачи RS485 (DE/RE).
  */
 HS321::HS321(const uint8_t slaveAddress,
-                HardwareSerial* serialPort,
-                HardwareSerial* serialDebug,
-                const unsigned long baud,
-                const uint8_t transmitterModeContact)
-        :_slaveAddress(slaveAddress),
-        _serialPort(serialPort),
-        _serialDebug(serialDebug),
-        _baud(baud),
-        _transmitterModeContact(transmitterModeContact),
-        _totalTimeout(0),
-        _interCharTimeout(0){
+             HardwareSerial serialPort,
+             HardwareSerial *serialDebug,
+             const uint32_t baudRate,
+             const uint8_t transmitterModeContact)
+	: slaveAddress_(slaveAddress),
+	  serialPort_(serialPort),
+	  serialDebug_(serialDebug),
+	  baudRate_(baudRate),
+	  rs485EnablePin_(transmitterModeContact),
+	  totalTimeout_(0),
+	  interCharTimeout_(0) {
 }
 
 /**
@@ -42,32 +42,31 @@ HS321::HS321(const uint8_t slaveAddress,
  * После успешной инициализации устанавливает флаг _initialized = true.
  */
 void HS321::begin() {
+	// Инициализация порта, SERIAL_8N1 — 8 бит данных, без паритета, 1 стоп-бит по умолчанию в библиотеке Arduino
+	serialPort_.begin(baudRate_);
 
-    // Инициализация порта, SERIAL_8N1 — 8 бит данных, без паритета, 1 стоп-бит по умолчанию в библиотеке Arduino
-    _serialPort->begin(_baud);
+	if (serialDebug_ != nullptr) {
+		// Инициализация отладочного порта, SERIAL_8N1 — 8 бит данных, без паритета, 1 стоп-бит по умолчанию в библиотеке Arduino
+		serialDebug_->begin(baudRate_, SERIAL_8N1);
+	}
 
-    if (_serialDebug != nullptr) {
-        // Инициализация отладочного порта, SERIAL_8N1 — 8 бит данных, без паритета, 1 стоп-бит по умолчанию в библиотеке Arduino
-        _serialDebug->begin(_baud, SERIAL_8N1);
-    }
+	// Настройка пина режима RS485, управляющего направлением передачи данных (DE/RE) модуля RS485 на микросхеме MAX485
+	pinMode(rs485EnablePin_, OUTPUT);
+	// По умолчанию — приём (переводим модуль в режим приёма данных)
+	digitalWrite(rs485EnablePin_, RS485Receive);
 
-    // Настройка пина режима RS485, управляющего направлением передачи данных (DE/RE) модуля RS485 на микросхеме MAX485
-    pinMode(_transmitterModeContact, OUTPUT);
-    // По умолчанию — приём (переводим модуль в режим приёма данных)
-    digitalWrite(_transmitterModeContact, RS485Receive);
-
-    // Вычисление тайм-аутов
-    // Тайм-аут между кадрами MODBUS 2000 микросекунд (по умолчанию) 2 секунды
-    _totalTimeout = static_cast<unsigned long>(2000);
-    // Тайм-аут между байтами кадра MODBUS 3.5 символов
-    // (1.0 / baud) это скорость передачи данных
-    // 10 это количество бит в символе в кадре MODBUS
-    // 1000000 это перевод в микросекунды
-    _interCharTimeout = (3500000UL + _baud - 1) / _baud;
+	// Вычисление тайм-аутов
+	// Тайм-аут между кадрами MODBUS 2000 микросекунд (по умолчанию) 2 секунды
+	totalTimeout_ = static_cast<uint32_t>(2000);
+	// Тайм-аут между байтами кадра MODBUS 3.5 символов
+	// (1.0 / baud) это скорость передачи данных
+	// 10 это количество бит в символе в кадре MODBUS
+	// 1000000 это перевод в микросекунды
+	interCharTimeout_ = (3500000UL + baudRate_ - 1) / baudRate_;
 
 
 #ifdef DEBUG
-    _serialDebug->println("HS321: Инициализация завершена");
+	serialDebug_->println("HS321: Инициализация завершена");
 #endif
 }
 
@@ -84,142 +83,142 @@ void HS321::begin() {
  * @return True, если чтение прошло успешно, иначе false.
  */
 bool HS321::readParameters(const uint8_t slaveAddress,
-                            const uint16_t startAddress,
-                            uint16_t* arrayValues,
-                            const size_t numberRegisters) const {
+                           const uint16_t startAddress,
+                           uint16_t *arrayValues,
+                           const size_t numberRegisters) const {
 #ifdef DEBUG
-    _serialDebug->println("START readParameters !!!");
+	serialDebug_->println("START readParameters !!!");
 #endif
-    // Проверки входных данных и корректности указателя на массив
-    if (arrayValues == nullptr || numberRegisters == 0 ) {
-        return false;
-    }
+	// Проверки входных данных и корректности указателя на массив
+	if (arrayValues == nullptr || numberRegisters == 0) {
+		return false;
+	}
 
-    // Проверка на максимальное количество регистров (Modbus ограничение)
-    if (numberRegisters > 125) {
-        return false; // Modbus протокол ограничивает чтение 125 регистрами
-    }
+	// Проверка на максимальное количество регистров (Modbus ограничение)
+	if (numberRegisters > 125) {
+		return false; // Modbus протокол ограничивает чтение 125 регистрами
+	}
 
-    uint8_t request[8];
-    request[0] = slaveAddress;                                  // Адрес устройства
-    request[1] = READ;                                          // Код функции для чтения
-    request[2] = static_cast<uint8_t>(startAddress >> 8);       // Высокий байт адреса
-    request[3] = static_cast<uint8_t>(startAddress & 0xFF);     // Низкий байт адреса
-    request[4] = static_cast<uint8_t>(numberRegisters >> 8);    // Число параметров читаемых (по умолчанию 1)
-    request[5] = static_cast<uint8_t>(numberRegisters & 0xFF);  // Число параметров читаемых (по умолчанию 1)
+	uint8_t request[8];
+	request[0] = slaveAddress; // Адрес устройства
+	request[1] = READ; // Код функции для чтения
+	request[2] = static_cast<uint8_t>(startAddress >> 8); // Высокий байт адреса
+	request[3] = static_cast<uint8_t>(startAddress & 0xFF); // Низкий байт адреса
+	request[4] = static_cast<uint8_t>(numberRegisters >> 8); // Число параметров читаемых (по умолчанию 1)
+	request[5] = static_cast<uint8_t>(numberRegisters & 0xFF); // Число параметров читаемых (по умолчанию 1)
 
-    // Вычисление и добавление CRC
-    const uint16_t crc = calculateCRC(request, 6);
-    request[6] = static_cast<uint8_t>(crc & 0xFF);          // Низкий байт CRC
-    request[7] = static_cast<uint8_t>(crc >> 8 & 0xFF);   // Высокий байт CRC
-
-#ifdef DEBUG
-    _serialDebug->print("READ Request \"Запрос\": ");
-    for (byte i = 0; i < sizeof(request); i++) {
-        if (request[i] < 0x10) _serialDebug->print("0");
-        _serialDebug->print(request[i], HEX);
-        _serialDebug->print(" ");
-    }
-    _serialDebug->println();
-#endif
-
-    // Отправка запроса
-    sendData(request, sizeof(request));
-
-    // Расчет размера ответа
-    // Ответ: [адрес][функция][байт данных][данные...][CRC]
-    // байт данных = количество байт данных = numberRegisters * 2
-    const size_t responseSize = 5 + numberRegisters * 2; // 3 заголовка + данные + 2 CRC
-    uint8_t response[255]; // Макс. Размер ответа Modbus: 255 байт
-
-    // Получение ответа
-    if (!receiveData(response, responseSize)) {
-#ifdef DEBUG
-        _serialDebug->println("Ошибка приёма данных");
-        _serialDebug->println("END readParameters !!!");
-        _serialDebug->println();
-#endif
-        return false;
-    }
+	// Вычисление и добавление CRC
+	const uint16_t crc = calculateCRC(request, 6);
+	request[6] = static_cast<uint8_t>(crc & 0xFF); // Низкий байт CRC
+	request[7] = static_cast<uint8_t>(crc >> 8 & 0xFF); // Высокий байт CRC
 
 #ifdef DEBUG
-    _serialDebug->print("READ Response \"Ответ\": ");
-    for (byte i = 0; i < responseSize; i++) {
-        if (response[i] < 0x10) _serialDebug->print("0");
-        _serialDebug->print(response[i], HEX);
-        _serialDebug->print(" ");
-    }
-    _serialDebug->println();
+	serialDebug_->print("READ Request \"Запрос\": ");
+	for (byte i = 0; i < sizeof(request); i++) {
+		if (request[i] < 0x10) serialDebug_->print("0");
+		serialDebug_->print(request[i], HEX);
+		serialDebug_->print(" ");
+	}
+	serialDebug_->println();
 #endif
 
-    // Базовые проверки ответа
-    if (response[0] != slaveAddress || response[1] != READ) {
+	// Отправка запроса
+	sendData(request, sizeof(request));
+
+	// Расчет размера ответа
+	// Ответ: [адрес][функция][байт данных][данные...][CRC]
+	// байт данных = количество байт данных = numberRegisters * 2
+	const size_t responseSize = 5 + numberRegisters * 2; // 3 заголовка + данные + 2 CRC
+	uint8_t response[255]; // Макс. Размер ответа Modbus: 255 байт
+
+	// Получение ответа
+	if (!receiveData(response, responseSize)) {
 #ifdef DEBUG
-        _serialDebug->print("Неверный адрес или функция. Ожидалось: ");
-        _serialDebug->print(slaveAddress, HEX);
-        _serialDebug->print(" ");
-        _serialDebug->print(READ, HEX);
-        _serialDebug->print(", получено: ");
-        _serialDebug->print(response[0], HEX);
-        _serialDebug->print(" ");
-        _serialDebug->println(response[1], HEX);
+		serialDebug_->println("Ошибка приёма данных");
+		serialDebug_->println("END readParameters !!!");
+		serialDebug_->println();
 #endif
-        return false;
-    }
-
-    // Проверка количества байт данных
-    const uint8_t byteCount = response[2];
-    if (byteCount != numberRegisters * 2) {
-#ifdef DEBUG
-        _serialDebug->print("Неверное количество байт данных. Ожидалось: ");
-        _serialDebug->print(numberRegisters * 2);
-        _serialDebug->print(", получено: ");
-        _serialDebug->println(byteCount);
-#endif
-        return false;
-    }
-
-    // Проверка CRC ответа (исключая CRC байты)
-    // Сохраняем CRC из ответа (последние 2 байта)
-    const uint16_t receivedCRC = response[responseSize - 1] << 8 | response[responseSize - 2];
-    // Вычисляем CRC для ответа без CRC байтов
-    const uint16_t calculatedCRC = calculateCRC(response, responseSize - 2);
-
-    // Сравниваем CRC
-    if (receivedCRC != calculatedCRC) {
-#ifdef DEBUG
-        _serialDebug->print("Ошибка CRC. Получено: 0x");
-        _serialDebug->print(receivedCRC, HEX);
-        _serialDebug->print(", рассчитано: 0x");
-        _serialDebug->println(calculatedCRC, HEX);
-#endif
-        return false;
-    }
-
-    // Извлечение значений из ответа
-    if (numberRegisters == 1) {
-        // Для одного регистра
-        arrayValues[0] = static_cast<uint16_t>(response[3]) << 8 | response[4];
-    } else {
-        // Для нескольких регистров
-        for (size_t i = 0; i < numberRegisters; i++) {
-            const size_t dataIndex = 3 + i * 2; // 3 - начало данных
-            arrayValues[i] = static_cast<uint16_t>(response[dataIndex]) << 8 | response[dataIndex + 1];
-        }
-    }
+		return false;
+	}
 
 #ifdef DEBUG
-    _serialDebug->print("Прочитано значений: ");
-    for (size_t i = 0; i < numberRegisters; i++) {
-        _serialDebug->print(arrayValues[i]);
-        if (i < numberRegisters - 1) _serialDebug->print(", ");
-    }
-    _serialDebug->println();
-    _serialDebug->println("END readParameters !!!");
-    _serialDebug->println();
+	serialDebug_->print("READ Response \"Ответ\": ");
+	for (byte i = 0; i < responseSize; i++) {
+		if (response[i] < 0x10) serialDebug_->print("0");
+		serialDebug_->print(response[i], HEX);
+		serialDebug_->print(" ");
+	}
+	serialDebug_->println();
 #endif
 
-    return true;
+	// Базовые проверки ответа
+	if (response[0] != slaveAddress || response[1] != READ) {
+#ifdef DEBUG
+		serialDebug_->print("Неверный адрес или функция. Ожидалось: ");
+		serialDebug_->print(slaveAddress, HEX);
+		serialDebug_->print(" ");
+		serialDebug_->print(READ, HEX);
+		serialDebug_->print(", получено: ");
+		serialDebug_->print(response[0], HEX);
+		serialDebug_->print(" ");
+		serialDebug_->println(response[1], HEX);
+#endif
+		return false;
+	}
+
+	// Проверка количества байт данных
+	const uint8_t byteCount = response[2];
+	if (byteCount != numberRegisters * 2) {
+#ifdef DEBUG
+		serialDebug_->print("Неверное количество байт данных. Ожидалось: ");
+		serialDebug_->print(numberRegisters * 2);
+		serialDebug_->print(", получено: ");
+		serialDebug_->println(byteCount);
+#endif
+		return false;
+	}
+
+	// Проверка CRC ответа (исключая CRC байты)
+	// Сохраняем CRC из ответа (последние 2 байта)
+	const uint16_t receivedCRC = response[responseSize - 1] << 8 | response[responseSize - 2];
+	// Вычисляем CRC для ответа без CRC байтов
+	const uint16_t calculatedCRC = calculateCRC(response, responseSize - 2);
+
+	// Сравниваем CRC
+	if (receivedCRC != calculatedCRC) {
+#ifdef DEBUG
+		serialDebug_->print("Ошибка CRC. Получено: 0x");
+		serialDebug_->print(receivedCRC, HEX);
+		serialDebug_->print(", рассчитано: 0x");
+		serialDebug_->println(calculatedCRC, HEX);
+#endif
+		return false;
+	}
+
+	// Извлечение значений из ответа
+	if (numberRegisters == 1) {
+		// Для одного регистра
+		arrayValues[0] = static_cast<uint16_t>(response[3]) << 8 | response[4];
+	} else {
+		// Для нескольких регистров
+		for (size_t i = 0; i < numberRegisters; i++) {
+			const size_t dataIndex = 3 + i * 2; // 3 - начало данных
+			arrayValues[i] = static_cast<uint16_t>(response[dataIndex]) << 8 | response[dataIndex + 1];
+		}
+	}
+
+#ifdef DEBUG
+	serialDebug_->print("Прочитано значений: ");
+	for (size_t i = 0; i < numberRegisters; i++) {
+		serialDebug_->print(arrayValues[i]);
+		if (i < numberRegisters - 1) serialDebug_->print(", ");
+	}
+	serialDebug_->println();
+	serialDebug_->println("END readParameters !!!");
+	serialDebug_->println();
+#endif
+
+	return true;
 }
 
 /**
@@ -235,113 +234,112 @@ bool HS321::readParameters(const uint8_t slaveAddress,
  * @return True, если запись прошла успешно, иначе false.
  */
 bool HS321::writeParameters(const uint8_t slaveAddress,
-                             const uint16_t startAddress,
-                             const uint16_t* arrayValues,
-                             const size_t numberRegisters) const {
-
+                            const uint16_t startAddress,
+                            const uint16_t *arrayValues,
+                            const size_t numberRegisters) const {
 #ifdef DEBUG
-    _serialDebug->println("START writeParameters !!!");
+	serialDebug_->println("START writeParameters !!!");
 #endif
 
-    // Проверка входных данных
-    if (arrayValues == nullptr || numberRegisters == 0 ) {
+	// Проверка входных данных
+	if (arrayValues == nullptr || numberRegisters == 0) {
 #ifdef DEBUG
-        _serialDebug->println("Ошибка: неверные входные данные");
+		serialDebug_->println("Ошибка: неверные входные данные");
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    // Ограничение максимального количества регистров (Modbus ограничение)
-    constexpr size_t MAX_MODBUS_REGISTERS = 123;
-    if (numberRegisters > MAX_MODBUS_REGISTERS) {
+	// Ограничение максимального количества регистров (Modbus ограничение)
+	constexpr size_t MAX_MODBUS_REGISTERS = 123;
+	if (numberRegisters > MAX_MODBUS_REGISTERS) {
 #ifdef DEBUG
-        _serialDebug->print("Ошибка: слишком много регистров: ");
-        _serialDebug->println(numberRegisters);
+		serialDebug_->print("Ошибка: слишком много регистров: ");
+		serialDebug_->println(numberRegisters);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    // Приводим void* к uint16_t* для работы с данными
-    // const auto arrayRegisterValues = static_cast<const uint16_t*>(arrayValues);
+	// Приводим void* к uint16_t* для работы с данными
+	// const auto arrayRegisterValues = static_cast<const uint16_t*>(arrayValues);
 
-    // Вычисляем размер запроса
-    const size_t requestSize = numberRegisters == 1 ? 8 : 9 + numberRegisters * 2;
+	// Вычисляем размер запроса
+	const size_t requestSize = numberRegisters == 1 ? 8 : 9 + numberRegisters * 2;
 
-    // Используем статический буфер с максимальным размером (более безопасно)
-    constexpr size_t MAX_REQUEST_SIZE = 7 + MAX_MODBUS_REGISTERS * 2;
-    if (requestSize > MAX_REQUEST_SIZE) {
-        return false;
-    }
+	// Используем статический буфер с максимальным размером (более безопасно)
+	constexpr size_t MAX_REQUEST_SIZE = 7 + MAX_MODBUS_REGISTERS * 2;
+	if (requestSize > MAX_REQUEST_SIZE) {
+		return false;
+	}
 
-    uint8_t request[255]; // Макс. Размер запроса Modbus: 255 байт
+	uint8_t request[255]; // Макс. Размер запроса Modbus: 255 байт
 
-    // Заполняем заголовок
-    request[0] = slaveAddress;              // Адрес устройства
+	// Заполняем заголовок
+	request[0] = slaveAddress; // Адрес устройства
 
-    if (numberRegisters == 1) {
-        request[1] = WRITE_ONE;             // Код функции 0x06 для записи в один регистр
-        request[2] = static_cast<uint8_t>(startAddress >> 8);   // Высокий байт адреса
-        request[3] = static_cast<uint8_t>(startAddress & 0xFF); // Низкий байт адреса
-        request[4] = static_cast<uint8_t>(arrayValues[0] >> 8); // Данные регистра старший байт
-        request[5] = static_cast<uint8_t>(arrayValues[0] & 0xFF);   // Данные регистра младший байт
-    } else if (numberRegisters > 1) {
-        request[1] = WRITE_RANGE;           // Код функции 0x10 для записи в диапазон регистров
-        request[2] = static_cast<uint8_t>(startAddress >> 8);
-        request[3] = static_cast<uint8_t>(startAddress & 0xFF);
-        request[4] = static_cast<uint8_t>(numberRegisters >> 8);    // Количество регистров старший байт
-        request[5] = static_cast<uint8_t>(numberRegisters & 0xFF);  // Количество регистров младший байт
-        request[6] = static_cast<uint8_t>(numberRegisters * 2); // Количество байт данных
-        // Копируем, данные с преобразованием порядка байт
-        for (size_t i = 0; i < numberRegisters; i++) {
-            request[7 + i * 2] = static_cast<uint8_t>(arrayValues[i] >> 8);
-            request[8 + i * 2] = static_cast<uint8_t>(arrayValues[i] & 0xFF);
-        }
-    }
+	if (numberRegisters == 1) {
+		request[1] = WRITE_ONE; // Код функции 0x06 для записи в один регистр
+		request[2] = static_cast<uint8_t>(startAddress >> 8); // Высокий байт адреса
+		request[3] = static_cast<uint8_t>(startAddress & 0xFF); // Низкий байт адреса
+		request[4] = static_cast<uint8_t>(arrayValues[0] >> 8); // Данные регистра старший байт
+		request[5] = static_cast<uint8_t>(arrayValues[0] & 0xFF); // Данные регистра младший байт
+	} else if (numberRegisters > 1) {
+		request[1] = WRITE_RANGE; // Код функции 0x10 для записи в диапазон регистров
+		request[2] = static_cast<uint8_t>(startAddress >> 8);
+		request[3] = static_cast<uint8_t>(startAddress & 0xFF);
+		request[4] = static_cast<uint8_t>(numberRegisters >> 8); // Количество регистров старший байт
+		request[5] = static_cast<uint8_t>(numberRegisters & 0xFF); // Количество регистров младший байт
+		request[6] = static_cast<uint8_t>(numberRegisters * 2); // Количество байт данных
+		// Копируем, данные с преобразованием порядка байт
+		for (size_t i = 0; i < numberRegisters; i++) {
+			request[7 + i * 2] = static_cast<uint8_t>(arrayValues[i] >> 8);
+			request[8 + i * 2] = static_cast<uint8_t>(arrayValues[i] & 0xFF);
+		}
+	}
 
-    // Вычисление CRC (все байты, кроме последних 2, которые для CRC)
-    const uint16_t crc = calculateCRC(request, requestSize - 2);
-    // Добавляем CRC в конец запроса
-    request[requestSize - 2] = static_cast<uint8_t>(crc & 0xFF); // Низкий байт CRC
-    request[requestSize - 1] = static_cast<uint8_t>(crc >> 8 & 0xFF); // Высокий байт CRC
+	// Вычисление CRC (все байты, кроме последних 2, которые для CRC)
+	const uint16_t crc = calculateCRC(request, requestSize - 2);
+	// Добавляем CRC в конец запроса
+	request[requestSize - 2] = static_cast<uint8_t>(crc & 0xFF); // Низкий байт CRC
+	request[requestSize - 1] = static_cast<uint8_t>(crc >> 8 & 0xFF); // Высокий байт CRC
 
 #ifdef DEBUG
-    _serialDebug->print("Запрос Modbus (");
-    _serialDebug->print(requestSize);
-    _serialDebug->print(" байт): ");
-    for (size_t i = 0; i < requestSize; i++) {
-        if (request[i] < 0x10) _serialDebug->print("0");
-        _serialDebug->print(request[i], HEX);
-        _serialDebug->print(" ");
-    }
-    _serialDebug->println();
+	serialDebug_->print("Запрос Modbus (");
+	serialDebug_->print(requestSize);
+	serialDebug_->print(" байт): ");
+	for (size_t i = 0; i < requestSize; i++) {
+		if (request[i] < 0x10) serialDebug_->print("0");
+		serialDebug_->print(request[i], HEX);
+		serialDebug_->print(" ");
+	}
+	serialDebug_->println();
 #endif
 
-    // Отправка запроса
-    sendData(request, requestSize);
+	// Отправка запроса
+	sendData(request, requestSize);
 
-    // Получение ответа
-    // Размер ответа зависит от функции:
-    // Для 0x06: 8 байт
-    // Для 0x10: 8 байт
-    constexpr size_t responseSize = 8;  // Modbus ответ всегда 8 байт для этих функций
-    uint8_t response[responseSize];
+	// Получение ответа
+	// Размер ответа зависит от функции:
+	// Для 0x06: 8 байт
+	// Для 0x10: 8 байт
+	constexpr size_t responseSize = 8; // Modbus ответ всегда 8 байт для этих функций
+	uint8_t response[responseSize];
 
-    if (!receiveData(response, responseSize)) {
+	if (!receiveData(response, responseSize)) {
 #ifdef DEBUG
-        _serialDebug->println("Ошибка приема ответа");
-        _serialDebug->println("END writeParameters !!!");
-        _serialDebug->println();
-        _serialDebug->println();
+		serialDebug_->println("Ошибка приема ответа");
+		serialDebug_->println("END writeParameters !!!");
+		serialDebug_->println();
+		serialDebug_->println();
 #endif
-        return false;
-    }
+		return false;
+	}
 #ifdef DEBUG
-    _serialDebug->println("END writeParameters !!!");
-    _serialDebug->println();
-    _serialDebug->println();
+	serialDebug_->println("END writeParameters !!!");
+	serialDebug_->println();
+	serialDebug_->println();
 #endif
-    // Проверка ответа
-    return validateModbusResponse(response, responseSize, slaveAddress, request[1]);
+	// Проверка ответа
+	return validateModbusResponse(response, responseSize, slaveAddress, request[1]);
 }
 
 /**
@@ -359,60 +357,61 @@ bool HS321::writeParameters(const uint8_t slaveAddress,
  * @param expectedFunction Ожидаемый код функции.
  * @return True, если ответ корректен, иначе false.
  */
-bool HS321::validateModbusResponse(const uint8_t* response,
-                                        const size_t responseSize,
-                                        const uint8_t expectedAddress,
-                                        const uint8_t expectedFunction) {
-    if (responseSize < 4) {  // Минимум: адрес + функция + CRC
-        return false;
-    }
+bool HS321::validateModbusResponse(const uint8_t *response,
+                                   const size_t responseSize,
+                                   const uint8_t expectedAddress,
+                                   const uint8_t expectedFunction) {
+	if (responseSize < 4) {
+		// Минимум: адрес + функция + CRC
+		return false;
+	}
 
-    // Проверка адреса устройства
-    if (response[0] != expectedAddress) {
+	// Проверка адреса устройства
+	if (response[0] != expectedAddress) {
 #ifdef DEBUG
-        _serialDebug->print("Неверный адрес в ответе: 0x");
-        _serialDebug->print(response[0], HEX);
-        _serialDebug->print(", ожидалось: 0x");
-        _serialDebug->println(expectedAddress, HEX);
+		serialDebug_->print("Неверный адрес в ответе: 0x");
+		serialDebug_->print(response[0], HEX);
+		serialDebug_->print(", ожидалось: 0x");
+		serialDebug_->println(expectedAddress, HEX);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    // Проверка на исключение
-    if (response[1] == (expectedFunction | 0x80)) {
+	// Проверка на исключение
+	if (response[1] == (expectedFunction | 0x80)) {
 #ifdef DEBUG
-        _serialDebug->print("Исключение Modbus. Код ошибки: 0x");
-        _serialDebug->println(response[2], HEX);
+		serialDebug_->print("Исключение Modbus. Код ошибки: 0x");
+		serialDebug_->println(response[2], HEX);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    // Проверка кода функции
-    if (response[1] != expectedFunction) {
+	// Проверка кода функции
+	if (response[1] != expectedFunction) {
 #ifdef DEBUG
-        _serialDebug->print("Неверная функция в ответе: 0x");
-        _serialDebug->print(response[1], HEX);
-        _serialDebug->print(", ожидалось: 0x");
-        _serialDebug->println(expectedFunction, HEX);
+		serialDebug_->print("Неверная функция в ответе: 0x");
+		serialDebug_->print(response[1], HEX);
+		serialDebug_->print(", ожидалось: 0x");
+		serialDebug_->println(expectedFunction, HEX);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    // Проверка CRC
-    const uint16_t calculatedCRC = calculateCRC(response, responseSize - 2);
-    const uint16_t receivedCRC = static_cast<uint16_t>(response[responseSize - 1] << 8) | response[responseSize - 2];
+	// Проверка CRC
+	const uint16_t calculatedCRC = calculateCRC(response, responseSize - 2);
+	const uint16_t receivedCRC = static_cast<uint16_t>(response[responseSize - 1] << 8) | response[responseSize - 2];
 
-    if (calculatedCRC != receivedCRC) {
+	if (calculatedCRC != receivedCRC) {
 #ifdef DEBUG
-        _serialDebug->print("Ошибка CRC. Вычислено: 0x");
-        _serialDebug->print(calculatedCRC, HEX);
-        _serialDebug->print(", получено: 0x");
-        _serialDebug->println(receivedCRC, HEX);
+		serialDebug_->print("Ошибка CRC. Вычислено: 0x");
+		serialDebug_->print(calculatedCRC, HEX);
+		serialDebug_->print(", получено: 0x");
+		serialDebug_->println(receivedCRC, HEX);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 /**
@@ -425,33 +424,32 @@ bool HS321::validateModbusResponse(const uint8_t* response,
  * @return Вычисленное значение CRC16.
  */
 uint16_t HS321::calculateCRC(const uint8_t *data, const uint8_t length) {
+	// Более строгая проверка
+	if (data == nullptr || length == 0) {
+		return 0xFFFF; // или другое значение ошибки
+	}
 
-    // Более строгая проверка
-    if (data == nullptr || length == 0) {
-        return 0xFFFF; // или другое значение ошибки
-    }
+	// Дополнительная проверка, что указатель валидный
+	// (если есть возможность проверить диапазон адресов)
 
-    // Дополнительная проверка, что указатель валидный
-    // (если есть возможность проверить диапазон адресов)
-
-    uint16_t crc = 0xFFFF; // начальное значение CRC
-    for (uint8_t i = 0; i < length; i++) {
-        crc ^= data[i];
-        for (uint8_t j = 0; j < 8; j++) {
-            if (crc & 0x0001) {
-                crc = crc >> 1 ^ 0xA001; // полином
-            } else {
-                crc = crc >> 1;
-            }
-        }
-    }
+	uint16_t crc = 0xFFFF; // начальное значение CRC
+	for (uint8_t i = 0; i < length; i++) {
+		crc ^= data[i];
+		for (uint8_t j = 0; j < 8; j++) {
+			if (crc & 0x0001) {
+				crc = crc >> 1 ^ 0xA001; // полином
+			} else {
+				crc = crc >> 1;
+			}
+		}
+	}
 
 #ifdef DEBUG
-    _serialDebug->print("CRC as uint16_t: 0x");
-    _serialDebug->println(crc, HEX);
+	serialDebug_->print("CRC as uint16_t: 0x");
+	serialDebug_->println(crc, HEX);
 #endif
 
-    return crc;
+	return crc;
 }
 
 /**
@@ -463,25 +461,25 @@ uint16_t HS321::calculateCRC(const uint8_t *data, const uint8_t length) {
  * @param data Указатель на массив данных для отправки.
  * @param length Количество байт для передачи.
  */
-void HS321::sendData(const uint8_t* data, const size_t length) const {
+void HS321::sendData(const uint8_t *data, const size_t length) const {
 #ifdef DEBUG_sendData
-    _serialDebug->println("\t START sendData !!!");
+	serialDebug_->println("\t START sendData !!!");
 #endif
 
-    // Переводим устройство в режим передатчика
-    digitalWrite(_transmitterModeContact, RS485Transmit);
-    //delay(1);  // Короткая задержка для стабилизации
+	// Переводим устройство в режим передатчика
+	digitalWrite(rs485EnablePin_, RS485Transmit);
+	//delay(1);  // Короткая задержка для стабилизации
 
-        // Реализуйте отправку данных через последовательный порт
-        _serialPort->write(data, length);
-        _serialPort->flush();  // Ожидаем завершения передачи
+	// Реализуйте отправку данных через последовательный порт
+	serialPort_.write(data, length);
+	serialPort_.flush(); // Ожидаем завершения передачи
 
-    // Немедленно возвращаемся в режим приема
-    digitalWrite(_transmitterModeContact, RS485Receive);
-    //delay(1);  // Важно! Дать линии стабилизироваться перед приёмом
+	// Немедленно возвращаемся в режим приема
+	digitalWrite(rs485EnablePin_, RS485Receive);
+	//delay(1);  // Важно! Дать линии стабилизироваться перед приёмом
 
 #ifdef DEBUG_sendData
-    _serialDebug->println("\t END sendData !!!");
+	serialDebug_->println("\t END sendData !!!");
 #endif
 }
 
@@ -496,121 +494,109 @@ void HS321::sendData(const uint8_t* data, const size_t length) const {
  * @param length Ожидаемое количество байт.
  * @return True, если все данные получены, иначе false.
  */
-bool HS321::receiveData(uint8_t* buffer, const size_t length) const {
+bool HS321::receiveData(uint8_t *buffer, const size_t length) const {
 #ifdef DEBUG
-    _serialDebug->println("\t START receiveData !!!");
+	serialDebug_->println("\t START receiveData !!!");
 #endif
 
-    if (buffer == nullptr || length == 0) {
+	if (buffer == nullptr || length == 0) {
 #ifdef DEBUG
-        _serialDebug->println("Ошибка: неверные входные данные");
-        _serialDebug->println("\t END receiveData !!!");
+		serialDebug_->println("Ошибка: неверные входные данные");
+		serialDebug_->println("\t END receiveData !!!");
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    size_t bytesRead = 0;
-    unsigned long lastByteTime = millis(); // Начало времени ожидания
-    const unsigned long charTimeout = (_interCharTimeout * length + 999) / 1000; // Время ожидания между символами в мс
+	size_t bytesRead = 0;
+	uint32_t lastByteTime = millis(); // Начало времени ожидания
+	const uint32_t charTimeout = (interCharTimeout_ * length + 999) / 1000; // Время ожидания между символами в мс
 
 #ifdef DEBUG
-    _serialDebug->print("Waiting for ");
-    _serialDebug->print(length);
-    _serialDebug->println(" bytes...");
+	serialDebug_->print("Waiting for ");
+	serialDebug_->print(length);
+	serialDebug_->println(" bytes...");
 #endif
 
-    // Ждем данные с тайм-аутом
-    while (bytesRead < length) {
-        // Общий тайм-аут
-        if (millis() - lastByteTime > _totalTimeout) {
+	// Ждем данные с тайм-аутом
+	while (bytesRead < length) {
+		// Общий тайм-аут
+		if (millis() - lastByteTime > totalTimeout_) {
 #ifdef DEBUG
-            _serialDebug->print("TOTAL TIMEOUT! Received ");
-            _serialDebug->print(bytesRead);
-            _serialDebug->print("/");
-            _serialDebug->println(length);
+			serialDebug_->print("TOTAL TIMEOUT! Received ");
+			serialDebug_->print(bytesRead);
+			serialDebug_->print("/");
+			serialDebug_->println(length);
 #endif
-            break;
-        }
+			break;
+		}
 
-        // Чтение доступных данных
-        while(_serialPort->available() > 0 && bytesRead < length) {
-            buffer[bytesRead] = _serialPort->read();
-            bytesRead++;
-            lastByteTime = millis(); // Сброс таймера при получении данных
+		// Чтение доступных данных
+		while (serialPort_.available() > 0 && bytesRead < length) {
+			buffer[bytesRead] = serialPort_.read();
+			bytesRead++;
+			lastByteTime = millis(); // Сброс таймера при получении данных
 #ifdef DEBUG_receiveData
-            _serialDebug->print("Got byte ");
-            _serialDebug->print(bytesRead);
-            _serialDebug->print(": 0x");
-            if (buffer[bytesRead-1] < 0x10) _serialDebug->print("0");
-            _serialDebug->print(buffer[bytesRead-1], HEX);
-            _serialDebug->println();
+			serialDebug_->print("Got byte ");
+			serialDebug_->print(bytesRead);
+			serialDebug_->print(": 0x");
+			if (buffer[bytesRead - 1] < 0x10) serialDebug_->print("0");
+			serialDebug_->print(buffer[bytesRead - 1], HEX);
+			serialDebug_->println();
 #endif
-        }
+		}
 
 
-        // Проверка тайм-аута между символами только если нет доступных данных
-        if (bytesRead < length) {
-            if (_serialPort->available() == 0) {
-                if (millis() - lastByteTime > charTimeout) {
+		// Проверка тайм-аута между символами только если нет доступных данных
+		if (bytesRead < length) {
+			if (serialPort_.available() == 0) {
+				if (millis() - lastByteTime > charTimeout) {
 #ifdef DEBUG
-                    _serialDebug->print("INTER-CHAR TIMEOUT! Received ");
-                    _serialDebug->print(bytesRead);
-                    _serialDebug->print("/");
-                    _serialDebug->println(length);
+					serialDebug_->print("INTER-CHAR TIMEOUT! Received ");
+					serialDebug_->print(bytesRead);
+					serialDebug_->print("/");
+					serialDebug_->println(length);
 #endif
-                    break;
-                }
-            }
-        }
-    }
+					break;
+				}
+			}
+		}
+	}
 
 #ifdef DEBUG
-    if (bytesRead > 0) {
-        _serialDebug->print("Received ");
-        _serialDebug->print(bytesRead);
-        _serialDebug->print("/");
-        _serialDebug->print(length);
-        _serialDebug->print(" bytes: ");
-        for (size_t i = 0; i < bytesRead; i++) {
-            if (buffer[i] < 0x10) _serialDebug->print("0");
-            _serialDebug->print(buffer[i], HEX);
-            _serialDebug->print(" ");
-        }
-        _serialDebug->println("");
-    } else {
-        _serialDebug->print("NO DATA RECEIVED");
-        _serialDebug->println("");
-    }
+	if (bytesRead > 0) {
+		serialDebug_->print("Received ");
+		serialDebug_->print(bytesRead);
+		serialDebug_->print("/");
+		serialDebug_->print(length);
+		serialDebug_->print(" bytes: ");
+		for (size_t i = 0; i < bytesRead; i++) {
+			if (buffer[i] < 0x10) serialDebug_->print("0");
+			serialDebug_->print(buffer[i], HEX);
+			serialDebug_->print(" ");
+		}
+		serialDebug_->println("");
+	} else {
+		serialDebug_->print("NO DATA RECEIVED");
+		serialDebug_->println("");
+	}
 
-    _serialDebug->println("\t END receiveData !!!");
+	serialDebug_->println("\t END receiveData !!!");
 #endif
 
-    return bytesRead == length;
+	return bytesRead == length;
 }
 
 
 /**
- * @brief Чтение кода текущей ошибки частотного преобразователя.
+ * @brief Установка целевую частоту (задания)
  *
- * Обращается к регистру 0x8000, где хранится код последней неисправности.
+ * Записывает значение целевой частоты в процентах (-10000…+10000 = -100.00%…+100.00%) в регистр 0x1000.
  *
- * @param faultCode Указатель на переменную для сохранения кода ошибки.
+ * @param value Целевое значение частоты в сотых долях процента: -10000…+10000.
  * @return true при успехе, иначе false.
  */
-bool HS321::readFaultDescription(uint16_t* faultCode) const {
-    return readSingleParameter(0x8000, faultCode);
-}
-
-/**
- * @brief Чтение состояния двигателя (вращается / остановлен).
- *
- * Читает регистр 0x3000, содержащий текущее состояние работы.
- *
- * @param state Указатель на переменную для сохранения состояния.
- * @return true при успехе, иначе false.
- */
-bool HS321::readRunningState(uint16_t* state) const {
-    return readParameters(_slaveAddress, 0x3000, state, 1);
+bool HS321::setFrequencySetpoint(const int16_t value) const {
+	return writeSingleParameter(0x1000, value);
 }
 
 /**
@@ -622,9 +608,32 @@ bool HS321::readRunningState(uint16_t* state) const {
  * @return true при успехе, иначе false.
  */
 bool HS321::writeControlCommand(const ControlCommand command) const {
-    return writeSingleParameter(0x2000,  command);
+	return writeSingleParameter(0x2000, command);
 }
 
+/**
+ * @brief Чтение состояния двигателя (вращается / остановлен).
+ *
+ * Читает регистр 0x3000, содержащий текущее состояние работы.
+ *
+ * @param state Указатель на переменную для сохранения состояния.
+ * @return true при успехе, иначе false.
+ */
+bool HS321::readRunningState(uint16_t *state) const {
+	return readParameters(slaveAddress_, 0x3000, state, 1);
+}
+
+/**
+ * @brief Чтение кода текущей ошибки частотного преобразователя.
+ *
+ * Обращается к регистру 0x8000, где хранится код последней неисправности.
+ *
+ * @param faultCode Указатель на переменную для сохранения кода ошибки.
+ * @return true при успехе, иначе false.
+ */
+bool HS321::readFaultDescription(uint16_t *faultCode) const {
+	return readSingleParameter(0x8000, faultCode);
+}
 
 /**
  * @brief Чтение одного регистра Modbus.
@@ -635,8 +644,8 @@ bool HS321::writeControlCommand(const ControlCommand command) const {
  * @param value Указатель на переменную для сохранения значения.
  * @return true при успехе, иначе false.
  */
-bool HS321::readSingleParameter(const uint16_t address, uint16_t* value) const {
-    return readParameters(_slaveAddress, address, value, 1);
+bool HS321::readSingleParameter(const uint16_t address, uint16_t *value) const {
+	return readParameters(slaveAddress_, address, value, 1);
 }
 
 /**
@@ -650,9 +659,9 @@ bool HS321::readSingleParameter(const uint16_t address, uint16_t* value) const {
  * @param count Количество регистров для чтения.
  * @return true при успехе, иначе false.
  */
-bool HS321::readParametersInGroups(const GroupsParameter group, const uint8_t numberGroup, uint16_t* arrayValues, const size_t count) const {
-    const uint16_t startAddress = buildParameterAddress(group, numberGroup);
-    return readParameters(_slaveAddress, startAddress, arrayValues, count);
+bool HS321::readParametersInGroups(const GroupsParameter group, const uint8_t numberGroup, uint16_t *arrayValues, const size_t count) const {
+	const uint16_t startAddress = buildParameterAddress(group, numberGroup);
+	return readParameters(slaveAddress_, startAddress, arrayValues, count);
 }
 
 /**
@@ -665,9 +674,9 @@ bool HS321::readParametersInGroups(const GroupsParameter group, const uint8_t nu
  * @param value Указатель на переменную для сохранения значения.
  * @return true при успехе, иначе false.
  */
-bool HS321::readSingleGroupParameter(const GroupsParameter group, const uint8_t numberGroup, uint16_t* value) const {
-    const uint16_t address = buildParameterAddress(group, numberGroup);
-    return readSingleParameter(address, value);
+bool HS321::readSingleGroupParameter(const GroupsParameter group, const uint8_t numberGroup, uint16_t *value) const {
+	const uint16_t address = buildParameterAddress(group, numberGroup);
+	return readSingleParameter(address, value);
 }
 
 
@@ -681,7 +690,7 @@ bool HS321::readSingleGroupParameter(const GroupsParameter group, const uint8_t 
  * @return true при успехе, иначе false.
  */
 bool HS321::writeSingleParameter(const uint16_t address, const uint16_t value) const {
-    return writeParameters(_slaveAddress, address, &value, 1);
+	return writeParameters(slaveAddress_, address, &value, 1);
 }
 
 /**
@@ -695,9 +704,9 @@ bool HS321::writeSingleParameter(const uint16_t address, const uint16_t value) c
  * @param dataCount Количество значений.
  * @return true при успехе, иначе false.
  */
-bool HS321::writeParametersInGroups(const GroupsParameter group, const uint8_t numberGroup, const uint16_t* arrayData, const size_t dataCount) const {
-    const uint16_t startAddress = buildParameterAddress(group, numberGroup);
-    return writeParameters(_slaveAddress, startAddress, arrayData, dataCount );
+bool HS321::writeParametersInGroups(const GroupsParameter group, const uint8_t numberGroup, const uint16_t *arrayData, const size_t dataCount) const {
+	const uint16_t startAddress = buildParameterAddress(group, numberGroup);
+	return writeParameters(slaveAddress_, startAddress, arrayData, dataCount);
 }
 
 /**
@@ -711,8 +720,8 @@ bool HS321::writeParametersInGroups(const GroupsParameter group, const uint8_t n
  * @return true при успехе, иначе false.
  */
 bool HS321::writeSingleGroupParameter(const GroupsParameter group, const uint8_t numberGroup, const uint16_t value) const {
-    const uint16_t address = buildParameterAddress(group, numberGroup);
-    return writeSingleParameter(address, value);
+	const uint16_t address = buildParameterAddress(group, numberGroup);
+	return writeSingleParameter(address, value);
 }
 
 /**
@@ -726,15 +735,15 @@ bool HS321::writeSingleGroupParameter(const GroupsParameter group, const uint8_t
  * @return True, если чтение прошло успешно, иначе false.
  */
 bool HS321::checkCommunicationSettings(uint16_t settings[5]) const {
-    constexpr size_t requestSize = 5;
-    uint16_t arrayValues[requestSize];
-    // Читаем параметры из группы FC
-    if (readParametersInGroups(GROUP_FC, 0, arrayValues, requestSize)) {
-        // Копируем значения в выходной массив
-        for (size_t i = 0; i < requestSize; ++i) {
-            settings[i] = arrayValues[i];
-        }
-        return true;
-    }
-    return false;
+	constexpr size_t requestSize = 5;
+	uint16_t arrayValues[requestSize];
+	// Читаем параметры из группы FC
+	if (readParametersInGroups(GROUP_FC, 0, arrayValues, requestSize)) {
+		// Копируем значения в выходной массив
+		for (size_t i = 0; i < requestSize; ++i) {
+			settings[i] = arrayValues[i];
+		}
+		return true;
+	}
+	return false;
 }

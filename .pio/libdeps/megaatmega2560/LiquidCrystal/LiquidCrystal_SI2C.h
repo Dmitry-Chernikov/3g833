@@ -53,11 +53,9 @@
 #include "LCD.h"
 
 
-class LiquidCrystal_SI2C : public LCD 
-{
+class LiquidCrystal_SI2C : public LCD {
 public:
-   
-   /*!
+    /*!
     @method     
     @abstract   Class constructor. 
     @discussion Initializes class variables and defines the I2C address of the
@@ -66,11 +64,12 @@ public:
     @param      lcd_Addr[in] I2C address of the IO expansion module. For I2CLCDextraIO,
     the address can be configured using the on board jumpers.
     */
-   LiquidCrystal_SI2C (uint8_t lcd_Addr);
-   // Constructor with backlight control
-   LiquidCrystal_SI2C (uint8_t lcd_Addr, uint8_t backlighPin, t_backlightPol pol);
-   
-   /*!
+    LiquidCrystal_SI2C(uint8_t lcd_Addr);
+
+    // Constructor with backlight control
+    LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t backlighPin, t_backlightPol pol);
+
+    /*!
     @method     
     @abstract   Class constructor. 
     @discussion Initializes class variables and defines the I2C address of the
@@ -82,12 +81,13 @@ public:
     @param      Rw[in] LCD Rw (Read/write) pin connected to the IO extender module
     @param      Rs[in] LCD Rs (Reset) pin connected to the IO extender module
     */
-   LiquidCrystal_SI2C( uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs);
-   // Constructor with backlight control
-   LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,
-                     uint8_t backlighPin, t_backlightPol pol);   
-   
-   /*!
+    LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs);
+
+    // Constructor with backlight control
+    LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,
+                       uint8_t backlighPin, t_backlightPol pol);
+
+    /*!
     @method     
     @abstract   Class constructor. 
     @discussion Initializes class variables and defines the I2C address of the
@@ -103,13 +103,15 @@ public:
     @param      d6[in] LCD data 2 pin map on IO extender module
     @param      d7[in] LCD data 3 pin map on IO extender module
     */
-   LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs, 
-                     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7 );
-   // Constructor with backlight control
-   LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs, 
-                     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
-                     uint8_t backlighPin, t_backlightPol pol);
-   /*!
+    LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,
+                       uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+
+    // Constructor with backlight control
+    LiquidCrystal_SI2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,
+                       uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
+                       uint8_t backlighPin, t_backlightPol pol);
+
+    /*!
     @function
     @abstract   LCD initialization and associated HW.
     @discussion Initializes the LCD to a given size (col, row). This methods
@@ -125,9 +127,9 @@ public:
     @param      charsize[in] size of the characters of the LCD: LCD_5x8DOTS or
     LCD_5x10DOTS.
     */
-   virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);   
-   
-   /*!
+    virtual void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
+
+    /*!
     @function
     @abstract   Send a particular value to the LCD.
     @discussion Sends a particular value to the LCD for writing to the LCD or
@@ -139,9 +141,9 @@ public:
     @param      mode[in] DATA - write to the LCD CGRAM, COMMAND - write a 
     command to the LCD.
     */
-   virtual void send(uint8_t value, uint8_t mode);
-   
-   /*!
+    virtual void send(uint8_t value, uint8_t mode);
+
+    /*!
     @function
     @abstract   Sets the pin to control the backlight.
     @discussion Sets the pin in the device to control the backlight. This device
@@ -149,9 +151,9 @@ public:
     
     @param      0: backlight off, 1..255: backlight on.
     */
-   void setBacklightPin ( uint8_t value, t_backlightPol pol );
-   
-   /*!
+    void setBacklightPin(uint8_t value, t_backlightPol pol);
+
+    /*!
     @function
     @abstract   Switch-on/off the LCD backlight.
     @discussion Switch-on/off the LCD backlight.
@@ -160,9 +162,9 @@ public:
     
     @param      value: backlight mode (HIGH|LOW)
     */
-   void setBacklight ( uint8_t value );
+    void setBacklight(uint8_t value);
 
-  /*!
+    /*!
    @function
    @abstract   Initialises class private variables
    @discussion This is the class single point for initialising private variables.
@@ -178,20 +180,19 @@ public:
    @param      d6[in] LCD data 2 pin map on IO extender module
    @param      d7[in] LCD data 3 pin map on IO extender module
    */
-  void config (uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs, 
-               uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7 );
-   
+    void config(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,
+                uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
+
 private:
-   
-   /*!
+    /*!
     @method     
     @abstract   Initializes the LCD class
     @discussion Initializes the LCD class and IO expansion module.
     */
-   int  init();
-   
-   
-   /*!
+    int init();
+
+
+    /*!
     @method     
     @abstract   Writes an 4 bit value to the LCD.
     @discussion Writes 4 bits (the least significant) to the LCD control data lines.
@@ -199,26 +200,25 @@ private:
     @param      more[in]  Value to distinguish between command and data.
     COMMAND == command, DATA == data.
     */
-   void write4bits(uint8_t value, uint8_t mode);
-   
-   /*!
+    void write4bits(uint8_t value, uint8_t mode);
+
+    /*!
     @method     
     @abstract   Pulse the LCD enable line (En).
     @discussion Sends a pulse of 1 uS to the Enable pin to execute an command
     or write operation.
     */
-   void pulseEnable(uint8_t);
-   
-   
-   uint8_t _Addr;             // I2C Address of the IO expander
-   uint8_t _backlightPinMask; // Backlight IO pin mask
-   uint8_t _backlightStsMask; // Backlight status mask
-   SI2CIO  _si2cio;            // I2CIO PCF8574* expansion module driver I2CLCDextraIO
-   uint8_t _En;               // LCD expander word for enable pin
-   uint8_t _Rw;               // LCD expander word for R/W pin
-   uint8_t _Rs;               // LCD expander word for Register Select pin
-   uint8_t _data_pins[4];     // LCD data lines
-   
+    void pulseEnable(uint8_t);
+
+
+    uint8_t _Addr; // I2C Address of the IO expander
+    uint8_t _backlightPinMask; // Backlight IO pin mask
+    uint8_t _backlightStsMask; // Backlight status mask
+    SI2CIO _si2cio; // I2CIO PCF8574* expansion module driver I2CLCDextraIO
+    uint8_t _En; // LCD expander word for enable pin
+    uint8_t _Rw; // LCD expander word for R/W pin
+    uint8_t _Rs; // LCD expander word for Register Select pin
+    uint8_t _data_pins[4]; // LCD data lines
 };
 
 #else

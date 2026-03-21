@@ -81,7 +81,7 @@ void blankFunction() {
 void setup() {
     Serial.begin(250000);
 
-	lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
     // Add more "lines" than the display has. The extra will be scrolled.
     screen.add_line(line1);
@@ -117,6 +117,6 @@ void loop() {
     if (enter.check() == LOW) {
         Serial.println(F("ENTER button pressed"));
         menu.switch_focus();
-		menu.update();
+        menu.update();
     }
 }

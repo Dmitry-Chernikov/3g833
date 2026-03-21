@@ -91,8 +91,8 @@ char string_notSaved[] = "  ";
 
 
 enum FunctionTypes {
-  increase = 1,
-  decrease = 2,
+    increase = 1,
+    decrease = 2,
 };
 
 
@@ -144,128 +144,127 @@ LiquidSystem menu_system(main_menu, outputs_menu, inputs_menu);
 
 // Checks all the buttons.
 void buttonsCheck() {
-  if (right.check() == LOW) {
-    menu_system.next_screen();
-  }
-  if (left.check() == LOW) {
-    menu_system.previous_screen();
-  }
-  if (up.check() == LOW) {
-    menu_system.call_function(increase);
-  }
-  if (down.check() == LOW) {
-    menu_system.call_function(decrease);
-  }
-  if (enter.check() == LOW) {
-    menu_system.switch_focus();
-  }
+    if (right.check() == LOW) {
+        menu_system.next_screen();
+    }
+    if (left.check() == LOW) {
+        menu_system.previous_screen();
+    }
+    if (up.check() == LOW) {
+        menu_system.call_function(increase);
+    }
+    if (down.check() == LOW) {
+        menu_system.call_function(decrease);
+    }
+    if (enter.check() == LOW) {
+        menu_system.switch_focus();
+    }
 }
 
 // Callback function that will be attached to back_line.
 void go_back() {
-  // This function takes reference to the wanted menu.
-  menu_system.change_menu(main_menu);
+    // This function takes reference to the wanted menu.
+    menu_system.change_menu(main_menu);
 }
 
 void goto_outputs_menu() {
-  menu_system.change_menu(outputs_menu);
+    menu_system.change_menu(outputs_menu);
 }
 
 void goto_inputs_menu() {
-  menu_system.change_menu(inputs_menu);
+    menu_system.change_menu(inputs_menu);
 }
 
 void increase_pin6() {
-  if (pin6_level < 225) {
-    pin6_level += 25;
-  } else {
-    pin6_level = 250;
-  }
-  analogWrite(pin6, pin6_level);
-  strncpy(output_saved, string_notSaved, sizeof(string_notSaved));
+    if (pin6_level < 225) {
+        pin6_level += 25;
+    } else {
+        pin6_level = 250;
+    }
+    analogWrite(pin6, pin6_level);
+    strncpy(output_saved, string_notSaved, sizeof(string_notSaved));
 }
 
 void decrease_pin6() {
-  if (pin6_level > 25) {
-    pin6_level -= 25;
-  } else {
-    pin6_level = 0;
-  }
-  analogWrite(pin6, pin6_level);
-  strncpy(output_saved, string_notSaved, sizeof(string_notSaved));
+    if (pin6_level > 25) {
+        pin6_level -= 25;
+    } else {
+        pin6_level = 0;
+    }
+    analogWrite(pin6, pin6_level);
+    strncpy(output_saved, string_notSaved, sizeof(string_notSaved));
 }
 
 void save_input() {
-  EEPROM.put(11, sample_period);
-  strncpy(input_saved, string_saved, sizeof(string_saved));
+    EEPROM.put(11, sample_period);
+    strncpy(input_saved, string_saved, sizeof(string_saved));
 }
 
 void save_output() {
-  EEPROM.put(9, pin6_level);
-  strncpy(output_saved, string_saved, sizeof(string_saved));
+    EEPROM.put(9, pin6_level);
+    strncpy(output_saved, string_saved, sizeof(string_saved));
 }
 
 void increase_samplePeriod() {
-  if (sample_period < 10) {
-    sample_period++;
-    strncpy(input_saved, string_notSaved, sizeof(string_notSaved));
-  }
+    if (sample_period < 10) {
+        sample_period++;
+        strncpy(input_saved, string_notSaved, sizeof(string_notSaved));
+    }
 }
 
 void decrease_samplePeriod() {
-  if (sample_period > 0) {
-    sample_period--;
-    strncpy(input_saved, string_notSaved, sizeof(string_notSaved));
-  }
+    if (sample_period > 0) {
+        sample_period--;
+        strncpy(input_saved, string_notSaved, sizeof(string_notSaved));
+    }
 }
 
 void setup() {
-  Serial.begin(250000);
+    Serial.begin(250000);
 
-  pinMode(pin6, OUTPUT);
+    pinMode(pin6, OUTPUT);
 
-  // Reads the values recorded in the EEPROM
-  EEPROM.get(9, pin6_level);
-  EEPROM.get(11, sample_period);
-  analogWrite(pin6, pin6_level);
+    // Reads the values recorded in the EEPROM
+    EEPROM.get(9, pin6_level);
+    EEPROM.get(11, sample_period);
+    analogWrite(pin6, pin6_level);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-  back_line.set_focusPosition(Position::LEFT);
+    back_line.set_focusPosition(Position::LEFT);
 
-  back_line.attach_function(1, go_back);
-  back_line.attach_function(2, go_back);
+    back_line.attach_function(1, go_back);
+    back_line.attach_function(2, go_back);
 
-  outputs_line.attach_function(1, goto_outputs_menu);
-  outputs_line.attach_function(2, goto_outputs_menu);
-  inputs_line.attach_function(1, goto_inputs_menu);
-  inputs_line.attach_function(2, goto_inputs_menu);
+    outputs_line.attach_function(1, goto_outputs_menu);
+    outputs_line.attach_function(2, goto_outputs_menu);
+    inputs_line.attach_function(1, goto_inputs_menu);
+    inputs_line.attach_function(2, goto_inputs_menu);
 
-  pin6_line.attach_function(increase, increase_pin6);
-  pin6_line.attach_function(decrease, decrease_pin6);
+    pin6_line.attach_function(increase, increase_pin6);
+    pin6_line.attach_function(decrease, decrease_pin6);
 
-  oSave_line.attach_function(1, save_output);
-  oSave_line.attach_function(2, save_output);
-  iSave_line.attach_function(1, save_input);
-  iSave_line.attach_function(2, save_input);
-  iSample_line.attach_function(increase, increase_samplePeriod);
-  iSample_line.attach_function(decrease, decrease_samplePeriod);
+    oSave_line.attach_function(1, save_output);
+    oSave_line.attach_function(2, save_output);
+    iSave_line.attach_function(1, save_input);
+    iSave_line.attach_function(2, save_input);
+    iSample_line.attach_function(increase, increase_samplePeriod);
+    iSample_line.attach_function(decrease, decrease_samplePeriod);
 
-  strncpy(input_saved, string_saved, sizeof(string_saved));
-  strncpy(output_saved, string_saved, sizeof(string_saved));
+    strncpy(input_saved, string_saved, sizeof(string_saved));
+    strncpy(output_saved, string_saved, sizeof(string_saved));
 
-  menu_system.update();
+    menu_system.update();
 }
 
 void loop() {
-  buttonsCheck();
+    buttonsCheck();
 
-  static unsigned long lastMillis_sample = 0;
-  if (millis() - lastMillis_sample > (sample_period * 1000)) {
-    lastMillis_sample = millis();
-    pinA4_value = analogRead(pinA4);
-    pinA5_value = analogRead(pinA5);
-    menu_system.update();
-  }
-
+    static unsigned long lastMillis_sample = 0;
+    if (millis() - lastMillis_sample > (sample_period * 1000)) {
+        lastMillis_sample = millis();
+        pinA4_value = analogRead(pinA4);
+        pinA5_value = analogRead(pinA5);
+        menu_system.update();
+    }
 }

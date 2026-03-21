@@ -10,9 +10,9 @@
  * @param maxParameters Максимальное количество параметров, которые можно добавить в группу (по умолчанию — 10).
  */
 ParameterGroup::ParameterGroup(const char *groupName, const int maxParameters)
-                                                        :GROUP_NAME(groupName),
-                                                        MAX_PARAMETERS(maxParameters),
-                                                        _parameterCount(0) {
+    : GROUP_NAME(groupName),
+      MAX_PARAMETERS(maxParameters),
+      _parameterCount(0) {
     _parameters = new Parameter[maxParameters]; // Выделение памяти под массив параметров
 }
 

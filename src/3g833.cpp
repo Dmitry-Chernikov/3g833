@@ -18,7 +18,7 @@
  *   0006 = Замедленный останов (ramp stop)
  *   0007 = Сброс ошибки
  * 1000H, Запись, Задание частоты, -10000…+10000 = -100.00%…+100.00%
- * 3000H, Чтение, Состояние привода, 1–3 (1=FWD, 2=REV, 3=STOP)
+ * 3000H, Чтение, Состояние привода, 1–3 (1=FWD (Forward running), 2=REV (Revers running), 3=STOP)
  * 8000H, Чтение, Код ошибки, 0=нет ошибки, другие — код ошибки
  * Формат данных:
  *   Частота: 5000 = 50.00 Гц (делитель 100)
@@ -59,6 +59,71 @@
  * - F2.29: Коэффициент фильтра наблюдения за потоком (300 по умолчанию).
 **/
 
+/**
+ * @brief Процедура настройки частотного преобразователя HS321 в векторном режиме с автоматической адаптацией под двигатель
+ *
+ * Выполняет, полную настройку векторного управления по Modbus RTU:
+ * - Выбор режима Sensorless Vector Control
+ * - Настройка источника задания и команд
+ * - Параметризация двигателя (F9.00–F9.04)
+ * - Запуск автоидентификации параметров двигателя (F9.05 = 1)
+ * - Настройка ПИ-регуляторов скорости (низко/высокоскоростные зоны)
+ * - Ограничение момента, компенсация скольжения, фильтры
+ *
+ * @param driver Объект драйвера HS321 (предполагается наличие методов writeSingleParameter, readSingleParameter)
+ * @return true, если настройка прошла успешно; false — при ошибке записи/чтения или таймауте автоадаптации
+ */
+/*bool configureVectorModeWithAutoTuning(HS321& driver) {
+    // === 1. Режим управления и интерфейс ===
+    if (!driver.writeSingleParameter(0x0F01, 1)) return false;  // F0.01 = 1: Sensorless Vector Control
+    if (!driver.writeSingleParameter(0x0F02, 2)) return false;  // F0.02 = 2: Управление по Modbus
+    if (!driver.writeSingleParameter(0x0F03, 8)) return false;  // F0.03 = 8: Источник частоты — Modbus (регистр 1000H)
+
+    // === 2. Параметры двигателя (пример для стандартного АД 380В, 50Гц, 1500 об/мин) ===
+    if (!driver.writeSingleParameter(0x0F90, 0))     return false;   // F9.00 = 0.0 кВт (автоопределение)
+    if (!driver.writeSingleParameter(0x0F91, 380))   return false;   // F9.01 = 380 В
+    if (!driver.writeSingleParameter(0x0F92, 0))     return false;   // F9.02 = 0 А (автоопределение тока)
+    if (!driver.writeSingleParameter(0x0F93, 1500))  return false;   // F9.03 = 1500 об/мин
+    if (!driver.writeSingleParameter(0x0F94, 5000))  return false;   // F9.04 = 50.00 Гц (в сотых долях)
+
+    // === 3. Включение автоидентификации (статическая настройка) ===
+    if (!driver.writeSingleParameter(0x0F95, 1)) return false;  // F9.05 = 1: запуск автонастройки
+
+    // Ожидание завершения автоадаптации (F9.05 должен сброситься в 0)
+    uint32_t timeout = 40000;  // 40 секунд максимум
+    uint32_t start = millis();
+    uint16_t f905_value;
+    while (timeout > (millis() - start)) {
+        if (driver.readSingleParameter(0x0F95, &f905_value) && f905_value == 0) {
+            break;  // Успешно завершено
+        }
+        delay(100);
+    }
+    if (timeout <= (millis() - start)) {
+        return false;  // Таймаут автоадаптации
+    }
+
+    // === 4. Настройка ПИ-регуляторов скорости ===
+    if (!driver.writeSingleParameter(0x0F20, 25))    return false;   // F2.00: Kp низкой скорости = 25
+    if (!driver.writeSingleParameter(0x0F21, 100))   return false;   // F2.01: Ki низкой скорости = 1.00 (в сотых)
+    if (!driver.writeSingleParameter(0x0F22, 15))    return false;   // F2.02: Kp высокой скорости = 15
+    if (!driver.writeSingleParameter(0x0F23, 50))    return false;   // F2.03: Ki высокой скорости = 0.50
+    if (!driver.writeSingleParameter(0x0F24, 1000))  return false;   // F2.04: Переключение на низкую зону = 10.00 Гц
+    if (!driver.writeSingleParameter(0x0F25, 3000))  return false;   // F2.05: Переключение на высокую зону = 30.00 Гц
+
+    // === 5. Ограничение момента ===
+    if (!driver.writeSingleParameter(0x0F219, 150)) return false;   // F2.19: Ограничение момента = 150%
+    if (!driver.writeSingleParameter(0x0F220, 100)) return false;   // F2.20: Макс. момент в ослаблении поля = 100%
+
+    // === 6. Компенсация и фильтры ===
+    if (!driver.writeSingleParameter(0x0F214, 100)) return false;   // F2.14: Компенсация скольжения = 100%
+    if (!driver.writeSingleParameter(0x0F228, 100)) return false;   // F2.28: Компенсация потока = 100%
+    if (!driver.writeSingleParameter(0x0F223, 25))  return false;   // F2.23: Фильтр скорости = 25 мс
+    if (!driver.writeSingleParameter(0x0F229, 300)) return false;   // F2.29: Фильтр наблюдения = 300
+
+    return true;  // Все настройки выполнены успешно
+}*/
+
 #include "TechnicalSpecifications3G833.h"
 using namespace TechnicalSpecifications3G833;
 #include "config.h" //Определены define для вкл/выкл кода в компиляцию
@@ -66,7 +131,7 @@ using namespace TechnicalSpecifications3G833;
 #include "ControlSystem.h"    // Основной алгоритм работы станка содержит процедуры используемые в loop
 #include "Display.h"          // Работа с дисплеем Adafruit RGB LCD Shield
 #include "Encoder.h"          // Объявление объекта типа AS5048A для работы с энкодером AS5048A
-#include "IOPorts.h"          // Описаны все порты ввода/вывода процедуры их настройки
+#include "IOPorts.h"
 #include "MemoryEeprom.h"     // Описывает структуру данных которая сохраняется в память и процедуры для работы с памятью
 
 #include "StatesActuators.h"  // Описаны переменные которые хранят состояния режимов работы станка и исполнительных механизмов
@@ -86,216 +151,186 @@ using namespace TechnicalSpecifications3G833;
 
 #ifdef ENABLE_KEYPAD
 void pciSetup(const byte pin) {
-    //*Pin Change Interrupt Прерывание по изменению вывода*//
-    // PCICR Регистр управления PCINT прерываниями, имеются три группы PCI0..2 в
-    // которые входят выводы по 8 штук PCIFR Регистр флагов сработавших прерываний
-    // PCINT, показывает в какой группе сработало прерывание от вывода PCMSKx
-    // Регистр маскировки прерываний каждого из портов для групп PCI0..2,
-    // активирует прерывание по выводу. 1 Задать обработчик для соответствующего
-    // прерывания PCINT, используя макрос ISR. 2 Разрешить генерацию прерываний
-    // интересующим выводом микроконтроллера (регистр группы PCMSKx). 3 Разрешить
-    // обработку прерывания PCINT, которое генерирует интересующий вывод (регистр
-    // PCICR). 4 Установить бит I, разрешающий обработку прерываний глобально
-    // (регистр SREG).
-    // PCMSK0 |= 1 << 6;
-    *digitalPinToPCMSK(pin) |= bit(digitalPinToPCMSKbit(pin)); // Разрешаем PCINT для указанного пина
-    // PCIFR |= 0 << 0
-    PCIFR |= bit(digitalPinToPCICRbit(pin)); // Очищаем признак запроса прерывания
-    // для соответствующей группы пинов
-    // PCICR |= 1 << 0;
-    PCICR |= bit(digitalPinToPCICRbit(pin)); // Разрешаем PCINT для соответствующей группы пинов
-    SREG |= 1 << SREG_I; // бит 7 Разрешить прерывания микроконтроллера
+	//*Pin Change Interrupt Прерывание по изменению вывода*//
+	// PCICR Регистр управления PCINT прерываниями, имеются три группы PCI0..2 в
+	// которые входят выводы по 8 штук PCIFR Регистр флагов сработавших прерываний
+	// PCINT, показывает в какой группе сработало прерывание от вывода PCMSKx
+	// Регистр маскировки прерываний каждого из портов для групп PCI0..2,
+	// активирует прерывание по выводу. 1 Задать обработчик для соответствующего
+	// прерывания PCINT, используя макрос ISR. 2 Разрешить генерацию прерываний
+	// интересующим выводом микроконтроллера (регистр группы PCMSKx). 3 Разрешить
+	// обработку прерывания PCINT, которое генерирует интересующий вывод (регистр
+	// PCICR). 4 Установить бит I, разрешающий обработку прерываний глобально
+	// (регистр SREG).
+	// PCMSK0 |= 1 << 6;
+	*digitalPinToPCMSK(pin) |= bit(digitalPinToPCMSKbit(pin)); // Разрешаем PCINT для указанного пина
+	// PCIFR |= 0 << 0
+	PCIFR |= bit(digitalPinToPCICRbit(pin)); // Очищаем признак запроса прерывания
+	// для соответствующей группы пинов
+	// PCICR |= 1 << 0;
+	PCICR |= bit(digitalPinToPCICRbit(pin)); // Разрешаем PCINT для соответствующей группы пинов
+	SREG |= 1 << SREG_I; // бит 7 Разрешить прерывания микроконтроллера
 }
 
 void readKeypad() {
-    handleButtonStates();
-    handleMotorStates();
+	handleButtonStates();
+	handleMotorStates();
 }
 #endif
 
 /*****hs321*****/
-HS321 hs321(0x0001, &Serial1, &Serial, 9600, rs485TransceiverReceive);
+HS321 hs321(0x0001, Serial1, &Serial, 9600, rs485TransceiverReceive);
 uint16_t responseData;
 /*****hs321*****/
 
 
 void setup() {
-    cli();
+	cli();
 
 #ifdef ENABLE_KEYPAD
-    pinMode(interruptRemote, INPUT_PULLUP); // Подтянем пины источники PCINT к питанию
-    pciSetup(interruptRemote); // И разрешим на них прерывания T6
+	pinMode(interruptRemote, INPUT_PULLUP); // Подтянем пины источники PCINT к питанию
+	pciSetup(interruptRemote); // И разрешим на них прерывания T6
 #endif
 
-    initSetupInputManipulation();
+	initSetupInputManipulation();
 
-    initSetupOutputExecutiveMechanism();
+	initSetupOutputExecutiveMechanism();
 
-    hs321.begin();
+	hs321.begin();
 
 
 #ifdef ENABLE_KEYPAD
-    readKeypad();
+	readKeypad();
 #endif
 
-    /////////////Инициализация энкодера/////////////
-    initEncoder();
+	/////////////Инициализация энкодера/////////////
+	initEncoder();
 
-    initDisplay();
+	initDisplay();
 
-    clearMemory();
+	clearMemory();
 
-    initMemory();
+	initMemory();
 
-    settingTextMenu();
+	settingTextMenu();
 
-    // strncpy(input_saved, string_saved, sizeof(string_saved));
-    // strncpy(output_saved, string_saved, sizeof(string_saved));
+	// strncpy(input_saved, string_saved, sizeof(string_saved));
+	// strncpy(output_saved, string_saved, sizeof(string_saved));
 
-    sei();
-}
-
-void testConnection() {
-    Serial.println("\n=== CONNECTION TEST ===");
-
-    // Тест 1: Простой пинг
-    Serial.println("1. Sending test command...");
-    uint16_t value;
-
-    // Добавляем больше задержек
-    if (hs321.readSingleGroupParameter(GROUP_d, 0, &value)) {
-        Serial.println("*** SUCCESS: dDevice responde! ***");
-        Serial.print("Value: 0x");
-        Serial.println(value, HEX);
-    } else {
-        Serial.println("*** FAILED: No response from device ***");
-
-        // Проверка напряжения на линиях
-        Serial.println("Check:");
-        Serial.println("- RS485 A/B lines connection");
-        Serial.println("- Common GND");
-        Serial.println("- Device power");
-        Serial.println("- MAX485 power (5V)");
-        Serial.println("- DE/RE pin connection");
-    }
-
-    Serial.println("=== TEST COMPLETE ===\n");
+	sei();
 }
 
 void loop() {
-    constexpr uint16_t value[2] = {1, 2};
-    /*****SUSWE321*****/
-     if (hs321.writeParametersInGroups(GROUP_F0, 1, value, 2)) {
-         //Serial.println(String(responseData));
-
-         lcdPrintString(_lcd, "Frequency", "OK", "", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
-     }
-    /*****SUSWE321*****/
+	constexpr uint16_t value[2] = {1, 2};
+	/*****SUSWE321*****/
+	if (hs321.writeParametersInGroups(GROUP_F0, 1, value, 2)) {
+		lcdPrintString(_lcd, "Frequency", "OK", "", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+	}
+	/*****SUSWE321*****/
 
 
-    handleButtonStates();
-    handleMotorStates();
+	handleButtonStates();
+	handleMotorStates();
 
-    /////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
-    if (stateStartFeed) {
-        // Кнопку подача-пуск нажали. Запускаем мотор возвратно-поступательного движения
+	/////////////////////////////////////////////////////ЛОГИКА СОСТОЯНИЯ///////////////////////////////////////////////////////
+	if (stateStartFeed) {
+		// Кнопку подача-пуск нажали. Запускаем мотор возвратно-поступательного движения
+		handleStartFeed();
 
-        handleStartFeed();
-        handleProgramSwitch();
+		handleProgramSwitch();
 
-        handleAutoCycle();
+		handleAutoCycle();
 
-        handleManualMode();
+		handleManualMode();
 
 #ifdef ENABLE_PROGRAM_SWITCH
-        if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
-                           0, true, false);
-        }
+		if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
+			               0, true, false);
+		}
 
-        if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(
-                &previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0,
-                           true, false);
-        }
+		if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(
+			    &previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0, 0,
+			               true, false);
+		}
 
-        if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(
-                &previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0,
-                           0, true, false);
-        }
+		if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(
+			    &previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", WHITE, NOT_CHANGE_COLOR, 0, 0,
+			               0, true, false);
+		}
 #endif
 
 #ifdef ENABLE_SWITCH
-        if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
-                           0, true, false);
-        }
+		if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
+			               0, true, false);
+		}
 
-        if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0,
-                           0, 0, true, false);
-        }
+		if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0,
+			               0, 0, true, false);
+		}
 #endif
-    }
+	}
 
-    if (!stateStartFeed) {
-        // Кнопку Общий стоп нажали
+	if (!stateStartFeed) {
+		// Кнопку Общий стоп нажали
 
-        handleStop();
+		handleStop();
 
-        /////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
-        saveEeprom(_lcd, _dataBuffer, _data);
+		/////////////////////////////////////////////////////EEPROM SAVE///////////////////////////////////////////////////////
+		saveEeprom(_lcd, _dataBuffer, _data);
 
-        /////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
-        Menu();
-    }
+		/////////////////////////////////////////////////////LCD DISPLAY BUTTONS READ///////////////////////////////////////////////////////
+		Menu();
+	}
 
-    /////////////////////////////////////////////////////ЦИКЛ///////////////////////////////////////////////////////
-    while (stateStartCycle) {
-        // Включён режим Цикл
-
-        handleCycle();
+	/////////////////////////////////////////////////////ЦИКЛ///////////////////////////////////////////////////////
+	while (stateStartCycle) {
+		// Включён режим Цикл
+		handleCycle();
 
 #ifdef ENABLE_PROGRAM_SWITCH
-        if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0,
-                           true, false);
-        }
+		if (!_data.stateIntermediate && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "IN FIELD ACTION", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0, 0, 0,
+			               true, false);
+		}
 
-        if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(
-                &previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0,
-                           true, false);
-        }
+		if (_data.stateIntermediate && !_data.stateElectromagnetBottom && stateMillisDelay(
+			    &previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT TOP PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0, 0,
+			               true, false);
+		}
 
-        if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(
-                &previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
-                           0, true, false);
-        }
+		if (_data.stateIntermediate && !_data.stateElectromagnetTop && stateMillisDelay(
+			    &previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT BOTTOM PROG", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
+			               0, true, false);
+		}
 #endif
 
 #ifdef ENABLE_SWITCH
-        if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
-                           0, true, false);
-        }
+		if (!digitalRead(endSwitchTop) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT TOP MECHAN", String(_data.linearMove, 2), "mm", YELLOW, NOT_CHANGE_COLOR, 0, 0,
+			               0, true, false);
+		}
 
-        if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
-            lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0,
-                           0, 0, true, false);
-        }
+		if (!digitalRead(endSwitchBottom) && stateMillisDelay(&previousMillisMenu, &updateMenu)) {
+			lcdPrintString(_lcd, "LIMIT BOTTOM MECHAN", String(_data.linearMove, 2), "mm", GREEN, NOT_CHANGE_COLOR, 0,
+			               0, 0, true, false);
+		}
 #endif
-    }
+	}
 }
 
 #if defined(ENABLE_KEYPAD)
 ISR(PCINT0_vect) {
-    // Обработчик запросов прерывания от пинов PCINT0..PCINT7
+	// Обработчик запросов прерывания от пинов PCINT0..PCINT7
 
-    cli(); // сбрасываем флаг прерывания (Запретить прерывания)
-    readKeypad(); // вызов процедуры опроса клавиатуры
-    sei(); // устанавливаем флаг прерывания (Разрешить прерывания)
+	cli(); // сбрасываем флаг прерывания (Запретить прерывания)
+	readKeypad(); // вызов процедуры опроса клавиатуры
+	sei(); // устанавливаем флаг прерывания (Разрешить прерывания)
 }
 #endif

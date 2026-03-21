@@ -67,277 +67,252 @@ var windowHeight;
 var svgDoc;
 var minZoom;
 var maxZoom;
-if (!window) window=this;
+if (!window) window = this;
 
 /**
  * Show the graph in the middle of the view, scaled to fit
  */
-function show()
-{
-  if (window.innerHeight) // Firefox
-  {
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
-  }
-  else if (document.documentElement.clientWidth) // Chrome/Safari
-  {
-    windowWidth = document.documentElement.clientWidth
-    windowHeight = document.documentElement.clientHeight
-  }
-  if (!windowWidth || !windowHeight) // failsafe
-  {
-    windowWidth = 800;
-    windowHeight = 600;
-  }
-  minZoom = Math.min(Math.min(viewHeight,windowHeight)/viewHeight,Math.min(viewWidth,windowWidth)/viewWidth);
-  maxZoom = minZoom+1.5;
-  zoomInFactor = Math.pow(maxZoom/minZoom,1.0/zoomSteps);
-  zoomOutFactor = 1.0/zoomInFactor;
+function show() {
+    if (window.innerHeight) // Firefox
+    {
+        windowWidth = window.innerWidth;
+        windowHeight = window.innerHeight;
+    } else if (document.documentElement.clientWidth) // Chrome/Safari
+    {
+        windowWidth = document.documentElement.clientWidth
+        windowHeight = document.documentElement.clientHeight
+    }
+    if (!windowWidth || !windowHeight) // failsafe
+    {
+        windowWidth = 800;
+        windowHeight = 600;
+    }
+    minZoom = Math.min(Math.min(viewHeight, windowHeight) / viewHeight, Math.min(viewWidth, windowWidth) / viewWidth);
+    maxZoom = minZoom + 1.5;
+    zoomInFactor = Math.pow(maxZoom / minZoom, 1.0 / zoomSteps);
+    zoomOutFactor = 1.0 / zoomInFactor;
 
-  var g = svgDoc.getElementById('viewport');
-  try
-  {
-    var bb = g.getBBox(); // this can throw an exception if css { display: none }
-    var tx = (windowWidth-viewWidth*minZoom+8)/(2*minZoom);
-    var ty = viewHeight+(windowHeight-viewHeight*minZoom)/(2*minZoom);
-    var a = 'scale('+minZoom+') rotate(0) translate('+tx+' '+ty+')';
-    g.setAttribute('transform',a);
-  }
-  catch(e) {}
+    var g = svgDoc.getElementById('viewport');
+    try {
+        var bb = g.getBBox(); // this can throw an exception if css { display: none }
+        var tx = (windowWidth - viewWidth * minZoom + 8) / (2 * minZoom);
+        var ty = viewHeight + (windowHeight - viewHeight * minZoom) / (2 * minZoom);
+        var a = 'scale(' + minZoom + ') rotate(0) translate(' + tx + ' ' + ty + ')';
+        g.setAttribute('transform', a);
+    } catch (e) {
+    }
 }
 
 /**
  * Register handlers
  */
-function init(evt)
-{
-  svgDoc = evt.target.ownerDocument;
-  try {
-    if (top.window && top.window.registerShow) { // register show function in html doc for dynamic sections
-      top.window.registerShow(sectionId,show);
+function init(evt) {
+    svgDoc = evt.target.ownerDocument;
+    try {
+        if (top.window && top.window.registerShow) { // register show function in html doc for dynamic sections
+            top.window.registerShow(sectionId, show);
+        }
+    } catch (e) {
+        // ugh, we are not allowed to talk to the parent; can happen with Chrome when viewing pages
+        // locally, since they treat every local page as having a different origin
     }
-  } catch(e) {
-    // ugh, we are not allowed to talk to the parent; can happen with Chrome when viewing pages
-    // locally, since they treat every local page as having a different origin
-  }
-  show();
+    show();
 
-  setAttributes(root, {
-     "onmousedown" : "handleMouseDown(evt)",
-     "onmousemove" : "handleMouseMove(evt)",
-     "onmouseup"   : "handleMouseUp(evt)"
-  });
+    setAttributes(root, {
+        "onmousedown": "handleMouseDown(evt)",
+        "onmousemove": "handleMouseMove(evt)",
+        "onmouseup": "handleMouseUp(evt)"
+    });
 
-  if (window.addEventListener)
-  {
-    if (navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 ||
-        navigator.userAgent.toLowerCase().indexOf("opera") >= 0 ||
-        navigator.appVersion.indexOf("MSIE") != -1)
-    {
-      window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari/IE9
+    if (window.addEventListener) {
+        if (navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 ||
+            navigator.userAgent.toLowerCase().indexOf("opera") >= 0 ||
+            navigator.appVersion.indexOf("MSIE") != -1) {
+            window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari/IE9
+        } else {
+            window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
+        }
     }
-    else
-    {
-      window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
-    }
-  }
 }
 
-window.onresize=function()
-{
-  if (svgDoc) { show(); }
+window.onresize = function () {
+    if (svgDoc) {
+        show();
+    }
 }
 
 /**
  * Instance an SVGPoint object with given event coordinates.
  */
-function getEventPoint(evt)
-{
-  var p = root.createSVGPoint();
-  p.x = evt.clientX;
-  p.y = evt.clientY;
-  return p;
+function getEventPoint(evt) {
+    var p = root.createSVGPoint();
+    p.x = evt.clientX;
+    p.y = evt.clientY;
+    return p;
 }
 
 /**
  * Sets the current transform matrix of an element.
  */
-function setCTM(element, matrix)
-{
-  var s = "matrix(" + matrix.a + "," + matrix.b + "," + matrix.c + "," + matrix.d + "," + matrix.e + "," + matrix.f + ")";
-  element.setAttribute("transform", s);
+function setCTM(element, matrix) {
+    var s = "matrix(" + matrix.a + "," + matrix.b + "," + matrix.c + "," + matrix.d + "," + matrix.e + "," + matrix.f + ")";
+    element.setAttribute("transform", s);
 }
 
 /**
  * Sets attributes of an element.
  */
-function setAttributes(element, attributes)
-{
-  for (i in attributes)
-    element.setAttributeNS(null, i, attributes[i]);
+function setAttributes(element, attributes) {
+    for (i in attributes)
+        element.setAttributeNS(null, i, attributes[i]);
 }
 
-function doZoom(g,point,zoomFactor)
-{
-  var p = point.matrixTransform(g.getCTM().inverse());
-  var k = root.createSVGMatrix().translate(p.x, p.y).scale(zoomFactor).translate(-p.x, -p.y);
-  var n = g.getCTM().multiply(k);
-  var s = Math.max(n.a,n.d);
-  if      (s>maxZoom) n=n.translate(p.x,p.y).scale(maxZoom/s).translate(-p.x,-p.y);
-  else if (s<minZoom) n=n.translate(p.x,p.y).scale(minZoom/s).translate(-p.x,-p.y);
-  setCTM(g, n);
-  stateTf = stateTf.multiply(n.inverse());
+function doZoom(g, point, zoomFactor) {
+    var p = point.matrixTransform(g.getCTM().inverse());
+    var k = root.createSVGMatrix().translate(p.x, p.y).scale(zoomFactor).translate(-p.x, -p.y);
+    var n = g.getCTM().multiply(k);
+    var s = Math.max(n.a, n.d);
+    if (s > maxZoom) n = n.translate(p.x, p.y).scale(maxZoom / s).translate(-p.x, -p.y);
+    else if (s < minZoom) n = n.translate(p.x, p.y).scale(minZoom / s).translate(-p.x, -p.y);
+    setCTM(g, n);
+    stateTf = stateTf.multiply(n.inverse());
 }
 
 /**
  * Handle mouse move event.
  */
-function handleMouseWheel(evt)
-{
-  if (!evt) evt = window.evt;
-  if (!evt.shiftKey) return; // only zoom when shift is pressed
-  if (evt.preventDefault) evt.preventDefault();
-  evt.returnValue = false;
+function handleMouseWheel(evt) {
+    if (!evt) evt = window.evt;
+    if (!evt.shiftKey) return; // only zoom when shift is pressed
+    if (evt.preventDefault) evt.preventDefault();
+    evt.returnValue = false;
 
-  if (state!='pan')
-  {
-    var delta;
-    if (evt.wheelDelta)
-    {
-      delta = evt.wheelDelta / 7200; // Opera/Chrome/IE9/Safari
+    if (state != 'pan') {
+        var delta;
+        if (evt.wheelDelta) {
+            delta = evt.wheelDelta / 7200; // Opera/Chrome/IE9/Safari
+        } else {
+            delta = evt.detail / -180; // Mozilla
+        }
+        var svgDoc = evt.target.ownerDocument;
+        var g = svgDoc.getElementById("viewport");
+        var p = getEventPoint(evt);
+        doZoom(g, p, 1 + delta);
     }
-    else
-    {
-      delta = evt.detail / -180; // Mozilla
-    }
-    var svgDoc = evt.target.ownerDocument;
+}
+
+/**
+ * Handle mouse move event.
+ */
+function handleMouseMove(evt) {
+    if (evt.preventDefault)
+        evt.preventDefault();
+
+    evt.returnValue = false;
+
     var g = svgDoc.getElementById("viewport");
-    var p = getEventPoint(evt);
-    doZoom(g,p,1+delta);
-  }
-}
 
-/**
- * Handle mouse move event.
- */
-function handleMouseMove(evt)
-{
-  if(evt.preventDefault)
-    evt.preventDefault();
-
-  evt.returnValue = false;
-
-  var g = svgDoc.getElementById("viewport");
-
-  if (state == 'pan')
-  {
-    // Pan mode
-    var p = getEventPoint(evt).matrixTransform(stateTf);
-    setCTM(g,stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
-  }
+    if (state == 'pan') {
+        // Pan mode
+        var p = getEventPoint(evt).matrixTransform(stateTf);
+        setCTM(g, stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
+    }
 }
 
 /**
  * Handle click event.
  */
-function handleMouseDown(evt)
-{
-  if(evt.preventDefault)
-    evt.preventDefault();
-  evt.returnValue = false;
-  var g = svgDoc.getElementById("viewport");
-  state = 'pan';
-  stateTf = g.getCTM().inverse();
-  stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
-  g.style.cursor = cursorGrab;
+function handleMouseDown(evt) {
+    if (evt.preventDefault)
+        evt.preventDefault();
+    evt.returnValue = false;
+    var g = svgDoc.getElementById("viewport");
+    state = 'pan';
+    stateTf = g.getCTM().inverse();
+    stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
+    g.style.cursor = cursorGrab;
 }
 
 /**
  * Handle mouse button release event.
  */
-function handleMouseUp(evt)
-{
-  if (evt.preventDefault) evt.preventDefault();
-  evt.returnValue = false;
-  var g = svgDoc.getElementById("viewport");
-  g.style.cursor = "default";
-  // Quit pan mode
-  state = '';
+function handleMouseUp(evt) {
+    if (evt.preventDefault) evt.preventDefault();
+    evt.returnValue = false;
+    var g = svgDoc.getElementById("viewport");
+    g.style.cursor = "default";
+    // Quit pan mode
+    state = '';
 }
 
 /**
  * Dumps a matrix to a string (useful for debug).
  */
-function dumpMatrix(matrix)
-{
-  var s = "[ " + matrix.a + ", " + matrix.c + ", " + matrix.e + "\n  " + matrix.b + ", " + matrix.d + ", " + matrix.f + "\n  0, 0, 1 ]";
-  return s;
+function dumpMatrix(matrix) {
+    var s = "[ " + matrix.a + ", " + matrix.c + ", " + matrix.e + "\n  " + matrix.b + ", " + matrix.d + ", " + matrix.f + "\n  0, 0, 1 ]";
+    return s;
 }
 
 /**
  * Handler for pan buttons
  */
-function handlePan(x,y)
-{
-  var g = svgDoc.getElementById("viewport");
-  setCTM(g,g.getCTM().translate(x*20/minZoom,y*20/minZoom));
+function handlePan(x, y) {
+    var g = svgDoc.getElementById("viewport");
+    setCTM(g, g.getCTM().translate(x * 20 / minZoom, y * 20 / minZoom));
 }
 
 /**
  * Handle reset button
  */
-function handleReset()
-{
-  show();
+function handleReset() {
+    show();
 }
 
 /**
  * Handler for zoom buttons
  */
-function handleZoom(evt,direction)
-{
-  var g = svgDoc.getElementById("viewport");
-  var factor = direction=='in' ? zoomInFactor : zoomOutFactor;
-  var m = g.getCTM();
-  var p = root.createSVGPoint();
-  p.x = windowWidth/2;
-  p.y = windowHeight/2;
-  doZoom(g,p,factor);
+function handleZoom(evt, direction) {
+    var g = svgDoc.getElementById("viewport");
+    var factor = direction == 'in' ? zoomInFactor : zoomOutFactor;
+    var m = g.getCTM();
+    var p = root.createSVGPoint();
+    p.x = windowWidth / 2;
+    p.y = windowHeight / 2;
+    doZoom(g, p, factor);
 }
 
-function serializeXmlNode(xmlNode)
-{
-  if (typeof window.XMLSerializer != "undefined") {
-    return (new window.XMLSerializer()).serializeToString(xmlNode);
-  } else if (typeof xmlNode.xml != "undefined") {
-    return xmlNode.xml;
-  }
-  return "";
+function serializeXmlNode(xmlNode) {
+    if (typeof window.XMLSerializer != "undefined") {
+        return (new window.XMLSerializer()).serializeToString(xmlNode);
+    } else if (typeof xmlNode.xml != "undefined") {
+        return xmlNode.xml;
+    }
+    return "";
 }
 
 /**
  * Handler for print function
  */
-function handlePrint(evt)
-{
-  evt.returnValue = false;
-  var g = svgDoc.getElementById("graph");
-  var xs = serializeXmlNode(g);
-  try {
-    var w = window.open('about:blank','_blank','width='+windowWidth+',height='+windowHeight+
-                        ',toolbar=0,status=0,menubar=0,scrollbars=0,resizable=0,location=0,directories=0');
-    var d = w.document;
-    d.write('<html xmlns="http://www.w3.org/1999/xhtml" '+
-            'xmlns:svg="http://www.w3.org/2000/svg" '+
+function handlePrint(evt) {
+    evt.returnValue = false;
+    var g = svgDoc.getElementById("graph");
+    var xs = serializeXmlNode(g);
+    try {
+        var w = window.open('about:blank', '_blank', 'width=' + windowWidth + ',height=' + windowHeight +
+            ',toolbar=0,status=0,menubar=0,scrollbars=0,resizable=0,location=0,directories=0');
+        var d = w.document;
+        d.write('<html xmlns="http://www.w3.org/1999/xhtml" ' +
+            'xmlns:svg="http://www.w3.org/2000/svg" ' +
             'xmlns:xlink="http://www.w3.org/1999/xlink">');
-    d.write('<head><title>Print SVG</title></head>');
-    d.write('<body style="margin: 0px; padding: 0px;" onload="window.print();">');
-    d.write('<div id="svg" style="width:'+windowWidth+'px; height:'+windowHeight+'px;">'+xs+'</div>');
-    d.write('</body>');
-    d.write('</html>');
-    d.close();
-  } catch(e) {
-    alert('Failed to open popup window needed for printing!\n'+e.message);
-  }
+        d.write('<head><title>Print SVG</title></head>');
+        d.write('<body style="margin: 0px; padding: 0px;" onload="window.print();">');
+        d.write('<div id="svg" style="width:' + windowWidth + 'px; height:' + windowHeight + 'px;">' + xs + '</div>');
+        d.write('</body>');
+        d.write('</html>');
+        d.close();
+    } catch (e) {
+        alert('Failed to open popup window needed for printing!\n' + e.message);
+    }
 }
+
 /* @license-end */

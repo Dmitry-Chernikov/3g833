@@ -1,21 +1,24 @@
-h1, .h1, h2, .h2, h3, .h3{
+h1, .h1, h2, .h2, h3, .h3 {
     font-weight: 200 !important;
 }
 
-#navrow1, #navrow2, #navrow3, #navrow4, #navrow5{
+#navrow1, #navrow2, #navrow3, #navrow4, #navrow5 {
     border-bottom: 1px solid #EEEEEE;
 }
 
 .adjust-right {
-margin-left: 30px !important;
-font-size: 1.15em !important;
+    margin-left: 30px !important;
+    font-size: 1.15em !important;
 }
-.navbar{
- border: 0px solid #222 !important;
+
+.navbar {
+    border: 0px solid #222 !important;
 }
-table{
-    white-space:pre-wrap !important;
+
+table {
+    white-space: pre-wrap !important;
 }
+
 /*
  ===========================
  */
@@ -85,6 +88,7 @@ body {
         text-align: right;
     }
 }
+
 @media (max-width: 991px) {
     .footer-row {
         text-align: center;
@@ -135,7 +139,7 @@ pre.fragment {
     margin: 4px 8px 4px 2px;
     overflow: auto;
     word-wrap: break-word;
-    font-size:  9pt;
+    font-size: 9pt;
     line-height: 125%;
     font-family: monospace, fixed;
     font-size: 105%;
@@ -154,10 +158,10 @@ div.line {
     line-height: 1.0;
     text-wrap: unrestricted;
     white-space: -moz-pre-wrap; /* Moz */
-    white-space: -pre-wrap;     /* Opera 4-6 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    white-space: pre-wrap;      /* CSS3  */
-    word-wrap: normal;      /* IE 5.5+ */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* CSS3  */
+    word-wrap: normal; /* IE 5.5+ */
     text-indent: -53px;
     padding-left: 53px;
     padding-bottom: 0px;
@@ -173,7 +177,8 @@ div.line {
     transition-property: background-color, box-shadow;
     transition-duration: 0.5s;
 }
-div.line:hover{
+
+div.line:hover {
     background-color: #FBFF00;
 }
 
@@ -186,16 +191,17 @@ div.line.glow {
 span.lineno {
     padding-right: 4px;
     text-align: right;
-    color:rgba(0,0,0,0.3);
+    color: rgba(0, 0, 0, 0.3);
     border-right: 1px solid #EEE;
     border-left: 1px solid #EEE;
     background-color: #FFF;
     white-space: pre;
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace ;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
+
 span.lineno a {
     background-color: #FAFAFA;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 span.lineno a:hover {
@@ -270,103 +276,120 @@ blockquote {
 /*---------------- Search Box */
 
 #search-box {
-  margin: 10px 0px;
+    margin: 10px 0px;
 }
+
 #search-box .close {
-  display: none;
-  position: absolute;
-  right: 0px;
-  padding: 6px 12px;
-  z-index: 5;
+    display: none;
+    position: absolute;
+    right: 0px;
+    padding: 6px 12px;
+    z-index: 5;
 }
 
 /*---------------- Search results window */
 
 #search-results-window {
-  display: none;
+    display: none;
 }
 
 iframe#MSearchResults {
-  width: 100%;
-  height: 15em;
+    width: 100%;
+    height: 15em;
 }
 
 .SRChildren {
-  padding-left: 3ex; padding-bottom: .5em
+    padding-left: 3ex;
+    padding-bottom: .5em
 }
+
 .SRPage .SRChildren {
-  display: none;
+    display: none;
 }
+
 a.SRScope {
-  display: block;
+    display: block;
 }
+
 a.SRSymbol:focus, a.SRSymbol:active,
 a.SRScope:focus, a.SRScope:active {
-  text-decoration: underline;
+    text-decoration: underline;
 }
+
 span.SRScope {
-  padding-left: 4px;
+    padding-left: 4px;
 }
+
 .SRResult {
-  display: none;
+    display: none;
 }
 
 /* class and file list */
 .directory .icona,
 .directory .arrow {
-  height: auto;
+    height: auto;
 }
+
 .directory .icona .icon {
-  height: 16px;
+    height: 16px;
 }
+
 .directory .icondoc {
-  background-position: 0px 0px;
-  height: 20px;
+    background-position: 0px 0px;
+    height: 20px;
 }
+
 .directory .iconfopen {
-  background-position: 0px 0px;
+    background-position: 0px 0px;
 }
+
 .directory td.entry {
-  padding: 7px 8px 6px 8px;
+    padding: 7px 8px 6px 8px;
 }
 
 .table > tbody > tr > td.memSeparator {
-  line-height: 0;
-  .table-hover;
+    line-height: 0;
+
+    .table-hover
+;
 
 }
 
 .memItemLeft, .memTemplItemLeft {
-  white-space: normal;
+    white-space: normal;
 }
 
 /* enumerations */
 .panel-body thead > tr {
-  background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
 
 /* todo lists */
 .todoname,
 .todoname a {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 /* Class title */
 .summary {
-  margin-top: 25px;
+    margin-top: 25px;
 }
+
 .page-header {
-  margin: 20px 0px !important;
+    margin: 20px 0px !important;
 }
+
 .page-header .title {
-  display: inline-block;
+    display: inline-block;
 }
+
 .page-header .pull-right {
-  margin-top: 0.3em;
-  margin-left: 0.5em;
+    margin-top: 0.3em;
+    margin-left: 0.5em;
 }
+
 .page-header .label {
-  font-size: 50%;
+    font-size: 50%;
 }
 
 ul li {

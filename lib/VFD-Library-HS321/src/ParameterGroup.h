@@ -40,8 +40,8 @@ public:
     void addParameter(const Parameter &param);
 
 private:
-    const char* GROUP_NAME;         ///< Название группы параметров (например, "F1 - Управление V/F")
-    const int   MAX_PARAMETERS;     ///< Максимальное количество параметров в группе, определяется при создании
-    Parameter*  _parameters;        ///< Динамически выделяемый массив параметров
-    int         _parameterCount;    ///< Текущее количество добавленных параметров в группе
+    const char *GROUP_NAME; ///< Название группы параметров (например, "F1 - Управление V/F")
+    const int MAX_PARAMETERS; ///< Максимальное количество параметров в группе, определяется при создании
+    Parameter *_parameters; ///< Динамически выделяемый массив параметров
+    int _parameterCount; ///< Текущее количество добавленных параметров в группе
 };

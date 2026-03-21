@@ -124,52 +124,52 @@ LiquidMenu menu(lcd);
 
 
 void setup() {
-  Serial.begin(250000);
+    Serial.begin(250000);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-  // Set the variables as PROGMEM. The parameter is the consecutive
-  // number of the PROGMEM variable for that LiquidLine object.
-  line11.set_asProgmem(1);
-  line12.set_asProgmem(1);
-  line21.set_asProgmem(1);
-  line22.set_asProgmem(1);
-  line31.set_asProgmem(1);
-  line32.set_asProgmem(1);
-  line41.set_asProgmem(1);
-  line42.set_asProgmem(1);
-  line51.set_asProgmem(1);
-  line52.set_asProgmem(1);
-  line61.set_asProgmem(1);
-  line62.set_asProgmem(1);
-  line71.set_asProgmem(1);
-  line72.set_asProgmem(1);
-  line81.set_asProgmem(1);
-  line82.set_asProgmem(1);
-  line91.set_asProgmem(1);
-  line92.set_asProgmem(1);
-  line101.set_asProgmem(1);
-  line102.set_asProgmem(1);
+    // Set the variables as PROGMEM. The parameter is the consecutive
+    // number of the PROGMEM variable for that LiquidLine object.
+    line11.set_asProgmem(1);
+    line12.set_asProgmem(1);
+    line21.set_asProgmem(1);
+    line22.set_asProgmem(1);
+    line31.set_asProgmem(1);
+    line32.set_asProgmem(1);
+    line41.set_asProgmem(1);
+    line42.set_asProgmem(1);
+    line51.set_asProgmem(1);
+    line52.set_asProgmem(1);
+    line61.set_asProgmem(1);
+    line62.set_asProgmem(1);
+    line71.set_asProgmem(1);
+    line72.set_asProgmem(1);
+    line81.set_asProgmem(1);
+    line82.set_asProgmem(1);
+    line91.set_asProgmem(1);
+    line92.set_asProgmem(1);
+    line101.set_asProgmem(1);
+    line102.set_asProgmem(1);
 
-  menu.add_screen(welcome_screen);
-  menu.add_screen(screen1);
-  menu.add_screen(screen2);
-  menu.add_screen(screen3);
-  menu.add_screen(screen4);
-  menu.add_screen(screen5);
-  menu.add_screen(screen6);
-  menu.add_screen(screen7);
-  menu.add_screen(screen8);
-  menu.add_screen(screen9);
-  menu.add_screen(screen10);
+    menu.add_screen(welcome_screen);
+    menu.add_screen(screen1);
+    menu.add_screen(screen2);
+    menu.add_screen(screen3);
+    menu.add_screen(screen4);
+    menu.add_screen(screen5);
+    menu.add_screen(screen6);
+    menu.add_screen(screen7);
+    menu.add_screen(screen8);
+    menu.add_screen(screen9);
+    menu.add_screen(screen10);
 }
 
 void loop() {
-  static unsigned long lastMs_nextScreen = 0;
-  static unsigned int period_nextScreen = 1000;
-  // Periodic switching to the next screen.
-  if (millis() - lastMs_nextScreen > period_nextScreen) {
-    lastMs_nextScreen = millis();
-    menu.next_screen();
-  }
+    static unsigned long lastMs_nextScreen = 0;
+    static unsigned int period_nextScreen = 1000;
+    // Periodic switching to the next screen.
+    if (millis() - lastMs_nextScreen > period_nextScreen) {
+        lastMs_nextScreen = millis();
+        menu.next_screen();
+    }
 }

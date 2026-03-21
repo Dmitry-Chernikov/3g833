@@ -72,12 +72,11 @@
 
 // CONSTRUCTOR
 // ---------------------------------------------------------------------------
-SI2CIO::SI2CIO ( )
-{
-   _i2cAddr     = 0x0;
-   _dirMask     = 0xFF;    // mark all as INPUTs
-   _shadow      = 0x0;     // no values set
-   _initialised = false;
+SI2CIO::SI2CIO() {
+    _i2cAddr = 0x0;
+    _dirMask = 0xFF; // mark all as INPUTs
+    _shadow = 0x0; // no values set
+    _initialised = false;
 }
 
 // PUBLIC METHODS
@@ -85,137 +84,114 @@ SI2CIO::SI2CIO ( )
 
 //
 // begin
-int SI2CIO::begin (  uint8_t i2cAddr )
-{
-   // convert to 8 bit addresses for mapping as needed by the bitbang library
-   _i2cAddr = ( i2cAddr << 1 );
-   
-   i2c_init();
-      
-   _initialised = i2c_start(_i2cAddr | I2C_READ);
+int SI2CIO::begin(uint8_t i2cAddr) {
+    // convert to 8 bit addresses for mapping as needed by the bitbang library
+    _i2cAddr = (i2cAddr << 1);
 
-   _shadow = i2c_read(true);
-   
-   i2c_stop();
-   
-   return ( _initialised );
+    i2c_init();
+
+    _initialised = i2c_start(_i2cAddr | I2C_READ);
+
+    _shadow = i2c_read(true);
+
+    i2c_stop();
+
+    return (_initialised);
 }
 
 //
 // pinMode
-void SI2CIO::pinMode ( uint8_t pin, uint8_t dir )
-{
-   if ( _initialised )
-   {
-      if ( OUTPUT == dir )
-      {
-         _dirMask &= ~( 1 << pin );
-      }
-      else 
-      {
-         _dirMask |= ( 1 << pin );
-      }
-   }
+void SI2CIO::pinMode(uint8_t pin, uint8_t dir) {
+    if (_initialised) {
+        if (OUTPUT == dir) {
+            _dirMask &= ~(1 << pin);
+        } else {
+            _dirMask |= (1 << pin);
+        }
+    }
 }
 
 //
 // portMode
-void SI2CIO::portMode ( uint8_t dir )
-{
-   
-   if ( _initialised )
-   {
-      if ( dir == INPUT )
-      {
-         _dirMask = 0xFF;
-      }
-      else
-      {
-         _dirMask = 0x00;
-      }
-   }
+void SI2CIO::portMode(uint8_t dir) {
+    if (_initialised) {
+        if (dir == INPUT) {
+            _dirMask = 0xFF;
+        } else {
+            _dirMask = 0x00;
+        }
+    }
 }
 
 //
 // read
-uint8_t SI2CIO::read ( void )
-{
-   uint8_t retVal = 0;
-   
-   if ( _initialised )
-   {
-      i2c_start(_i2cAddr | I2C_READ);
- 
-	  retVal = (_dirMask & i2c_read(true));
-	  
-	  i2c_stop();
-   }
-   return ( retVal );
+uint8_t SI2CIO::read(void) {
+    uint8_t retVal = 0;
+
+    if (_initialised) {
+        i2c_start(_i2cAddr | I2C_READ);
+
+        retVal = (_dirMask & i2c_read(true));
+
+        i2c_stop();
+    }
+    return (retVal);
 }
 
 //
 // write
-int SI2CIO::write ( uint8_t value )
-{
-   int status = 0;
-   
-   if ( _initialised )
-   {
-      // Only write HIGH the values of the ports that have been initialised as
-      // outputs updating the output shadow of the device
-      _shadow = ( value & ~(_dirMask) );
-   
-      status = i2c_start(_i2cAddr | I2C_WRITE);
- 
-	  status &= i2c_write(_shadow);
-      
-	  i2c_stop();
-   }
-   return ( (status == 0) );
+int SI2CIO::write(uint8_t value) {
+    int status = 0;
+
+    if (_initialised) {
+        // Only write HIGH the values of the ports that have been initialised as
+        // outputs updating the output shadow of the device
+        _shadow = (value & ~(_dirMask));
+
+        status = i2c_start(_i2cAddr | I2C_WRITE);
+
+        status &= i2c_write(_shadow);
+
+        i2c_stop();
+    }
+    return ((status == 0));
 }
 
 //
 // digitalRead
-uint8_t SI2CIO::digitalRead ( uint8_t pin )
-{
-   uint8_t pinVal = 0;
-   
-   // Check if initialised and that the pin is within range of the device
-   // -------------------------------------------------------------------
-   if ( ( _initialised ) && ( pin <= 7 ) )
-   {
-      // Remove the values which are not inputs and get the value of the pin
-      pinVal = this->read() & _dirMask;
-      pinVal = ( pinVal >> pin ) & 0x01; // Get the pin value
-   }
-   return (pinVal);
+uint8_t SI2CIO::digitalRead(uint8_t pin) {
+    uint8_t pinVal = 0;
+
+    // Check if initialised and that the pin is within range of the device
+    // -------------------------------------------------------------------
+    if ((_initialised) && (pin <= 7)) {
+        // Remove the values which are not inputs and get the value of the pin
+        pinVal = this->read() & _dirMask;
+        pinVal = (pinVal >> pin) & 0x01; // Get the pin value
+    }
+    return (pinVal);
 }
 
 //
 // digitalWrite
-int SI2CIO::digitalWrite ( uint8_t pin, uint8_t level )
-{
-   uint8_t writeVal;
-   int status = 0;
-   
-   // Check if initialised and that the pin is within range of the device
-   // -------------------------------------------------------------------
-   if ( ( _initialised ) && ( pin <= 7 ) )
-   {
-      // Only write to HIGH the port if the port has been configured as
-      // an OUTPUT pin. Add the new state of the pin to the shadow
-      writeVal = ( 1 << pin ) & ~_dirMask;
-      if ( level == HIGH )
-      {
-         _shadow |= writeVal; 
-      }
-      else 
-      {
-         _shadow &= ~writeVal;
-      }
-      status = this->write ( _shadow );
-   }
-   return ( status );
+int SI2CIO::digitalWrite(uint8_t pin, uint8_t level) {
+    uint8_t writeVal;
+    int status = 0;
+
+    // Check if initialised and that the pin is within range of the device
+    // -------------------------------------------------------------------
+    if ((_initialised) && (pin <= 7)) {
+        // Only write to HIGH the port if the port has been configured as
+        // an OUTPUT pin. Add the new state of the pin to the shadow
+        writeVal = (1 << pin) & ~_dirMask;
+        if (level == HIGH) {
+            _shadow |= writeVal;
+        } else {
+            _shadow &= ~writeVal;
+        }
+        status = this->write(_shadow);
+    }
+    return (status);
 }
 
 //
