@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "EmergencyState.h"
 #include "ManualState.h"
 #include "StartedState.h"
 
@@ -22,7 +23,7 @@ void CycleState::onEnter() {
 }
 
 void CycleState::onExit() {
-    ctx->hs321.writeSingleRegister(0x2000, 6);    // Останов
+    ctx->hs321.writeControlCommand(DECELERATE_STOP_COMMAND);    // Останов
     ctx->moveUp(false);
     ctx->moveDown(false);
 }

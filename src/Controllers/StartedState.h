@@ -14,14 +14,23 @@ public:
 
 	void onButtonGeneralStopPressed() override;
 	void onButtonGeneralStopReleased() override {}
+
 	void onButtonStartFeedPressed() override {}
 	void onButtonStartFeedReleased() override;
+
 	void onButtonEndCyclePressed() override {}
+	void onButtonEndCycleReleased() override {}
+
 	void onButtonPushPressed() override;
+	void onButtonPushReleased() override ;
+
 	void onButtonSpindleStartPressed() override;
 	void onButtonSpindleStopPressed() override;
+
 	void onSwitchModeChanged(bool autoMode) override;
+
 	void onTopSliderReached(bool reached) override;
+
 	void onEndSwitchTopTriggered() override {}
 	void onEndSwitchBottomTriggered() override {}
 

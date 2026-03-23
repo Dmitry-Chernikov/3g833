@@ -8,11 +8,10 @@
 
 // ========== StartedState ==========
 void StartedState::onEnter() {
-	ctx->setFeedMotor(true);
-	ctx->releaseBrake(true);
+	ctx->setFeedMotor(true); /* Включаем мотор возвратно-поступательного движения */
 	lastAutoMode = ctx->stateAutoCycleManual;
 
-	// Сброс энкодера если на верхнем концевике
+	// Сброс энкодера если ползун находится на верхнем концевике парковки ползуна
 	if (ctx->stateTopSlider) {
 		ctx->data.absoluteAngle = 0;
 		ctx->data.anglePrevious = getAngle();
@@ -33,7 +32,7 @@ void StartedState::onUpdate() {
 	// Показываем позицию на LCD
 	if (millis() - lastLcdTime > 500) {
 		lcdPrintString(ctx->lcd, "POSITION", String(ctx->data.linearMove, 2), "mm",
-					   YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
+		YELLOW, NOT_CHANGE_COLOR, 0, 0, 0, true, false);
 		lastLcdTime = millis();
 	}
 }
@@ -43,11 +42,14 @@ void StartedState::onButtonGeneralStopPressed() {
 }
 
 void StartedState::onButtonStartFeedReleased() {
-	ctx->transitionTo(new StoppedState());
 }
 
 void StartedState::onButtonPushPressed() {
 	ctx->statePush = triggerRS(ctx->statePush, true, false);
+}
+
+void StartedState::onButtonPushReleased() {
+
 }
 
 void StartedState::onButtonSpindleStartPressed() {

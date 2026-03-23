@@ -211,13 +211,11 @@ void handleManualMode() {
 	if (!stateTopSlider) {
 		// Если ползун сошёл с концевика парковки
 
-		stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart),
-		                         !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);
+		stateSpindle = triggerRS(stateSpindle, !digitalRead(buttonSpindleStart), !digitalRead(buttonSpindleStop) || stateEndCycle || stateGeneralStop);
 		// Шпиндель Стоп или Стоп
 
 #ifdef ENABLE_PROGRAM_SWITCH
-		if (stateSpindle && ((_data.limitTop - 5 /*мм*/) < _data.linearMove) && (
-			    _data.linearMove < (_data.limitBottom + 5 /*мм*/))) {
+		if (stateSpindle && ((_data.limitTop - 5 /*мм*/) < _data.linearMove) && (_data.linearMove < (_data.limitBottom + 5 /*мм*/))) {
 			digitalWrite(motorSpindle, !stateSpindle); // включение выключение мотора шпинделя
 			digitalWrite(motorSelfCoolant, !stateSpindle); // включение выключение мотора помпы СОЖ
 		} else {

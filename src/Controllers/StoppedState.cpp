@@ -1,34 +1,30 @@
 #include "StoppedState.h"
 
 #include <Arduino.h>
-
 #include "StartedState.h"
 #include "TextMenu.h"
 
 // ========== StoppedState ==========
 void StoppedState::onEnter() {
-	// Выключаем всё
-	ctx->setSpindle(false);
-	ctx->setFeedMotor(false);
-	ctx->moveUp(false);
-	ctx->moveDown(false);
-	ctx->releaseBrake(false);
-	ctx->setManualMode(false);
+	/* Полная остановка всех исполнительных механизмов */
+	ctx->setSpindle(false);			/* Отключаем мотор шпинделя */
+	ctx->setSelfCoolant(false);		/* Отключаем мотор системы подачи смазочно-охлаждающей жидкости */
+	ctx->setFeedMotor(false);		/* Отключаем мотор возвратно-поступательного движения */
+	ctx->moveUp(false);			/* Отключаем электромагнитную муфту подъема ползуна */
+	ctx->moveDown(false);		/* Отключаем электромагнитную муфту спускания ползуна */
+	ctx->setManualMode(false);	/* Отключаем электромагнитную муфту ручного управления перемещения ползуна */
+	ctx->releaseBrake(false);			/* Отключаем электромагнит растормаживания, ленточный тормоз блокирует перемещение ползуна */
 
-	lastMenuTime = millis();
+	ctx->saveToEEPROM();  /* Сохраняем все настройки */
 }
 
-void StoppedState::onExit() {
-	ctx->saveToEEPROM();
-}
+void StoppedState::onExit() {}
 
 void StoppedState::onUpdate() {
-	// Показываем меню
-	if (millis() - lastMenuTime > 100) {
-		Menu();  // Твоя существующая функция меню
-		lastMenuTime = millis();
-	}
+	Menu();  // При долгом нажатии кнопки дисплея открывается меню настройки станка
 }
+
+void StoppedState::onButtonGeneralStopPressed() {}
 
 void StoppedState::onButtonGeneralStopReleased() {
 	// Кнопка общей стоп отпущена - можно переходить в другое состояние

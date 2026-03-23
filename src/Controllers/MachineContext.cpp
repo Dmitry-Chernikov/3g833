@@ -61,13 +61,13 @@ void MachineContext::update() {
     // Обработка изменений из прерывания
     processButtonChanges();
     
-    // Чтение концевиков
+    // Чтение состояния концевика парковки ползуна в верхнем положении
     bool topSlider = !digitalRead(switchTopSlider);
     if (topSlider != stateTopSlider) {
         onTopSliderReached(topSlider);
     }
     
-    // Чтение механических концевиков
+    // Чтение состояния механических концевиков ограничительных лимитов режима АвтоЦикл
     if (!digitalRead(endSwitchTop)) {
         onEndSwitchTopTriggered();
     }
@@ -75,8 +75,8 @@ void MachineContext::update() {
         onEndSwitchBottomTriggered();
     }
     
-    // Чтение переключателя режимов
-    bool autoMode = digitalRead(switchAutoCycleManual);
+    // Чтение состояния переключателя режимов АвтоЦикл\Ручной
+	bool autoMode = digitalRead(switchAutoCycleManual);
     if (autoMode != stateAutoCycleManual) {
         onSwitchModeChanged(autoMode);
     }
@@ -84,9 +84,9 @@ void MachineContext::update() {
     // Обновление позиции
     updatePosition();
     
-    // Обновление текущего состояния
+    // Обновление текущего состояния внутри самого контекста машины
     if (currentState_) {
-        currentState_->onUpdate();
+        currentState_->onUpdate();  // Тут происходит обновление данных назначенного состояния
     }
     
     // Периодическое сохранение в EEPROM
@@ -238,21 +238,21 @@ void MachineContext::releaseBrake(const bool release) const {
 	stateElectromagnetBrake = release;
 }
 
-// Управление электромагнитом движения вверх
+// Управление электромагнитной муфтой движения вверх
 void MachineContext::moveUp(const bool enable) const {
     digitalWrite(electromagnetTop, !enable);
 	// Сохраняем состояние электромагнита в data для сохранения в eeprom, на случай отключения питания, для восстановления
     data.stateElectromagnetTop = enable;
 }
 
-// Управление электромагнитом движения вниз
+// Управление электромагнитной муфтой движения вниз
 void MachineContext::moveDown(const bool enable) const {
     digitalWrite(electromagnetBottom, !enable);
 	// Сохраняем состояние электромагнита в data для сохранения в eeprom, на случай отключения питания, для восстановления
     data.stateElectromagnetBottom = enable;
 }
 
-// Управление электромагнитом ручной подачи возвратно-поступательного движения
+// Управление электромагнитной муфтой ручной подачи возвратно-поступательного движения
 void MachineContext::setManualMode(const bool enable) const {
     digitalWrite(electromagnetManual, !enable);
 	stateElectromagnetManual = enable;
@@ -266,16 +266,15 @@ void MachineContext::updatePosition() const {
 void MachineContext::updateProgramSwitches() const {
 #ifdef ENABLE_PROGRAM_SWITCH
     if (data.linearMove <= data.limitTop) {
-        data.stateElectromagnetTop = true; // Включить состояние вверх программного переключателя
-        data.stateElectromagnetBottom = false; // Выключить состояние вниз программного переключателя
-        data.stateIntermediate = true; // Ползун вышел из промежуточного состояния
+        data.stateElectromagnetTop = true;		// Включить состояние вверх программного переключателя
+        data.stateElectromagnetBottom = false;	// Выключить состояние вниз программного переключателя
+        data.stateIntermediate = true;			// Ползун вышел из промежуточного состояния
     } else if (data.linearMove >= data.limitBottom) {
-        data.stateElectromagnetTop = false; // Выключить состояние вверх программного переключателя
-        data.stateElectromagnetBottom = true; // Включить состояние вниз программного переключателя
-        data.stateIntermediate = true; // Ползун вышел из промежуточного состояния
+        data.stateElectromagnetTop = false;		// Выключить состояние вверх программного переключателя
+        data.stateElectromagnetBottom = true;	// Включить состояние вниз программного переключателя
+        data.stateIntermediate = true;			// Ползун вышел из промежуточного состояния
     } else {
-    	// Ползун в промежуточном состоянии
-        data.stateIntermediate = false;
+        data.stateIntermediate = false;			// Ползун в промежуточном состоянии
     }
 #endif
 }

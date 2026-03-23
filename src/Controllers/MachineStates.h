@@ -23,14 +23,23 @@ public:
 
     virtual void onButtonGeneralStopPressed() = 0;			/* Нажатие кнопки Общий Стоп */
     virtual void onButtonGeneralStopReleased() = 0;			/* Отжатие кнопки Общий Стоп */
+
     virtual void onButtonStartFeedPressed() = 0;			/* Нажата кнопки Подача-Пуск */
     virtual void onButtonStartFeedReleased() = 0;			/* Отжатие кнопки Подача-Пуск */
+
 	virtual void onButtonEndCyclePressed() = 0;				/* Нажатие кнопки Конец Цикла */
-    virtual void onButtonPushPressed() = 0;					/* Отжатие кнопки Конец Цикла */
+	virtual void onButtonEndCycleReleased() = 0;			/* Отжатие кнопки Конец Цикла */
+
+    virtual void onButtonPushPressed() = 0;					/* Нажатие кнопки Толчковая */
+	virtual void onButtonPushReleased() = 0;				/* Отжатие кнопки Толчковая */
+
     virtual void onButtonSpindleStartPressed() = 0;			/* Нажали кнопку Старт Шпиндель */
     virtual void onButtonSpindleStopPressed() = 0;			/* Отжатие кнопки Старт Шпиндель */
+
     virtual void onSwitchModeChanged(bool autoMode) = 0;	/* Изменение состояния переключателя режима работы управления, (true - Автоматически Цикл, false - Ручной Ввод Хоны) */
+
     virtual void onTopSliderReached(bool reached) = 0;		/* Включение концевика верхнего положения ползуна (true - достигли, false - отошёл) */
+
     virtual void onEndSwitchTopTriggered() = 0;				/* Путевой переключатель перешёл в состояния верхнего положения ползуна */
     virtual void onEndSwitchBottomTriggered() = 0;			/* Путевой переключатель перешёл в состояния нижнего положения ползуна */
 

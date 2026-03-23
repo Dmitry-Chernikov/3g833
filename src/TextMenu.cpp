@@ -366,7 +366,7 @@ void Menu() {
 
     while (startMenu) {
         if (stateTopSlider) {
-            // Если ползун на концевике парковки. Концевик парковки, ползун в верху исходного состояния
+            // Если ползун на концевике парковки. Концевик парковки, ползун вверху исходного состояния
             _data.absoluteAngle = 0;
             _data.anglePrevious = angleSensor.rotationRawToAngle(angleSensor.getRawRotation(64, true, false));
         }

@@ -53,7 +53,6 @@ void saveEeprom(LCD lcd, B &dataBuffer, D &data) {
     EEPROM.get(0, dataBuffer);
     if (data != dataBuffer) {
         EEPROM.put(0, data); // Сохранение изменений структуры data в EEPROM
-        lcdPrintString(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true,
-                       true);
+        lcdPrintString(lcd, "SAVE EEPROM OK", String(data.initData), "", WHITE, NOT_CHANGE_COLOR, 0, 0, 1000, true, true);
     }
 }

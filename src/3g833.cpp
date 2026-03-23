@@ -175,6 +175,7 @@ void pciSetup(const byte pin) {
 void readKeypad() {
 	handleButtonStates();
 	handleMotorStates();
+	DDRA;
 }
 #endif
 
